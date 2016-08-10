@@ -25,6 +25,8 @@ class LoginController extends Controller
      */
     public function defaultLoginPage(Request $request)
     {
+        $errorMassage= "";
+
         //Creats a loginform
         $loginHandler = new LoginHandler();
         $loginForm = $this->createFormBuilder($loginHandler,['attr' => ['class' => 'form-signin']])
@@ -38,15 +40,21 @@ class LoginController extends Controller
         //If someone send login data
         if ($loginForm->isSubmitted() && $loginForm->isValid())
         {
-            $loginHandler = $loginForm->getData();
-            $loginHandler->login();
-
             $ldapConnector = new LDAPConnetor();
             $ldapConnector->intiLDAPConnection();
+
+            $loginHandler = $loginForm->getData();
+            if ($loginHandler->login() == FALSE)
+            {
+                $errorMassage .= "Name oder Passwort falsch!";
+            }
+
+
         }
         //return the default loginpage
         return $this->render("default/login.html.twig", array(
-            "loginForm"=>$loginForm->createView()
+            "loginForm"=>$loginForm->createView(),
+            "errorMassage"=>$errorMassage
         ));
     }
 }
