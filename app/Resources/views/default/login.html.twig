@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <link href="{{ asset('css/loginPage.css') }}" rel="stylesheet" />
+{% endblock %}
+
+{% form_theme loginForm 'bootstrap_3_layout.html.twig' %}
+{% block body %}
+    <div class="container">
+        {{ form_start(loginForm) }}
+        <h2 class="form-signin-heading">Bitte logge dich ein</h2>
+        {{ form_widget(loginForm) }}
+        {{ form_end(loginForm) }}
+
+    </div>
+{% endblock %}
