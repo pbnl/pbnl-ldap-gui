@@ -1,5 +1,6 @@
 <?php
-namespace AppBundle\model;
+namespace AppBundle\model\ldapCon;
+namespace AppBundle\model\ldapCon;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
 /**

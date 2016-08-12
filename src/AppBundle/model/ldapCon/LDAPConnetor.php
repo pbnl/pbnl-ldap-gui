@@ -1,5 +1,5 @@
 <?php
-namespace AppBundle\model;
+namespace AppBundle\model\ldapCon;
 /**
  * Created by PhpStorm.
  * User: paul
@@ -11,6 +11,7 @@ class LDAPConnetor
 {
 
     private $ldap;
+    private $ds;
 
     /**
      * @return
@@ -36,14 +37,18 @@ class LDAPConnetor
             throw new NoLDAPBindDataException("No Data in the ENV-Vars", 1);
         }
 
-        $ds = ldap_connect($ip);
-        ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);
-        $this->ldap = ldap_bind($ds, $bindDn, $bindPasswd);
+        $this->ds = ldap_connect($ip);
+        ldap_set_option($this->ds, LDAP_OPT_PROTOCOL_VERSION, 3);
+        $this->ldap = ldap_bind($this->ds, $bindDn, $bindPasswd);
     }
 
     public function closeLDAPConnection()
     {
         ldap_close($this->ldap);
+    }
+    public function getCon()
+    {
+        return $this->ds;
     }
 }
 

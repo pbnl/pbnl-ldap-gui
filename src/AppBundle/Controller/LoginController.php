@@ -8,7 +8,7 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\LoginHandler;
+use AppBundle\model\login\LoginHandler;
 use AppBundle\model\LDAPConnetor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class LoginController extends Controller
@@ -25,6 +26,11 @@ class LoginController extends Controller
      */
     public function defaultLoginPage(Request $request)
     {
+        if($request->getSession()->get("loggedIn",TRUE))
+        {
+            return $this->redirectToRoute("Startpage");
+        }
+
         $errorMassage= "";
 
         //Creats a loginform
@@ -40,9 +46,6 @@ class LoginController extends Controller
         //If someone send login data
         if ($loginForm->isSubmitted() && $loginForm->isValid())
         {
-            $ldapConnector = new LDAPConnetor();
-            $ldapConnector->intiLDAPConnection();
-
             $loginHandler = $loginForm->getData();
             if ($loginHandler->login() == FALSE)
             {
