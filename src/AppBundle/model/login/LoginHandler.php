@@ -21,20 +21,30 @@ class LoginHandler
     public $hash = "";
     public $rememberme = FALSE;
 
+    /**
+     * Tries to find a user in the LDAP with a password and a name stored in the object fields
+     * If there is a correct user -> login
+     *
+     * @return bool
+     */
     public function login()
     {
+        //Open a connection to the LDAP
         $ldapConnector = new LDAPConnetor();
         $ldapConnector->intiLDAPConnection();
         $ldapCon = $ldapConnector->getCon();
 
+        //Search options
         $ldaptree = "ou=People,dc=pbnl,dc=de";
         $filter="(|(givenname=$this->name))";
 
-
+        //Search
         $result = ldap_search($ldapCon,$ldaptree, $filter) or die ("Error in search query: ".ldap_error($ldapCon));
         $data = ldap_get_entries($ldapCon, $result);
 
-        if ($data["count"] == 0) return FALSE;
+        //There can be only one user with a the name
+        if ($data["count"] != 1) return FALSE;
+        //Correct password an name?
         if ($data[0]["givenname"][0] == $this->name && SSHA::ssha_password_verify($data[0]["userpassword"][0],$this->password))
         {
             $this->loginSuccess();
@@ -46,6 +56,9 @@ class LoginHandler
         }
     }
 
+    /**
+     * Sets some variables in the session to see if someone is logged in
+     */
     private function loginSuccess()
     {
         $session = new Session();

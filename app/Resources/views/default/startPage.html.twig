@@ -1,9 +1,14 @@
-{% extends 'base.html.twig' %}
+{% extends "includes/base.html.twig" %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Startpage{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
 
     <link href="{{ asset('css/loginPage.css') }}" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+    {% include 'includes/nav.html.twig' %}
+
 {% endblock %}

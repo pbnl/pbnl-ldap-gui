@@ -26,6 +26,7 @@ class LoginController extends Controller
      */
     public function defaultLoginPage(Request $request)
     {
+        //If your are logged in you get redirected to the startPage
         if($request->getSession()->get("loggedIn",TRUE))
         {
             return $this->redirectToRoute("Startpage");
