@@ -16,6 +16,12 @@ class User
     public $mail = "";
     public $hashedPassword = "";
     public $homeDirectory = "";
+    public $dn = "";
 
+
+    public function memberOf(Group $group)
+    {
+        return in_array($this->dn, $group->getMembersDN());
+    }
 
 }

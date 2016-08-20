@@ -16,9 +16,9 @@ class People
         $this->ldapFrontend = $ldapFrontend;
     }
 
-    public function getAllUsers()
+    public function getAllUsers($group)
     {
-        return $this->ldapFrontend->getAllUsers();
+        return $this->ldapFrontend->getAllUsers($group);
     }
 
     public function addUser($user)

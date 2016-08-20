@@ -19,14 +19,14 @@ use Symfony\Component\HttpFoundation\Response;
 class UserManagerController extends Controller
 {
     /**
-     * @Route("/user/schowAllUsers", name="Alle Benutzer")
+     * @Route("/user/schowAllUsers/{group}", name="Alle Benutzer")
      * @param Request $request
      * @return Response
      */
-    public function getStartPage(Request $request)
+    public function getStartPage(Request $request,$group="")
     {
         $people = new People($this->get("ldap.frontend"));
-        $peopleList = $people->getAllUsers();
+        $peopleList = $people->getAllUsers($group);
 
         return$this->render("default/allUsers.html.twig",array(
             "users"=>$peopleList
