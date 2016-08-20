@@ -4,6 +4,6 @@ parameters:
 #    parameter_name: value
 
 services:
-#    service_name:
-#        class: AppBundle\Directory\ClassName
+    ldap.frontend:
+        class: AppBundle\model\ldapCon\LDAPService
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]

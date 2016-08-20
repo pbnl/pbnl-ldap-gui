@@ -42,7 +42,7 @@ class LoginHandler
         $result = ldap_search($ldapCon,$ldaptree, $filter) or die ("Error in search query: ".ldap_error($ldapCon));
         $data = ldap_get_entries($ldapCon, $result);
 
-        //There can be only one user with a the name
+        //There can be only one user with the name we are looking for
         if ($data["count"] != 1) return FALSE;
         //Correct password an name?
         if ($data[0]["givenname"][0] == $this->name && SSHA::ssha_password_verify($data[0]["userpassword"][0],$this->password))

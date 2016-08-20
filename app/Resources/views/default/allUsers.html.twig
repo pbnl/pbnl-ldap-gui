@@ -1,0 +1,41 @@
+{% extends "includes/base.html.twig" %}
+
+{% block title %}Alle Benutzer{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <link href="{{ asset('css/loginPage.css') }}" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+    {% include 'includes/nav.html.twig' %}
+    <div class="container">
+        <br><br>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    Nr
+                </th>
+                <th>
+                    Name
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>
+                    {{ loop.index}}
+                </td>
+                <td>
+                    {{user.givenName}}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+{% endblock %}

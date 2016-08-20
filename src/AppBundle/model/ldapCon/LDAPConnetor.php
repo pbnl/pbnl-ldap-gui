@@ -51,7 +51,3 @@ class LDAPConnetor
         return $this->ds;
     }
 }
-
-
-$c = new LDAPConnetor();
-$c->intiLDAPConnection();
