@@ -178,7 +178,6 @@ class LDAPService
         {
             if($oneUser->uidNumber >= $highestUidNumber) $highestUidNumber = $oneUser->uidNumber;
         }
-        print_r($highestUidNumber);
         return $highestUidNumber;
     }
 
