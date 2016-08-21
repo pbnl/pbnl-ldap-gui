@@ -11,9 +11,9 @@
 {% form_theme loginForm 'bootstrap_3_layout.html.twig' %}
 {% block body %}
     <div class="container">
-        {% if errorMassage != "" %}
-            <div class="alert alert-danger" role="alert">{{ errorMassage }}</div>
-        {% endif %}
+        <br>
+        <br>
+        {% include 'includes/messages.html.twig' %}
         {{ form_start(loginForm) }}
         <h2 class="form-signin-heading">Bitte logge dich ein</h2>
         {{ form_widget(loginForm) }}

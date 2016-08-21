@@ -7,3 +7,5 @@ services:
     ldap.frontend:
         class: AppBundle\model\ldapCon\LDAPService
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+    login:
+        class: AppBundle\model\login\LoginHandler

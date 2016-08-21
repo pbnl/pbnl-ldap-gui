@@ -8,7 +8,59 @@
     <link href="{{ asset('css/loginPage.css') }}" rel="stylesheet" />
 {% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        var ctx = document.getElementById("myChart");
+        var data = {
+            labels: [
+                "Red",
+                "Blue",
+                "Yellow"
+            ],
+            datasets: [
+                {
+                    data: [300, 50, 100],
+                    backgroundColor: [
+                        "#FF6384",
+                        "#36A2EB",
+                        "#FFCE56"
+                    ],
+                    hoverBackgroundColor: [
+                        "#FF6384",
+                        "#36A2EB",
+                        "#FFCE56"
+                    ]
+                }]
+        };
+        var myChart = new Chart(ctx, {
+            type: 'pie',
+            data: data,
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+
+{% endblock %}
+
 {% block body %}
     {% include 'includes/nav.html.twig' %}
+    <br><br>
+    {% include 'includes/messages.html.twig' %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <canvas id="myChart" width="50" height="50"></canvas>
+            </div>
+        </div>
 
+    </div>
 {% endblock %}

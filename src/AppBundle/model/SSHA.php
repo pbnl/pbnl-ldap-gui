@@ -32,4 +32,9 @@ class SSHA
             return False;
         }
     }
+    static public function ssha_password_gen($password)
+    {
+        $salt = openssl_random_pseudo_bytes(8, $cryptoStrong);
+        return "{SSHA}".base64_encode( sha1($password . $salt,TRUE) . $salt );
+    }
 }

@@ -1,0 +1,6 @@
+{% for message in errorMessage %}
+    <div class="alert alert-danger" role="alert">{{ message }}</div>
+{% endfor %}
+{% for message in successMessage%}
+    <div class="alert alert-success" role="alert">{{ message }}</div>
+{% endfor %}

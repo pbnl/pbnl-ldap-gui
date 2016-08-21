@@ -1,0 +1,17 @@
+{% extends "includes/base.html.twig" %}
+
+{% block title %}Error{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Berechtigungsfehler!</h1>
+        <h2 class="form-signin-heading">Bitte logge dich ein</h2>
+        <a href="/login" type="button" class="btn btn-default" >Zum Login</a>
+        <button href="/login" type="button" onclick="goBack()" class="btn btn-default" >Zurück</button>
+
+    </div>
+{% endblock %}

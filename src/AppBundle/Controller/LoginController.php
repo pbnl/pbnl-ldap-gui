@@ -8,6 +8,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\model\login\LoginDataHolder;
 use AppBundle\model\login\LoginHandler;
 use AppBundle\model\LDAPConnetor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -32,11 +33,12 @@ class LoginController extends Controller
             return $this->redirectToRoute("Startpage");
         }
 
-        $errorMassage= "";
+        $errorMassage = Array();
+        $successMessage = Array();
 
         //Creats a loginform
-        $loginHandler = new LoginHandler();
-        $loginForm = $this->createFormBuilder($loginHandler,['attr' => ['class' => 'form-signin']])
+        $loginDataHolder= new LoginDataHolder();
+        $loginForm = $this->createFormBuilder($loginDataHolder,['attr' => ['class' => 'form-signin']])
             ->add("name",TextType::class,array("attr"=>["placeholder"=>"Name"],'label' => false))
             ->add("password",PasswordType::class,array("attr"=>["placeholder"=>"Passwort"],'label' => false))
             ->add("rememberme",CheckboxType::class,array("label"=>"Erinnere dich","required"=>false))
@@ -47,10 +49,15 @@ class LoginController extends Controller
         //If someone send login data
         if ($loginForm->isSubmitted() && $loginForm->isValid())
         {
-            $loginHandler = $loginForm->getData();
-            if ($loginHandler->login() == FALSE)
+            $loginDataHolder = $loginForm->getData();
+            $loginHandler = $this->get("login");
+            if ($loginHandler->login($loginDataHolder) == FALSE)
             {
-                $errorMassage .= "Name oder Passwort falsch!";
+                array_push($errorMassage, "Name oder Passwort falsch!");
+            }
+            else
+            {
+                return $this->redirectToRoute("Startpage");
             }
 
 
@@ -58,7 +65,18 @@ class LoginController extends Controller
         //return the default loginpage
         return $this->render("default/login.html.twig", array(
             "loginForm"=>$loginForm->createView(),
-            "errorMassage"=>$errorMassage
+            "errorMessage"=>$errorMassage,
+            "successMessage"=>$successMessage
         ));
+    }
+
+    /**
+     * @Route("/logout",name="Logout")
+     */
+    public function logout()
+    {
+        $loginHandler = new LoginHandler();
+        $loginHandler->logout();
+        return $this->redirectToRoute("Login");
     }
 }

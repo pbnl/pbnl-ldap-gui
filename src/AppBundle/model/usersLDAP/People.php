@@ -9,9 +9,11 @@
 namespace AppBundle\model\usersLDAP;
 
 
+use AppBundle\model\ldapCon\LDAPService;
+
 class People
 {
-    function __construct($ldapFrontend)
+    function __construct(LDAPService $ldapFrontend)
     {
         $this->ldapFrontend = $ldapFrontend;
     }
@@ -21,12 +23,14 @@ class People
         return $this->ldapFrontend->getAllUsers($group);
     }
 
-    public function addUser($user)
+    public function addUser(User $user)
     {
+        if(!$this->ldapFrontend->getUserByName($user->givenName)) return $this->ldapFrontend->addAUser($user);
+        else return FALSE;
 
     }
 
-    public function delUser($user)
+    public function delUser(User $user)
     {
 
     }

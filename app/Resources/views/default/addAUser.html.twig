@@ -1,0 +1,99 @@
+{% extends "includes/base.html.twig" %}
+
+{% block title %}Alle Benutzer{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+
+{% form_theme addAUserForm 'bootstrap_3_horizontal_layout.html.twig' %}
+{% block body %}
+    {% include 'includes/nav.html.twig' %}
+    <div class="container">
+        <br><br>
+        {% include 'includes/messages.html.twig' %}
+        {% if addedSomeone %}
+            <h2 class="form-signin-heading">Hinzugefügter Benutzer</h2>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>
+                        Name des Wertes
+                    </th>
+                    <th>
+                        Wert
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        Vorname
+                    </th>
+                    <td>
+                        {{ addedPerson.cn }}
+                    </td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th>
+                        Benutzername
+                    </th>
+                    <td>
+                        {{ addedPerson.uid }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Vorname
+                    </th>
+                    <td>
+                        {{ addedPerson.cn }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Nachname
+                    </th>
+                    <td>
+                        {{ addedPerson.sn }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Mail
+                    </th>
+                    <td>
+                        {{ addedPerson.mail }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        uidNumber
+                    </th>
+                    <td>
+                        {{ addedPerson.uidNumber }}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        {% endif %}
+
+        <br><br>
+
+        <h2 class="form-signin-heading">Füge einen neuen Benutzer hinzu</h2>
+        <div class="col-sm-8">
+            {{ form_start(addAUserForm) }}
+            {{ form_row(addAUserForm.firstName) }}
+            {{ form_row(addAUserForm.secondName) }}
+            {{ form_row(addAUserForm.givenName) }}
+            {{ form_row(addAUserForm.clearPassword) }}
+            <div class="form-group">
+                {{ form_label(addAUserForm.generatedPassword) }}
+                <div class="col-md-6">{{ form_widget(addAUserForm.generatedPassword) }}</div>
+                <div class="col-md4"> {{ form_widget(addAUserForm.generatePassword) }}</div>
+            </div>
+            {{ form_end(addAUserForm) }}
+        </div>
+
+{% endblock %}

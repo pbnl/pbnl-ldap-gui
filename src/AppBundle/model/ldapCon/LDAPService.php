@@ -9,6 +9,7 @@
 namespace AppBundle\model\ldapCon;
 
 
+use AppBundle\model\SSHA;
 use AppBundle\model\usersLDAP\Group;
 use AppBundle\model\usersLDAP\User;
 
@@ -50,9 +51,7 @@ class LDAPService
         if($data["count"] != 0)
         {
             for($i = 0; $i < $data["count"]; $i++) {
-                $user = new User();
-                $user->givenName = $data[$i]["givenname"][0];
-                $user->dn = $data[$i]["dn"];
+                $user = new User($data[$i]);
                 array_push($people,$user);
             }
         }
@@ -123,6 +122,64 @@ class LDAPService
         }
 
         return $groups;
+    }
+
+    public function addAUser(User $user)
+    {
+        $userForLDAP = Array();
+        $userForLDAP["objectClass"][0] = "inetOrgPerson";
+        $userForLDAP["objectClass"][1] = "posixAccount";
+        $userForLDAP["objectClass"][2] = "pbnlAccount";
+        $userForLDAP["cn"] = $user->firstName;
+        $userForLDAP["gidNumber"] = "501";
+        $userForLDAP["uidNumber"] = $this->getHighestUidNumber()+1;
+        $userForLDAP["homeDirectory"] = "/home/".$user->givenName;
+        $userForLDAP["sn"] = $user->secondName;
+        $userForLDAP["uid"] = $user->givenName;
+        $userForLDAP["l"] = "Hamburg";
+        $userForLDAP["mail"] =  strtolower($user->givenName)."@pbnl.de";
+        $userForLDAP["mobile"] = "0";
+        $userForLDAP["postalCode"] = "0";
+        $userForLDAP["street"] = "0";
+        $userForLDAP["telephoneNumber"] = "0";
+        $userForLDAP["userPassword"] = SSHA::ssha_password_gen($user->clearPassword);
+
+        $ldaptree = "ou=People,dc=pbnl,dc=de";
+        $ou = "test";
+
+
+        ldap_add($this->ldapCon, "givenName=$user->givenName, ou=$ou, $ldaptree", $userForLDAP);
+        return $userForLDAP;
+
+
+
+    }
+
+    public function getUserByName($name)
+    {
+        //Search options
+        $ldaptree = "ou=People,dc=pbnl,dc=de";
+        $filter="(|(givenname=$name))";
+
+        //Search
+        $result = ldap_search($this->ldapCon,$ldaptree, $filter) or die ("Error in search query: ".ldap_error($this->ldapCon));
+        $data = ldap_get_entries($this->ldapCon, $result);
+
+        //There can be only one user with the name we are looking for
+        if ($data["count"] != 1) return FALSE;
+        return new User($data[0]);
+    }
+
+    public function getHighestUidNumber()
+    {
+        $users = $this->getAllUsers();
+        $highestUidNumber = 0;
+        foreach ($users as $oneUser)
+        {
+            if($oneUser->uidNumber >= $highestUidNumber) $highestUidNumber = $oneUser->uidNumber;
+        }
+        print_r($highestUidNumber);
+        return $highestUidNumber;
     }
 
 }

@@ -12,12 +12,23 @@ class User
     public $uid = "";
     public $firstName = "";
     public $secondName = "";
-    public $uidNumber = "";
+    public $uidNumber = 0;
     public $mail = "";
     public $hashedPassword = "";
     public $homeDirectory = "";
     public $dn = "";
+    public $clearPassword = "";
+    public $generatedPassword;
 
+
+    public function __construct($data = null)
+    {
+        if($data != null) {
+            $this->givenName = $data["givenname"][0];
+            $this->dn = $data["dn"];
+            $this->uidNumber = intval($data["uidnumber"][0]);
+        }
+    }
 
     public function memberOf(Group $group)
     {

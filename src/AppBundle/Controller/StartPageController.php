@@ -20,8 +20,32 @@ class StartPageController extends Controller
      */
     public function getStartPage(Request $request)
     {
-        return$this->render("default/startPage.html.twig",array(
+        $loginHandler = $this->get("login");
+        if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
 
+        $errorMessage = Array();
+        $successMessage = Array();
+
+        return$this->render("default/startPage.html.twig",array(
+            "errorMessage"=>$errorMessage,
+            "successMessage"=>$successMessage
+
+        ));
+    }
+
+    /**
+     * @Route("/permissionError", name="PermissionError")
+     */
+    public function permissionErrorPage(Request $request)
+    {
+        $errorMessage = Array();
+        $successMessage = Array();
+
+        array_push($errorMessage,"PermissionError");
+
+        return$this->render("/default/permissionError.html.twig",array(
+            "errorMessage"=>$errorMessage,
+            "successMessage"=>$successMessage
         ));
     }
 }
