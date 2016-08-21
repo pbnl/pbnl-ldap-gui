@@ -30,6 +30,11 @@ class People
 
     }
 
+    public function getOUGroupsNames()
+    {
+        return $this->ldapFrontend->getOUGroupsNames();
+    }
+
     public function delUser(User $user)
     {
 

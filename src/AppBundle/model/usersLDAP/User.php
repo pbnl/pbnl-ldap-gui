@@ -19,6 +19,7 @@ class User
     public $dn = "";
     public $clearPassword = "";
     public $generatedPassword;
+    public $ouGroup;
 
 
     public function __construct($data = null)

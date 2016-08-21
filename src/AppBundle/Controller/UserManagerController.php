@@ -9,11 +9,13 @@
 namespace AppBundle\Controller;
 
 
+use AppBundle\model\ArrayMethods;
 use AppBundle\model\usersLDAP\People;
 use AppBundle\model\usersLDAP\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -62,6 +64,8 @@ class UserManagerController extends Controller
         $successMessage = Array();
 
         //Create the form
+        $people = new People($this->get("ldap.frontend"));
+        $ouGroups = $people->getOUGroupsNames();
         $user = new User();
         $addUserForm = $this->createFormBuilder($user,['attr' => ['class' => 'form-addAUser']])
             ->add("firstName",TextType::class,array("attr"=>["placeholder"=>"Vorname"],'label' => "Vorname"))
@@ -70,6 +74,9 @@ class UserManagerController extends Controller
             ->add("clearPassword",PasswordType::class,array("attr"=>["placeholder"=>"Password"],'label' => "Password"))
             ->add("generatePassword",ButtonType::class,array("attr"=>[],'label' => "Generiere ein Passwort"))
             ->add("generatedPassword",TextType::class,array("attr"=>["readonly"=>"","placeholder"=>"Generiertes Passwort"],"label"=>FALSE))
+            ->add('ouGroup', ChoiceType::class, array(
+                'choices'  => ArrayMethods::valueToKeyAndValue($ouGroups),
+            ))
             ->add("send",SubmitType::class,array("label"=>"Erstellen","attr"=>["class"=>"btn btn-lg btn-primary btn-block"]))
             ->getForm();
 

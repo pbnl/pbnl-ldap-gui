@@ -145,7 +145,7 @@ class LDAPService
         $userForLDAP["userPassword"] = SSHA::ssha_password_gen($user->clearPassword);
 
         $ldaptree = "ou=People,dc=pbnl,dc=de";
-        $ou = "test";
+        $ou = $user->ouGroup;
 
 
         ldap_add($this->ldapCon, "givenName=$user->givenName, ou=$ou, $ldaptree", $userForLDAP);
@@ -180,6 +180,34 @@ class LDAPService
         }
         print_r($highestUidNumber);
         return $highestUidNumber;
+    }
+
+    /**
+     * Returns the name of the ou in the people folder
+     * @return array
+     */
+    public function getOUGroupsNames()
+    {
+        //Search options
+        $ldaptree = "ou=People,dc=pbnl,dc=de";
+
+        //Search filters
+        $filter="(&(objectClass=organizationalUnit))";
+
+        //Search
+        $result = ldap_search($this->ldapCon,$ldaptree, $filter) or die ("Error in search query: ".ldap_error($this->ldapCon));
+        $data = ldap_get_entries($this->ldapCon, $result);
+
+        $ou= Array();
+
+        if($data["count"] != 0)
+        {
+            for($i = 0; $i < $data["count"]; $i++)
+            {
+                array_push($ou,$data[$i]["ou"][0]);
+            }
+        }
+        return $ou;
     }
 
 }
