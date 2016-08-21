@@ -7,7 +7,7 @@ Installation:
 Extrahiere das Archiv in den Webordner.
 
 Du brauchst diese minimale Apache Konfiguration:
-
+```
 <VirtualHost *:80>
     ServerName domain.tld
     ServerAlias www.domain.tld
@@ -28,10 +28,11 @@ Du brauchst diese minimale Apache Konfiguration:
     ErrorLog /var/log/apache2/project_error.log
     CustomLog /var/log/apache2/project_access.log combined
 </VirtualHost>
-
+```
 Du musst folgende Umgebungsvariablen setzen:
+```
 export LDAP_IP=192.168.1.1
 export LDAP_BIND_PWD=passwort
 export LDAP_BIND_DN=cn=admin,dc=domain,dc=com
-
+```
 Das System arbeitet mit dem LDAP-Tree prefix dc=pbnl,dc=de
