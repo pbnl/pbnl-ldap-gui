@@ -55,4 +55,9 @@ class People
     {
 
     }
+
+    public function getGroups()
+    {
+        return $this->ldapFrontend->getAllGroups();
+    }
 }

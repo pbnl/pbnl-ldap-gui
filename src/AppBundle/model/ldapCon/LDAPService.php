@@ -113,6 +113,7 @@ class LDAPService
                 $group = new Group();
                 $group->name = $data[$i]["cn"][0];
                 $group->dn = $data[$i]["dn"];
+                $group->gidNumber =$data[$i]["gidnumber"][0];
                 $member = $data[$i]["memberuid"];
                 for ($j = 0;$j < $member["count"];$j++)
                 {

@@ -14,6 +14,7 @@ class Group
     private $members = Array(); // An array with all dn of the users
     public $name = "";
     public $dn = "";
+    public $gidNumber = "";
 
     public function addMember($dn)
     {
@@ -23,5 +24,9 @@ class Group
     public function getMembersDN()
     {
         return $this->members;
+    }
+    public function getMemberCount()
+    {
+        return count($this->members);
     }
 }
