@@ -249,4 +249,34 @@ class LDAPService
         ldap_mod_add($this->ldapCon,"mail=$forward,$ldaptree",$forward_info);
     }
 
+    /**
+     * Removes a user with his DN from an Group
+     * @param $userDN
+     * @param $group
+     */
+    public function removeUserDNFromGroup($userDN,$group)
+    {
+        //Del options
+        $ldaptree = "ou=Group,dc=pbnl,dc=de";
+        $group_info['memberUid'] = $userDN;
+
+        //Del
+        ldap_mod_del($this->ldapCon,"cn=$group,$ldaptree",$group_info);
+    }
+
+    /**
+     * Removes a mail with his address from a forward
+     * @param $mail
+     * @param $forward
+     */
+    public function removeMailFromForward($mail,$forward)
+    {
+        //Del options
+        $ldaptree = "ou=Forward,dc=pbnl,dc=de";
+        $forward_info['forward'] = $mail;
+
+        //Del
+        ldap_mod_del($this->ldapCon,"mail=$forward,$ldaptree",$forward_info);
+    }
+
 }
