@@ -27,11 +27,11 @@ use Symfony\Component\HttpFoundation\Response;
 class UserManagerController extends Controller
 {
     /**
-     * @Route("/user/schowAllUsers/{group}", name="Alle Benutzer")
+     * @Route("/user/schowAllUsers", name="Alle Benutzer")
      * @param Request $request
      * @return Response
      */
-    public function getAllUsers(Request $request,$group="")
+    public function getAllUsers(Request $request)
     {
         $loginHandler = $this->get("login");
         if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
@@ -39,10 +39,25 @@ class UserManagerController extends Controller
         $errorMessage = Array();
         $successMessage = Array();
 
+        //Get all users and search for name and groupq if wanted
         $people = new People($this->get("ldap.frontend"));
-        $peopleList = $people->getAllUsers($group);
+
+        //Create search form
+        $peopleSearchForm = $this->createFormBuilder($people,['attr' => ['class' => 'form-searchUser']])
+            ->add("userFilter",TextType::class,array("attr"=>["placeholder"=>"Benutzer suchen"],'label'=>false,'required' => false))
+            ->add("groupFilter",TextType::class,array("attr"=>["placeholder"=>"Gruppen suchen"],'label'=>false,'required' => false))
+            ->add("send",SubmitType::class,array("label"=>"Suchen","attr"=>["class"=>"btn btn-lg btn-primary btn-block"]))
+            ->setMethod("get")
+            ->getForm();
+
+        //Handel the form input
+        $peopleSearchForm->handleRequest($request);
+
+        //Search users
+        $peopleList = $people->getAllUsers($people->groupFilter,$people->userFilter);
 
         return$this->render("default/allUsers.html.twig",array(
+            "peopleSearchForm" => $peopleSearchForm->createView(),
             "users"=>$peopleList,
             "errorMessage"=>$errorMessage,
             "successMessage"=>$successMessage

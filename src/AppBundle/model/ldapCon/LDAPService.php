@@ -34,13 +34,14 @@ class LDAPService
      *
      * @return array
      */
-    public function getAllUsers($groupFilterName = "")
+    public function getAllUsers($groupFilterName = "",$userFilterName="")
     {
         //Search options
         $ldaptree = "ou=People,dc=pbnl,dc=de";
 
         //Search filters
-        $filter="(&(objectClass=inetOrgPerson))";
+        if($userFilterName != "") $filter="(&(objectClass=inetOrgPerson) (givenname=*$userFilterName*))";
+        else $filter="(&(objectClass=inetOrgPerson))";
 
         //Search
         $result = ldap_search($this->ldapCon,$ldaptree, $filter) or die ("Error in search query: ".ldap_error($this->ldapCon));
@@ -191,7 +192,7 @@ class LDAPService
         $ldaptree = "ou=People,dc=pbnl,dc=de";
 
         //Search filters
-        $filter="(&(objectClass=organizationalUnit))";
+        $filter="(&(objectClass=organizationalUnit) (!(ou=people)))";
 
         //Search
         $result = ldap_search($this->ldapCon,$ldaptree, $filter) or die ("Error in search query: ".ldap_error($this->ldapCon));
@@ -207,6 +208,36 @@ class LDAPService
             }
         }
         return $ou;
+    }
+
+    /**
+     * Adds a user with his DN to an Group
+     * @param $userDN
+     * @param $group
+     */
+    public function addUserDNToGroup($userDN ,$group)
+    {
+        //Add options
+        $ldaptree = "ou=Group,dc=pbnl,dc=de";
+        $group_info['memberUid'] = $userDN;
+
+        //Add
+        ldap_mod_add($this->ldapCon,"cn=$group,$ldaptree",$group_info);
+    }
+
+    /**
+     * Adds a mail with his address to a forward
+     * @param $mail
+     * @param $forward
+     */
+    public function addMailToForward($mail,$forward)
+    {
+        //Add options
+        $ldaptree = "ou=Forward,dc=pbnl,dc=de";
+        $forward_info['forward'] = $mail;
+
+        //Add
+        ldap_mod_add($this->ldapCon,"mail=$forward,$ldaptree",$forward_info);
     }
 
 }

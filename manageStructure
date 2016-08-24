@@ -1,0 +1,33 @@
+Groups:
+    Vorstände:
+        Ambronen
+        Anduril
+        Bund
+    Stamm:
+        Ambronen
+        Anduril
+    Teams:
+        Schulung
+        A-Fahrt
+Jede Gruppe hat DNs der Mitglieder
+
+People:
+    Ambronen:
+        Name
+    Anduril:
+        Name
+        Name
+
+Die Personen werden auf Grund der Gruppe mit einem Stamm verbunden.
+Nicht auf Grund der OU in der sie sind!
+Die OU ist nur für die Übersicht da! -> Braucht man diese dann noch?
+OU und Gruppen (Stammesname) Name muss gleich sein!
+
+Jeder der in einem Stavo ist kann Personen hinzufügen.
+Man kann nur Personen in eine Gruppe hinzufügen, wenn man selber drin ist.
+    -> Stavos können nur Personen für den eigenen Stamm hinzufügen
+
+Jeder der im Buvo ist, kann alles
+
+Jeder Gruppe hat einen Verteiler, zu dem man automatisch hinzugefügt wirst, wenn du einer Gruppe hinzugefügt wirst
+

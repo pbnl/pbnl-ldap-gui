@@ -4,15 +4,20 @@
 
 {% block stylesheets %}
     {{ parent() }}
-
-    <link href="{{ asset('css/loginPage.css') }}" rel="stylesheet" />
 {% endblock %}
+
+{% form_theme peopleSearchForm 'bootstrap_3_horizontal_layout.html.twig' %}
 
 {% block body %}
     {% include 'includes/nav.html.twig' %}
     <div class="container">
         <br><br>
         {% include 'includes/messages.html.twig' %}
+        <h3>Such Optionen</h3>
+        <div class="col-sm-6">
+            {{ form_start(peopleSearchForm) }}
+            {{ form_end(peopleSearchForm) }}
+        </div>
     <table class="table table-striped">
         <thead>
             <tr>
