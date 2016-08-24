@@ -125,32 +125,41 @@ class LDAPService
         return $groups;
     }
 
+    /**
+     * Adds a new user to the LDAP
+     * @param User $user
+     * @return array with all user attributes
+     */
     public function addAUser(User $user)
     {
         $userForLDAP = Array();
-        $userForLDAP["objectClass"][0] = "inetOrgPerson";
-        $userForLDAP["objectClass"][1] = "posixAccount";
-        $userForLDAP["objectClass"][2] = "pbnlAccount";
-        $userForLDAP["cn"] = $user->firstName;
-        $userForLDAP["gidNumber"] = "501";
-        $userForLDAP["uidNumber"] = $this->getHighestUidNumber()+1;
-        $userForLDAP["homeDirectory"] = "/home/".$user->givenName;
-        $userForLDAP["sn"] = $user->secondName;
-        $userForLDAP["uid"] = $user->givenName;
-        $userForLDAP["l"] = "Hamburg";
-        $userForLDAP["mail"] =  strtolower($user->givenName)."@pbnl.de";
-        $userForLDAP["mobile"] = "0";
-        $userForLDAP["postalCode"] = "0";
-        $userForLDAP["street"] = "0";
-        $userForLDAP["telephoneNumber"] = "0";
-        $userForLDAP["userPassword"] = SSHA::ssha_password_gen($user->clearPassword);
+        $userForLDAP["objectclass"][0] = "inetOrgPerson";
+        $userForLDAP["objectclass"][1] = "posixAccount";
+        $userForLDAP["objectclass"][2] = "pbnlAccount";
+        $userForLDAP["cn"][0] = $user->firstName;
+        $userForLDAP["gidnumber"][0] = "501";
+        $userForLDAP["uidnumber"][0] = $this->getHighestUidNumber()+1;
+        $userForLDAP["homedirectory"][0] = "/home/".$user->givenName;
+        $userForLDAP["sn"][0] = $user->secondName;
+        $userForLDAP["uid"][0] = $user->givenName;
+        $userForLDAP["l"][0] = "Hamburg";
+        $userForLDAP["mail"][0] =  strtolower($user->givenName)."@pbnl.de";
+        $userForLDAP["mobile"][0] = "0";
+        $userForLDAP["postalcode"][0] = "0";
+        $userForLDAP["street"][0] = "0";
+        $userForLDAP["telephonenumber"][0] = "0";
+        $userForLDAP["userpassword"][0] = SSHA::ssha_password_gen($user->clearPassword);
+        $userForLDAP["givenname"][0] = $user->givenName;
 
         $ldaptree = "ou=People,dc=pbnl,dc=de";
         $ou = $user->ouGroup;
 
-
         ldap_add($this->ldapCon, "givenName=$user->givenName, ou=$ou, $ldaptree", $userForLDAP);
-        return $userForLDAP;
+
+        //We need this for later
+        $userForLDAP["dn"] = "givenName=$user->givenName, ou=$ou, $ldaptree";
+
+        return new User($userForLDAP);
 
 
 

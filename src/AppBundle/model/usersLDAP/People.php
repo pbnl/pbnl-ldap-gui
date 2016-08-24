@@ -28,9 +28,20 @@ class People
         return $this->ldapFrontend->getAllUsers($group,$user);
     }
 
+    /**
+     * Adds a new user to the LDAP and adds him to the pbnl and wiki groups
+     * @param User $user
+     * @return array|bool
+     */
     public function addUser(User $user)
     {
-        if(!$this->ldapFrontend->getUserByName($user->givenName)) return $this->ldapFrontend->addAUser($user);
+        if(!$this->ldapFrontend->getUserByName($user->givenName))
+        {
+            $user = $this->ldapFrontend->addAUser($user);
+            $this->ldapFrontend->addUserDNToGroup($user->dn,"nordlichter");
+            $this->ldapFrontend->addUserDNToGroup($user->dn,"wiki");
+            return $user;
+        }
         else return FALSE;
 
     }
