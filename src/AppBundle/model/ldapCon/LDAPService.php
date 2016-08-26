@@ -181,6 +181,36 @@ class LDAPService
         return new User($data[0]);
     }
 
+    public function getUserByUidNumber($uidNumber)
+    {
+        //Search options
+        $ldaptree = "ou=People,dc=pbnl,dc=de";
+        $filter="(|(uidnumber=$uidNumber))";
+
+        //Search
+        $result = ldap_search($this->ldapCon,$ldaptree, $filter) or die ("Error in search query: ".ldap_error($this->ldapCon));
+        $data = ldap_get_entries($this->ldapCon, $result);
+
+        //There can be only one user with the name we are looking for
+        if ($data["count"] != 1) return FALSE;
+        return new User($data[0]);
+    }
+
+    public function getUserByDN($dn)
+    {
+        //Search options
+        $ldaptree = $dn;
+        $filter="(objectClass=*)";
+
+        //Search
+        $result = ldap_search($this->ldapCon,$ldaptree, $filter) or die ("Error in search query: ".ldap_error($this->ldapCon));
+        $data = ldap_get_entries($this->ldapCon, $result);
+
+        //There can be only one user with the dn we are looking for
+        if ($data["count"] != 1) return FALSE;
+        return new User($data[0]);
+    }
+
     public function getHighestUidNumber()
     {
         $users = $this->getAllUsers();
@@ -229,7 +259,7 @@ class LDAPService
     {
         //Add options
         $ldaptree = "ou=Group,dc=pbnl,dc=de";
-        $group_info['memberUid'] = $userDN;
+        $group_info['memberuid'] = str_replace(", ",",",$userDN);
 
         //Add
         ldap_mod_add($this->ldapCon,"cn=$group,$ldaptree",$group_info);
@@ -259,10 +289,11 @@ class LDAPService
     {
         //Del options
         $ldaptree = "ou=Group,dc=pbnl,dc=de";
-        $group_info['memberUid'] = $userDN;
+        $group_info['memberuid'] = str_replace(", ",",",$userDN);
 
         //Del
-        ldap_mod_del($this->ldapCon,"cn=$group,$ldaptree",$group_info);
+        ldap_mod_del($this->ldapCon, "cn=$group,$ldaptree", $group_info);
+
     }
 
     /**
@@ -280,4 +311,13 @@ class LDAPService
         ldap_mod_del($this->ldapCon,"mail=$forward,$ldaptree",$forward_info);
     }
 
+    /**
+     * Removes a user with the DN $userDN from the LDAP
+     * @param $userDN
+     */
+    public function removeUserWithDN($userDN)
+    {
+        //Del
+        ldap_delete($this->ldapCon,$userDN);
+    }
 }

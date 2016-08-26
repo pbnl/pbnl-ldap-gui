@@ -29,4 +29,22 @@ class Group
     {
         return count($this->members);
     }
+    public function getMembersOfGroupB($group)
+    {
+        $newGroup = new Group();
+        foreach ($this->members as $userDN)
+        {
+            if(in_array($userDN,$group->getMembersDN))
+            {
+                $newGroup->addMember($userDN);
+            }
+        }
+        return$newGroup;
+    }
+
+    public function isDNMember($dn)
+    {
+        if(in_array($dn,$this->members)) return true;
+        else return false;
+    }
 }

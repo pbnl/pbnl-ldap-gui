@@ -81,6 +81,7 @@ class UserManagerController extends Controller
         //Create the form
         $people = new People($this->get("ldap.frontend"));
         $ouGroups = $people->getOUGroupsNames();
+        $staemme = ["ambronen","minas","tronjer"];
         $user = new User();
         $addUserForm = $this->createFormBuilder($user,['attr' => ['class' => 'form-addAUser']])
             ->add("firstName",TextType::class,array("attr"=>["placeholder"=>"Vorname"],'label' => "Vorname"))
@@ -91,6 +92,9 @@ class UserManagerController extends Controller
             ->add("generatedPassword",TextType::class,array("attr"=>["readonly"=>"","placeholder"=>"Generiertes Passwort"],"label"=>FALSE))
             ->add('ouGroup', ChoiceType::class, array(
                 'choices'  => ArrayMethods::valueToKeyAndValue($ouGroups),
+            ))
+            ->add('stamm', ChoiceType::class, array(
+                'choices'  => ArrayMethods::valueToKeyAndValue($staemme),
             ))
             ->add("send",SubmitType::class,array("label"=>"Erstellen","attr"=>["class"=>"btn btn-lg btn-primary btn-block"]))
             ->getForm();
@@ -119,5 +123,28 @@ class UserManagerController extends Controller
             "successMessage"=>$successMessage
 
         ));
+    }
+
+    /**
+     * @Route("/user/loeschen", name="Loeschen")
+     * @param Request $request
+     * @return Response
+     */
+    public function delUser(Request $request)
+    {
+        $loginHandler = $this->get("login");
+        if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
+
+        $errorMessage = Array();
+        $successMessage = Array();
+
+        $uidNumber = $request->get("uidNumber");
+
+
+        $people = new People($this->get("ldap.frontend"));
+        $dn = $people->getUserByUidNumber($uidNumber)->dn;
+        $people->delUser($dn);
+
+        return $this->redirectToRoute("Alle Benutzer");
     }
 }

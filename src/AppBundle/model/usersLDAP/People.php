@@ -28,6 +28,11 @@ class People
         return $this->ldapFrontend->getAllUsers($group,$user);
     }
 
+    public function getUserByUidNumber($uidNumber)
+    {
+        return $this->ldapFrontend->getUserByUidNumber($uidNumber);
+    }
+
     /**
      * Adds a new user to the LDAP and adds him to the pbnl and wiki groups
      * @param User $user
@@ -37,9 +42,11 @@ class People
     {
         if(!$this->ldapFrontend->getUserByName($user->givenName))
         {
+            $stamm = $user->getStamm($this->ldapFrontend);
             $user = $this->ldapFrontend->addAUser($user);
             $this->ldapFrontend->addUserDNToGroup($user->dn,"nordlichter");
             $this->ldapFrontend->addUserDNToGroup($user->dn,"wiki");
+            $this->ldapFrontend->addUserDNToGroup($user->dn,$stamm);
             return $user;
         }
         else return FALSE;
@@ -51,13 +58,22 @@ class People
         return $this->ldapFrontend->getOUGroupsNames();
     }
 
-    public function delUser(User $user)
+    public function delUser($userDN)
     {
-
+        $this->ldapFrontend->removeUserDNFromGroup($userDN,"nordlichter");
+        $this->ldapFrontend->removeUserDNFromGroup($userDN,"wiki");
+        $user = $this->ldapFrontend->getUserByDN($userDN);
+        $this->ldapFrontend->removeUserDNFromGroup($userDN,$user->getStamm($this->ldapFrontend));
+        $this->ldapFrontend->removeUserWithDN($userDN);
     }
 
     public function getGroups()
     {
         return $this->ldapFrontend->getAllGroups();
+    }
+
+    public function getStavo($stamm)
+    {
+
     }
 }
