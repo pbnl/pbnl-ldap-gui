@@ -14,11 +14,12 @@ use AppBundle\model\usersLDAP\People;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class StammController extends Controller
 {
     /**
-     * @Route("/stamm", name="Stamm")
+     * @Route("/stamm/show", name="Stamm")
      */
     public function getStamm(Request $request)
     {
@@ -56,11 +57,38 @@ class StammController extends Controller
      */
     public function showStavo(Request $request)
     {
+        $loginHandler = $this->get("login");
+        if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
+
         $errorMessage = Array();
         $successMessage = Array();
 
         $people = new People($this->get("ldap.frontend"));
-        $groups = $people->getStavo("");
+        $session = new Session();
+        $stamm = $session->get("stamm");
+        $groups = $people->getStavo($stamm)->getMembersUser();
+
+
+        return$this->render(":default:showStavo.html.twig",array(
+            "errorMessage"=>$errorMessage,
+            "successMessage"=>$successMessage,
+            "users" => $groups
+        ));
+    }
+
+    /**
+     * @Route("/stamm/stavo/delMember", name="Loesche Stavo Mitglied")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function delStavoMember(Request $request)
+    {
+
+        $loginHandler = $this->get("login");
+        if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
+
+        $errorMessage = Array();
+        $successMessage = Array();
 
 
         return$this->render("/default/permissionError.html.twig",array(

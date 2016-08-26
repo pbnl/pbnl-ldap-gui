@@ -74,6 +74,7 @@ class People
 
     public function getStavo($stamm)
     {
-
+        $stavo = new Stavo($this->ldapFrontend,$stamm);
+        return $stavo;
     }
 }

@@ -34,7 +34,7 @@ class Group
         $newGroup = new Group();
         foreach ($this->members as $userDN)
         {
-            if(in_array($userDN,$group->getMembersDN))
+            if(in_array($userDN,$group->getMembersDN()))
             {
                 $newGroup->addMember($userDN);
             }

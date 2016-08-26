@@ -13,11 +13,13 @@ use AppBundle\model\ldapCon\LDAPService;
 class Stavo
 {
     private $members = Array();
+    private $ldap;
 
     public function __construct(LDAPService $ldap, $name)
     {
-        $stamm = $ldap->getAllGroups($name);
-        $stavos = $ldap->getAllGroups("stavo");
+        $this->ldap = $ldap;
+        $stamm = $ldap->getAllGroups($name)[0];
+        $stavos = $ldap->getAllGroups("stavo")[0];
         $stavo = $stamm->getMembersOfGroupB($stavos);
 
         $this->members = $stavo->getMembersDN();
@@ -26,6 +28,16 @@ class Stavo
     public function getMembersDN()
     {
         return $this->members;
+    }
+
+    public function getMembersUser()
+    {
+        $membersUser = Array();
+        foreach ($this->members as $memberDN)
+        {
+            array_push($membersUser,$this->ldap->getUserByDN($memberDN));
+        }
+        return $membersUser;
     }
 
 
