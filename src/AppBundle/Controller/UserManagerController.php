@@ -56,7 +56,7 @@ class UserManagerController extends Controller
         //Search users
         $peopleList = $people->getAllUsers($people->groupFilter,$people->userFilter);
 
-        return$this->render("default/allUsers.html.twig",array(
+        return$this->render(":default:showUsersInOneTabel.html.twig",array(
             "peopleSearchForm" => $peopleSearchForm->createView(),
             "users"=>$peopleList,
             "errorMessage"=>$errorMessage,
@@ -81,8 +81,8 @@ class UserManagerController extends Controller
         //Create the form
         $people = new People($this->get("ldap.frontend"));
         $ouGroups = $people->getOUGroupsNames();
-        $staemme = ["ambronen","minas","tronjer"];
-        $user = new User();
+        $staemme = $people->getStammesNames();
+        $user = new User($this->get("ldap.frontend"));
         $addUserForm = $this->createFormBuilder($user,['attr' => ['class' => 'form-addAUser']])
             ->add("firstName",TextType::class,array("attr"=>["placeholder"=>"Vorname"],'label' => "Vorname"))
             ->add("secondName",TextType::class,array("attr"=>["placeholder"=>"Nachname"],'label' => "Nachname"))

@@ -6,8 +6,6 @@
     {{ parent() }}
 {% endblock %}
 
-{% form_theme peopleSearchForm 'bootstrap_3_horizontal_layout.html.twig' %}
-
 {% block body %}
     {% include 'includes/nav.html.twig' %}
     <div class="container">
@@ -15,8 +13,11 @@
         {% include 'includes/messages.html.twig' %}
         <h3>Such Optionen</h3>
         <div class="col-sm-6">
-            {{ form_start(peopleSearchForm) }}
-            {{ form_end(peopleSearchForm) }}
+            {% if peopleSearchForm is defined %}
+                {% form_theme peopleSearchForm 'bootstrap_3_horizontal_layout.html.twig' %}
+                {{ form_start(peopleSearchForm) }}
+                {{ form_end(peopleSearchForm) }}
+            {% endif %}
         </div>
     <table class="table table-striped">
         <thead>

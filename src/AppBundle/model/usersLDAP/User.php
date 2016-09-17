@@ -25,7 +25,7 @@ class User
     private $stamm = "";
 
 
-    public function __construct($data = null)
+    public function __construct(LDAPService $LDAPService,$data = null)
     {
         if ($data != null) {
             $this->givenName = $data["givenname"][0];
@@ -38,6 +38,7 @@ class User
             //TODO: Weiterleitung holen
             else $this->mail = "";
         }
+        $this->stamm = $this->getStamm($LDAPService);
     }
 
     public function memberOf(Group $group)
@@ -49,7 +50,7 @@ class User
     {
         if ($this->stamm != "") return $this->stamm;
         if($ldapFrontend == null) return "";
-        $staemme = ["ambronen", "minas", "tronjer"];
+        $staemme = $ldapFrontend->getStammesNames();
         foreach ($staemme as $stammName) {
             $stammGroup = $ldapFrontend->getAllGroups("$stammName")[0];
             if ($this->memberOf($stammGroup)) {

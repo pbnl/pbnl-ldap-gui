@@ -33,6 +33,20 @@ class People
         return $this->ldapFrontend->getUserByUidNumber($uidNumber);
     }
 
+    public function getStammesNames()
+    {
+        $groups = $this->ldapFrontend->getAllGroups();
+        $names = array();
+        foreach ($groups as $group)
+        {
+            if($group->type == "stamm")
+            {
+                array_push($names,$group->name);
+            }
+        };
+        return $names;
+    }
+
     /**
      * Adds a new user to the LDAP and adds him to the pbnl and wiki groups
      * @param User $user
@@ -76,5 +90,10 @@ class People
     {
         $stavo = new Stavo($this->ldapFrontend,$stamm);
         return $stavo;
+    }
+
+    public function getUserByName($name)
+    {
+        return $this->ldapFrontend->getUserByName($name);
     }
 }

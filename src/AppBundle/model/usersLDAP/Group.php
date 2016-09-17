@@ -9,12 +9,20 @@
 namespace AppBundle\model\usersLDAP;
 
 
+use AppBundle\model\ldapCon\LDAPService;
+
 class Group
 {
     private $members = Array(); // An array with all dn of the users
     public $name = "";
     public $dn = "";
     public $gidNumber = "";
+    public $type = "";
+
+    public function __construct(LDAPService $LDAPService)
+    {
+        $this->LDAPService = $LDAPService;
+    }
 
     public function addMember($dn)
     {
@@ -29,9 +37,20 @@ class Group
     {
         return count($this->members);
     }
+
+    public function getListWithDNAndName()
+    {
+        $return = Array();
+
+        foreach ($this->members as $member)
+        {
+            $return[$this->LDAPService->getUserByDN($member)->givenName] = $member;
+        }
+        return $return;
+    }
     public function getMembersOfGroupB($group)
     {
-        $newGroup = new Group();
+        $newGroup = new Group($this->LDAPService);
         foreach ($this->members as $userDN)
         {
             if(in_array($userDN,$group->getMembersDN()))

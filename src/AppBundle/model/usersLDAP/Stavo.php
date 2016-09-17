@@ -40,5 +40,15 @@ class Stavo
         return $membersUser;
     }
 
+    public function addMemberByDN($userDN)
+    {
+        $this->ldap->addUserDNToGroup($userDN,"stavo");
+    }
+
+    public function delMemberByDN($userDN)
+    {
+        $this->ldap->removeUserDNFromGroup($userDN,"stavo");
+    }
+
 
 }

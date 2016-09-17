@@ -75,7 +75,7 @@ class LoginController extends Controller
      */
     public function logout()
     {
-        $loginHandler = new LoginHandler();
+        $loginHandler = $this->get("login");
         $loginHandler->logout();
         return $this->redirectToRoute("Login");
     }

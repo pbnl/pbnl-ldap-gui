@@ -9,6 +9,7 @@
 namespace AppBundle\model\ldapCon;
 
 
+use AppBundle\model\login\LoginDataHolder;
 use AppBundle\model\SSHA;
 use AppBundle\model\usersLDAP\Group;
 use AppBundle\model\usersLDAP\User;
@@ -52,7 +53,7 @@ class LDAPService
         if($data["count"] != 0)
         {
             for($i = 0; $i < $data["count"]; $i++) {
-                $user = new User($data[$i]);
+                $user = new User($this,$data[$i]);
                 array_push($people,$user);
             }
         }
@@ -110,9 +111,20 @@ class LDAPService
         if($data["count"] != 0)
         {
             for($i = 0; $i < $data["count"]; $i++) {
-                $group = new Group();
+                $group = new Group($this);
                 $group->name = $data[$i]["cn"][0];
                 $group->dn = $data[$i]["dn"];
+                if(isset($data[$i]["description"]))
+                {
+                    if(strpos($data[$i]["description"][0],"stammGroup") !== false)
+                    {
+                        $group->type = "stamm";
+                    }
+                    elseif (strpos($data[$i]["description"][0],"team") !== false)
+                    {
+                        $group->type = "team";
+                    }
+                }
                 $group->gidNumber =$data[$i]["gidnumber"][0];
                 $member = $data[$i]["memberuid"];
                 for ($j = 0;$j < $member["count"];$j++)
@@ -160,7 +172,7 @@ class LDAPService
         //We need this for later
         $userForLDAP["dn"] = "givenName=$user->givenName, ou=$ou, $ldaptree";
 
-        return new User($userForLDAP);
+        return new User($this,$userForLDAP);
 
 
 
@@ -178,7 +190,7 @@ class LDAPService
 
         //There can be only one user with the name we are looking for
         if ($data["count"] != 1) return FALSE;
-        return new User($data[0]);
+        return new User($this,$data[0]);
     }
 
     public function getUserByUidNumber($uidNumber)
@@ -192,8 +204,8 @@ class LDAPService
         $data = ldap_get_entries($this->ldapCon, $result);
 
         //There can be only one user with the name we are looking for
-        if ($data["count"] != 1) return FALSE;
-        return new User($data[0]);
+        if ($data["count"] != 1) print_r("There are more than one people with the uidNumber: $uidNumber");
+        return new User($this,$data[0]);
     }
 
     public function getUserByDN($dn)
@@ -208,7 +220,7 @@ class LDAPService
 
         //There can be only one user with the dn we are looking for
         if ($data["count"] != 1) return FALSE;
-        return new User($data[0]);
+        return new User($this,$data[0]);
     }
 
     public function getHighestUidNumber()
@@ -319,5 +331,32 @@ class LDAPService
     {
         //Del
         ldap_delete($this->ldapCon,$userDN);
+    }
+
+    public function makeLoginRequest(LoginDataHolder $loginData)
+    {
+        //Search options
+        $ldaptree = "ou=People,dc=pbnl,dc=de";
+        $filter="(|(givenname=$loginData->name))";
+
+        //Search
+        $result = ldap_search($this->ldapCon,$ldaptree, $filter) or die ("Error in search query: ".ldap_error($this->ldapCon));
+        $data = ldap_get_entries($this->ldapCon, $result);
+
+        return $data;
+    }
+
+    public function getStammesNames()
+    {
+        $groups = $this->getAllGroups();
+        $names = array();
+        foreach ($groups as $group)
+        {
+            if($group->type == "stamm")
+            {
+                array_push($names,$group->name);
+            }
+        };
+        return $names;
     }
 }
