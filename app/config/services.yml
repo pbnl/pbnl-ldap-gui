@@ -10,4 +10,6 @@ services:
     login:
         class: AppBundle\model\login\LoginHandler
         arguments: ['@ldap.frontend']
-
+    login.User:
+            class: AppBundle\model\login\loggedInUserService
+            arguments: ['@ldap.frontend']

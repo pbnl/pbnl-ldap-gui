@@ -12,6 +12,7 @@ namespace AppBundle\model\ldapCon;
 use AppBundle\model\login\LoginDataHolder;
 use AppBundle\model\SSHA;
 use AppBundle\model\usersLDAP\Group;
+use AppBundle\model\usersLDAP\Team;
 use AppBundle\model\usersLDAP\User;
 
 class LDAPService
@@ -110,32 +111,80 @@ class LDAPService
 
         if($data["count"] != 0)
         {
-            for($i = 0; $i < $data["count"]; $i++) {
-                $group = new Group($this);
-                $group->name = $data[$i]["cn"][0];
-                $group->dn = $data[$i]["dn"];
-                if(isset($data[$i]["description"]))
+            for($i = 0; $i < $data["count"]; $i++)
+            {
+                if(isset($data[$i]["description"]) && strpos($data[$i]["description"][0],"stammGroup") !== false)
                 {
-                    if(strpos($data[$i]["description"][0],"stammGroup") !== false)
+                    $group = new Group($this);
+                    $group->name = $data[$i]["cn"][0];
+                    $group->dn = $data[$i]["dn"];
+                    $group->type = "stamm";
+
+                    $group->gidNumber =$data[$i]["gidnumber"][0];
+                    $member = $data[$i]["memberuid"];
+                    for ($j = 0;$j < $member["count"];$j++)
                     {
-                        $group->type = "stamm";
+                        $group->addMember($member[$j]);
                     }
-                    elseif (strpos($data[$i]["description"][0],"team") !== false)
-                    {
-                        $group->type = "team";
-                    }
+                    array_push($groups,$group);
                 }
-                $group->gidNumber =$data[$i]["gidnumber"][0];
-                $member = $data[$i]["memberuid"];
-                for ($j = 0;$j < $member["count"];$j++)
-                {
-                    $group->addMember($member[$j]);
-                }
-                array_push($groups,$group);
             }
         }
 
         return $groups;
+    }
+
+    /**
+     * Returns all teams or a team which name is equal to the $groupFilterName string
+     *
+     * @param string $teamFilterName
+     * @return array
+     * An array with all groups
+     */
+    public function getAllTeams($teamFilterName = "")
+    {
+        //Search options
+        $ldaptree = "ou=Group,dc=pbnl,dc=de";
+
+        //Search filters
+        if ($teamFilterName != "")
+        {
+            $filter="(&(objectClass=posixGroup)(cn=$teamFilterName))";
+        }
+        else
+        {
+            $filter="(&(objectClass=posixGroup))";
+        }
+
+        //Search
+        $result = ldap_search($this->ldapCon,$ldaptree, $filter) or die ("Error in search query: ".ldap_error($this->ldapCon));
+        $data = ldap_get_entries($this->ldapCon, $result);
+
+        $teams = Array();
+
+        if($data["count"] != 0)
+        {
+            for($i = 0; $i < $data["count"]; $i++)
+            {
+                if(isset($data[$i]["description"]) && strpos($data[$i]["description"][0],"teamGroup") !== false)
+                {
+                    $team = new Team($this);
+                    $team->name = $data[$i]["cn"][0];
+                    $team->dn = $data[$i]["dn"];
+                    $team->type = "team";
+
+                    $team->gidNumber =$data[$i]["gidnumber"][0];
+                    $member = $data[$i]["memberuid"];
+                    for ($j = 0;$j < $member["count"];$j++)
+                    {
+                        $team->addMemberToClassArray($member[$j]);
+                    }
+                    array_push($teams,$team);
+                }
+            }
+        }
+
+        return $teams;
     }
 
     /**

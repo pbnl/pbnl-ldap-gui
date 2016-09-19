@@ -1,0 +1,75 @@
+{% extends "includes/base.html.twig" %}
+
+{% block title %}Teams{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {% include 'includes/nav.html.twig' %}
+    <div class="container">
+        <br><br>
+        {% include 'includes/messages.html.twig' %}
+        <h2>Meine Teams</h2>
+        <div class="col-sm-6">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>
+                        Nr
+                    </th>
+                    <th>
+                        Gid
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for team in teamList %}
+                    <tr>
+                        <td>
+                            {{ loop.index}}
+                        </td>
+                        <td>
+                            {{team.gidNumber}}
+                        </td>
+                        <td>
+                            {{team.name}}
+                        </td>
+                        <td>
+
+
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".modal-{{ team.gidNumber }}">Löchen</button>
+
+                            <div class="modal fade modal-{{ team.gidNumber }}" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="gridSystemModalLabel">Löschen?</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            Wollen sie wirklich das Team {{team.name}} löschen?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <a class="btn btn-danger" href="{{ path('Loesche Stavo Mitglied', {'uidNumber': team.gidNumber}) }}">Löschen</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
