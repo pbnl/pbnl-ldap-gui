@@ -53,7 +53,7 @@ class ParentGroup
 
     public function addMember($dn)
     {
-
+        $this->LDAPService->addUserDNToGroup($dn,$this->name);
     }
 
     public function addMemberToClassArray($dn)

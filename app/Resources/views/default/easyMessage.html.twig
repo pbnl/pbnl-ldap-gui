@@ -1,0 +1,16 @@
+{% extends "includes/base.html.twig" %}
+
+{% block title %}Teams{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {% include 'includes/nav.html.twig' %}
+    <div class="container">
+        <br><br>
+        {% include 'includes/messages.html.twig' %}
+    </div>
+
+{% endblock %}

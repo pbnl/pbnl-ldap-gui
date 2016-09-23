@@ -11,8 +11,6 @@ namespace AppBundle\model\usersLDAP;
 
 class Team extends ParentGroup
 {
-    public $name;
-    public $dn;
-    public $type;
+
 
 }

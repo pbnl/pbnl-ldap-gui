@@ -14,7 +14,8 @@ use AppBundle\model\ldapCon\LDAPService;
 class Organisation
 {
     public $ldapFrontend ;
-    public $teamManager;
+    private $teamManager;
+    private $userManager;
 
     public function __construct(LDAPService $LDAPService)
     {
@@ -29,5 +30,14 @@ class Organisation
             return $this->teamManager;
         }
         else return $this->teamManager;
+    }
+    public function getUserManager()
+    {
+        if($this->userManager == null)
+        {
+            $this->userManager = new UserManager($this->ldapFrontend);
+            return $this->userManager;
+        }
+        else return $this->userManager;
     }
 }

@@ -27,7 +27,7 @@ class TeamManager
 
     public function getTeamByGid($gid)
     {
-
+        return $this->ldapFrontend->getAllTeams($gid)[0];
     }
     public function getTeamByName($name)
     {

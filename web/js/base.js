@@ -17,14 +17,10 @@ function goBack() {
     window.history.back();
 }
 
-$(document).ready(function(){
-
-    $( form_generatePassword ).click(function() {
-        password = generatePassword(10);
-        $("#form_clearPassword").val(password);
-        $("#form_generatedPassword").val(password);
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
     });
-
-
-
-});
+    return vars;
+}

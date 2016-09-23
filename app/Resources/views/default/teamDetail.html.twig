@@ -1,0 +1,109 @@
+{% extends "includes/base.html.twig" %}
+
+{% block title %}Teams{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {% include 'includes/nav.html.twig' %}
+    <div class="container">
+        <br><br>
+        {% include 'includes/messages.html.twig' %}
+        <h2>Meine Teams</h2>
+        <div class="col-sm-8">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Wert
+                    </th>
+                    <th>
+                        Löschen
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <td>
+                        {{team.name}}
+                    </td>
+                </tr>
+                    <th>
+                        Gid
+                    </th>
+                    <td>
+                        {{team.gidNumber}}
+                    </td>
+                </tr>
+                    {% for member in team.getMembersDN %}
+                        <tr>
+                            <th>
+                                Mitglied
+                            </th>
+                            <td>
+                                {{member}}
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".modal-{{ member }}">Löchen</button>
+
+                                <div class="modal fade modal-{{ member }}" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title" id="gridSystemModalLabel">Löschen?</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                Wollen sie wirklich den User {{member}} aus dem Stavo löschen?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                <a class="btn btn-danger" href="{{ path('Team Mitglied löschen', {'dn': member,'gid':team.gidNumber}) }}">Löschen</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-sm-4">
+            <h3>Mitglied zum Team hinzufügen</h3>
+            <br>
+            <h4>Suche Benutzer</h4>
+            <div class="form-group">
+                <div class="col-sm-8">
+                    <input class="form-control" id="addUserToTeamSearch" placeholder="Benutzername">
+                </div>
+                <div class="col-sm-4">
+                    <button class="btn btn-primary" id="addUserToTeamSearchButton">Suche</button>
+                </div>
+            </div>
+            {{ form_start(addTeamMemberForm) }}
+            <div class="form-group">
+                <div class="col-sm-8">{{ form_widget(addTeamMemberForm.givenName) }}</div>
+                <div class="col-sm-4">{{ form_widget(addTeamMemberForm.send) }}</div>
+            </div>
+            {{ form_end(addTeamMemberForm) }}
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/teamDetails.js') }}"></script>
+
+{% endblock %}

@@ -40,6 +40,9 @@
                             {{team.name}}
                         </td>
                         <td>
+                            <a class="btn btn-primary" href={{ path("Team Detail", {'gid': team.gidNumber}) }}>Details</a>
+                        </td>
+                        <td>
 
 
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".modal-{{ team.gidNumber }}">Löchen</button>

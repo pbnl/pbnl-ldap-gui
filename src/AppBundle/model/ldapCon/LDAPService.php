@@ -113,8 +113,8 @@ class LDAPService
         {
             for($i = 0; $i < $data["count"]; $i++)
             {
-                if(isset($data[$i]["description"]) && strpos($data[$i]["description"][0],"stammGroup") !== false)
-                {
+                //if(isset($data[$i]["description"]) && strpos($data[$i]["description"][0],"stammGroup") !== false)
+                //{
                     $group = new Group($this);
                     $group->name = $data[$i]["cn"][0];
                     $group->dn = $data[$i]["dn"];
@@ -127,7 +127,7 @@ class LDAPService
                         $group->addMember($member[$j]);
                     }
                     array_push($groups,$group);
-                }
+                //}
             }
         }
 
@@ -147,7 +147,11 @@ class LDAPService
         $ldaptree = "ou=Group,dc=pbnl,dc=de";
 
         //Search filters
-        if ($teamFilterName != "")
+        if($teamFilterName != "" && is_numeric($teamFilterName))
+        {
+            $filter="(&(objectClass=posixGroup)(gidNumber=$teamFilterName))";
+        }
+        elseif ($teamFilterName != "")
         {
             $filter="(&(objectClass=posixGroup)(cn=$teamFilterName))";
         }
