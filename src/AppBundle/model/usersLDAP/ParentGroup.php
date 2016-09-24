@@ -15,10 +15,12 @@ class ParentGroup
 {
     public $LDAPService;
     protected $members = Array(); // An array with all dn of the users
+    protected $membersUserData = Array(); // An array with all dn of the users
     public $name = "";
     public $dn = "";
     public $gidNumber = "";
     public $type = "";
+    private $fetchedData = false;
 
     public function __construct(LDAPService $LDAPService)
     {
@@ -28,6 +30,12 @@ class ParentGroup
     public function getMembersDN()
     {
         return $this->members;
+    }
+
+    public function getMembersUser()
+    {
+        if(!$this->fetchedData) $this->fetchUserData();
+        return $this->membersUserData;
     }
 
     public function getMemberCount()
@@ -54,14 +62,37 @@ class ParentGroup
     public function addMember($dn)
     {
         $this->LDAPService->addUserDNToGroup($dn,$this->name);
+        $mail = $this->LDAPService->getUserByDN($dn)->mail;
+        $name = str_replace("@","",$this->name);
+        if(filter_var($mail, FILTER_VALIDATE_EMAIL)) $this->LDAPService->addMailToForward($mail,"$name@pbnl.de");
     }
 
     public function addMemberToClassArray($dn)
     {
         array_push($this->members,$dn);
+        $this->fetchedData = false;
     }
     public function delTeam($name)
     {
 
+    }
+
+    public function fetchUserData()
+    {
+        $this->membersUserData = Array();
+        foreach ($this->members as $member)
+        {
+            $oneUser = $this->LDAPService->getUserByDN($member);
+            array_push($this->membersUserData,$oneUser);
+        }
+        $this->fetchedData = true;
+    }
+
+    public function removeMember($dn)
+    {
+        $this->LDAPService->removeUserDNFromGroup($dn,$this->name);
+        $mail = $this->LDAPService->getUserByDN($dn)->mail;
+        $name = str_replace("@","",$this->name);
+        if(filter_var($mail, FILTER_VALIDATE_EMAIL)) $this->LDAPService->removeMailFromForward($mail,"$name@pbnl.de");
     }
 }

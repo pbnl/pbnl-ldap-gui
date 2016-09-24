@@ -43,18 +43,18 @@
                         {{team.gidNumber}}
                     </td>
                 </tr>
-                    {% for member in team.getMembersDN %}
+                    {% for member in team.getMembersUser %}
                         <tr>
                             <th>
                                 Mitglied
                             </th>
                             <td>
-                                {{member}}
+                                {{member.givenName}}
                             </td>
                             <td>
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".modal-{{ member }}">Löchen</button>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".modal-{{ member.uidNumber }}">Löchen</button>
 
-                                <div class="modal fade modal-{{ member }}" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+                                <div class="modal fade modal-{{ member.uidNumber }}" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -62,11 +62,11 @@
                                                 <h4 class="modal-title" id="gridSystemModalLabel">Löschen?</h4>
                                             </div>
                                             <div class="modal-body">
-                                                Wollen sie wirklich den User {{member}} aus dem Stavo löschen?
+                                                Wollen sie wirklich den User {{member.givenName}} aus dem Team {{team.name}} löschen?
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                <a class="btn btn-danger" href="{{ path('Team Mitglied löschen', {'dn': member,'gid':team.gidNumber}) }}">Löschen</a>
+                                                <a class="btn btn-danger" href="{{ path('Team Mitglied löschen', {'uidNumber': member.uidNumber,'gid':team.gidNumber}) }}">Löschen</a>
                                             </div>
                                         </div>
                                     </div>
