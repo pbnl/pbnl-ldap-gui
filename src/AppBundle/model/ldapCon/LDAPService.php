@@ -113,8 +113,8 @@ class LDAPService
         {
             for($i = 0; $i < $data["count"]; $i++)
             {
-                //if(isset($data[$i]["description"]) && strpos($data[$i]["description"][0],"stammGroup") !== false)
-                //{
+                if(isset($data[$i]["description"]) && strpos($data[$i]["description"][0],"stammGroup") !== false)
+                {
                     $group = new Group($this);
                     $group->name = $data[$i]["cn"][0];
                     $group->dn = $data[$i]["dn"];
@@ -127,7 +127,22 @@ class LDAPService
                         $group->addMember($member[$j]);
                     }
                     array_push($groups,$group);
-                //}
+                }
+                elseif (isset($data[$i]["description"]) && strpos($data[$i]["description"][0],"teamGroup") !== false)
+                {
+                    $team = new Team($this);
+                    $team->name = $data[$i]["cn"][0];
+                    $team->dn = $data[$i]["dn"];
+                    $team->type = "team";
+
+                    $team->gidNumber =$data[$i]["gidnumber"][0];
+                    $member = $data[$i]["memberuid"];
+                    for ($j = 0;$j < $member["count"];$j++)
+                    {
+                        $team->addMemberToClassArray($member[$j]);
+                    }
+                    array_push($groups,$team);
+                }
             }
         }
 

@@ -23,10 +23,12 @@ class User
     public $generatedPassword;
     public $ouGroup;
     private $stamm = "";
+    private $ldapService;
 
 
     public function __construct(LDAPService $LDAPService,$data = null)
     {
+        $this->ldapService = $LDAPService;
         if ($data != null) {
             $this->givenName = $data["givenname"][0];
             $this->dn = str_replace(", ", ",", $data["dn"]);
@@ -41,7 +43,7 @@ class User
         $this->stamm = $this->getStamm($LDAPService);
     }
 
-    public function memberOf(Group $group)
+    public function memberOf(ParentGroup $group)
     {
         return in_array($this->dn, $group->getMembersDN());
     }
@@ -63,6 +65,16 @@ class User
     public function setStamm($stamm)
     {
         $this->stamm = $stamm;
+    }
+
+    public function delUser()
+    {
+        $groups = $this->ldapService->getAllGroups();
+        foreach ($groups as $group)
+        {
+            if($group->isDNMember($this->dn)) $group->removeMember($this->dn);
+        }
+        $this->ldapService->removeUserWithDN($this->dn);
     }
 
 }

@@ -10,6 +10,7 @@ namespace AppBundle\Controller;
 
 
 use AppBundle\model\ArrayMethods;
+use AppBundle\model\usersLDAP\Organisation;
 use AppBundle\model\usersLDAP\People;
 use AppBundle\model\usersLDAP\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -141,9 +142,9 @@ class UserManagerController extends Controller
         $uidNumber = $request->get("uidNumber");
 
 
-        $people = new People($this->get("ldap.frontend"));
-        $dn = $people->getUserByUidNumber($uidNumber)->dn;
-        $people->delUser($dn);
+        $org = new Organisation($this->get("ldap.frontend"));
+        $user = $org->getUserManager()->getUserByUid($uidNumber);
+        $user->delUser();
 
         return $this->redirectToRoute("Alle Benutzer");
     }
