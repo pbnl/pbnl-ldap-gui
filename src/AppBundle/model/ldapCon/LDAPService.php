@@ -124,7 +124,7 @@ class LDAPService
                     $member = $data[$i]["memberuid"];
                     for ($j = 0;$j < $member["count"];$j++)
                     {
-                        $group->addMember($member[$j]);
+                        $group->addMemberToClassArray($member[$j]);
                     }
                     array_push($groups,$group);
                 }
@@ -142,6 +142,21 @@ class LDAPService
                         $team->addMemberToClassArray($member[$j]);
                     }
                     array_push($groups,$team);
+                }
+                else
+                {
+                    $group = new Group($this);
+                    $group->name = $data[$i]["cn"][0];
+                    $group->dn = $data[$i]["dn"];
+                    $group->type = "stamm";
+
+                    $group->gidNumber =$data[$i]["gidnumber"][0];
+                    $member = $data[$i]["memberuid"];
+                    for ($j = 0;$j < $member["count"];$j++)
+                    {
+                        $group->addMemberToClassArray($member[$j]);
+                    }
+                    array_push($groups,$group);
                 }
             }
         }

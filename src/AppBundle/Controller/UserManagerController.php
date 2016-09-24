@@ -80,10 +80,11 @@ class UserManagerController extends Controller
         $successMessage = Array();
 
         //Create the form
-        $people = new People($this->get("ldap.frontend"));
-        $ouGroups = $people->getOUGroupsNames();
-        $staemme = $people->getStammesNames();
-        $user = new User($this->get("ldap.frontend"));
+        $org = new Organisation($this->get("ldap.frontend"));
+        $userManager = $org->getUserManager();
+        $ouGroups = $org->getOUGroupsNames();
+        $staemme = $org->getStammesNames();
+        $user = $userManager->getEmptyUser();
         $addUserForm = $this->createFormBuilder($user,['attr' => ['class' => 'form-addAUser']])
             ->add("firstName",TextType::class,array("attr"=>["placeholder"=>"Vorname"],'label' => "Vorname"))
             ->add("secondName",TextType::class,array("attr"=>["placeholder"=>"Nachname"],'label' => "Nachname"))
@@ -108,8 +109,7 @@ class UserManagerController extends Controller
         if($addUserForm->isSubmitted() && $addUserForm->isValid())
         {
             //Create the new user
-            $people = new People($this->get("ldap.frontend"));
-            $personAddedToLDAP = $people->addUser($user);
+            $personAddedToLDAP = $userManager->createNewUser($user);
             //Handel result and errors
             if ($personAddedToLDAP == FALSE) array_push($errorMessage,"Benutzer konnte nicht hinzugefügt werden. Benutzer exestiert bereits");
             else $addedSomeone = TRUE;

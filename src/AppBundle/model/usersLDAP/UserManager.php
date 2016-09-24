@@ -13,15 +13,31 @@ use AppBundle\model\ldapCon\LDAPService;
 
 class UserManager
 {
-    public $ldapFrontend;
+    private $ldapFrontend;
+    private $org;
 
-    public function __construct(LDAPService $LDAPService)
+    public function __construct(LDAPService $LDAPService, Organisation $org)
     {
         $this->ldapFrontend = $LDAPService;
+        $this->org = $org;
     }
-
-    public function createNewUser($name)
+    /**
+     * Adds a new user to the LDAP and adds him to the pbnl and wiki groups
+     * @param User $user
+     * @return array|bool
+     */
+    public function createNewUser($user)
     {
+        if(!$this->ldapFrontend->getUserByName($user->givenName))
+        {
+            $stamm = $user->getStamm($this->ldapFrontend);
+            $user = $this->ldapFrontend->addAUser($user);
+            $this->org->getGroupManager()->getAllGroups("nordlichter")[0]->addMember($user->dn);
+            $this->org->getGroupManager()->getAllGroups("wiki")[0]->addMember($user->dn);
+            $this->org->getGroupManager()->getAllGroups($stamm)[0]->addMember($user->dn);
+            return $user;
+        }
+        else return FALSE;
 
     }
 

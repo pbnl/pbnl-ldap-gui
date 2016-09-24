@@ -11,14 +11,8 @@ namespace AppBundle\model\usersLDAP;
 
 use AppBundle\model\ldapCon\LDAPService;
 
-class TeamManager
+class TeamManager extends GroupManager
 {
-    public $ldapFrontend;
-
-    public function __construct(LDAPService $LDAPService)
-    {
-        $this->ldapFrontend = $LDAPService;
-    }
 
     public function createNewTeam($name)
     {

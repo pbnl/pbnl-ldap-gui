@@ -14,10 +14,6 @@ use AppBundle\model\ldapCon\LDAPService;
 class Group extends ParentGroup
 {
 
-    public function addMember($dn)
-    {
-        array_push($this->members,$dn);
-    }
     public function getMembersOfGroupB($group)
     {
         $newGroup = new Group($this->LDAPService);
@@ -25,7 +21,7 @@ class Group extends ParentGroup
         {
             if(in_array($userDN,$group->getMembersDN()))
             {
-                $newGroup->addMember($userDN);
+                $newGroup->addMemberToClassArray($userDN);
             }
         }
         return$newGroup;

@@ -16,6 +16,7 @@ class Organisation
     public $ldapFrontend ;
     private $teamManager;
     private $userManager;
+    private $groupManager;
 
     public function __construct(LDAPService $LDAPService)
     {
@@ -26,18 +27,49 @@ class Organisation
     {
         if($this->teamManager == null)
         {
-            $this->teamManager = new TeamManager($this->ldapFrontend);
+            $this->teamManager = new TeamManager($this->ldapFrontend,$this);
             return $this->teamManager;
         }
         else return $this->teamManager;
     }
+
     public function getUserManager()
     {
         if($this->userManager == null)
         {
-            $this->userManager = new UserManager($this->ldapFrontend);
+            $this->userManager = new UserManager($this->ldapFrontend,$this);
             return $this->userManager;
         }
         else return $this->userManager;
     }
+
+    public function getGroupManager()
+    {
+        if($this->groupManager == null)
+        {
+            $this->groupManager = new GroupManager($this->ldapFrontend,$this);
+            return $this->groupManager;
+        }
+        else return $this->groupManager;
+    }
+
+    public function getOUGroupsNames()
+    {
+        return $this->ldapFrontend->getOUGroupsNames();
+    }
+
+    public function getStammesNames()
+    {
+        $groups = $this->ldapFrontend->getAllGroups();
+        $names = array();
+        foreach ($groups as $group)
+        {
+            if($group->type == "stamm")
+            {
+                array_push($names,$group->name);
+            }
+        };
+        return $names;
+    }
+
 }
