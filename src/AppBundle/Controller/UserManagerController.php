@@ -10,6 +10,7 @@ namespace AppBundle\Controller;
 
 
 use AppBundle\model\ArrayMethods;
+use AppBundle\model\formDataClasses\UserSearchFormDataHolder;
 use AppBundle\model\usersLDAP\Organisation;
 use AppBundle\model\usersLDAP\People;
 use AppBundle\model\usersLDAP\User;
@@ -41,10 +42,12 @@ class UserManagerController extends Controller
         $successMessage = Array();
 
         //Get all users and search for name and groupq if wanted
-        $people = new People($this->get("ldap.frontend"));
+        $org = new Organisation($this->get("ldap.frontend"));
+        $userManager = $org->getUserManager();
 
         //Create search form
-        $peopleSearchForm = $this->createFormBuilder($people,['attr' => ['class' => 'form-searchUser']])
+        $userSearchFormDataHolder = new UserSearchFormDataHolder();
+        $peopleSearchForm = $this->createFormBuilder($userSearchFormDataHolder,['attr' => ['class' => 'form-searchUser']])
             ->add("userFilter",TextType::class,array("attr"=>["placeholder"=>"Benutzer suchen"],'label'=>false,'required' => false))
             ->add("groupFilter",TextType::class,array("attr"=>["placeholder"=>"Gruppen suchen"],'label'=>false,'required' => false))
             ->add("send",SubmitType::class,array("label"=>"Suchen","attr"=>["class"=>"btn btn-lg btn-primary btn-block"]))
@@ -55,11 +58,11 @@ class UserManagerController extends Controller
         $peopleSearchForm->handleRequest($request);
 
         //Search users
-        $peopleList = $people->getAllUsers($people->groupFilter,$people->userFilter);
+        $userList = $userManager->getAllUsers($userSearchFormDataHolder->groupFilter,$userSearchFormDataHolder->userFilter);
 
         return$this->render(":default:showUsersInOneTabel.html.twig",array(
             "peopleSearchForm" => $peopleSearchForm->createView(),
-            "users"=>$peopleList,
+            "users"=>$userList,
             "errorMessage"=>$errorMessage,
             "successMessage"=>$successMessage
 
