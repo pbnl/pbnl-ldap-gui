@@ -54,15 +54,17 @@ class StammController extends Controller
      */
     public function showStavo(Request $request)
     {
-        $loginHandler = $this->get("login");
-        if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
-
         $errorMessage = Array();
         $successMessage = Array();
 
         $people = new People($this->get("ldap.frontend"));
         $session = new Session();
         $stamm = $session->get("stamm");
+
+        //Security stuff
+        $loginHandler = $this->get("login");
+        if (!$loginHandler->checkPermissions("inStamm:".$request->get("stamm",$stamm))) return $this->redirectToRoute("PermissionError");
+
         $group = $people->getStavo($request->get("stamm",$stamm))->getMembersUser();
 
         $stammesMember = $people->getGroups($request->get("stamm",$stamm))[0]->getListWithDNAndName();
@@ -103,7 +105,7 @@ class StammController extends Controller
         $stammName = $request->get("stamm");
 
         $loginHandler = $this->get("login");
-        if (!$loginHandler->checkPermissions("inStamm:$stammName")) return $this->redirectToRoute("PermissionError");
+        if (!$loginHandler->checkPermissions("inStamm:$stammName,inGroup:stavo")) return $this->redirectToRoute("PermissionError");
 
         //Get the stamm
         $people = new People($this->get("ldap.frontend"));
@@ -126,6 +128,9 @@ class StammController extends Controller
     {
         $errorMessage = Array();
         $successMessage = Array();
+
+        $loginHandler = $this->get("login");
+        if (!$loginHandler->checkPermissions("inStamm:".$request->get('form[stamm]').",inGroup:stavo")) return $this->redirectToRoute("PermissionError");
 
         $people = new People($this->get("ldap.frontend"));
         $stammesMember = $people->getGroups($request->get("form[stamm]"))[0]->getListWithDNAndName();

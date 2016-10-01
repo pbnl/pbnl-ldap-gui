@@ -82,6 +82,10 @@ class LoginHandler
         {
             return $session->get("loggedIn");
         }
+        else
+        {
+            if(!$session->get("loggedIn")) return false;
+        }
         $con = new LDAPService();
 
         //Splits up the string into an array
@@ -97,6 +101,10 @@ class LoginHandler
                     return $con->getAllGroups($session->get("stamm"))[0]->isDNMember($session->get("dn"));
                     break;
                 case "inStamm" :
+                    $value = explode(":",$requierment)[1];
+                    return $con->getAllGroups($value)[0]->isDNMember($session->get("dn"));
+                    break;
+                case "inGroup" :
                     $value = explode(":",$requierment)[1];
                     return $con->getAllGroups($value)[0]->isDNMember($session->get("dn"));
                     break;
