@@ -78,6 +78,7 @@ class LoginHandler
     public function checkPermissions($requierments = "")
     {
         $session = new Session();
+        $con = new LDAPService();
         if($requierments == "")
         {
             return $session->get("loggedIn");
@@ -85,8 +86,8 @@ class LoginHandler
         else
         {
             if(!$session->get("loggedIn")) return false;
+            if($con->getAllGroups("buvo")[0]->isDNMember($session->get("dn"))) return true;
         }
-        $con = new LDAPService();
 
         //Splits up the string into an array
         $requierments = explode(",",$requierments);
