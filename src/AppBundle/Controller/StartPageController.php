@@ -17,8 +17,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class StartPageController extends Controller
 {
-    public $staemmeGid = ["503"=>"","506"=>"","504"=>""];
-
     /**
      * @Route("/startPage", name="Startpage")
      */
@@ -38,7 +36,7 @@ class StartPageController extends Controller
         $groubCount = Array();
         foreach ($groups as $group)
         {
-            if(array_key_exists($group->gidNumber,$this->staemmeGid)) {
+            if ($group->type == "stamm") {
                 array_push($groupNames, $group->name);
                 array_push($groubCount, $group->getMemberCount());
             }

@@ -148,7 +148,7 @@ class LDAPService
                     $group = new Group($this);
                     $group->name = $data[$i]["cn"][0];
                     $group->dn = $data[$i]["dn"];
-                    $group->type = "stamm";
+                    $group->type = "team";
 
                     $group->gidNumber =$data[$i]["gidnumber"][0];
                     $member = $data[$i]["memberuid"];
