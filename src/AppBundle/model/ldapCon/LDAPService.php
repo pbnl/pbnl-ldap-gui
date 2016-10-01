@@ -442,4 +442,28 @@ class LDAPService
         };
         return $names;
     }
+
+    public function getForwardForMail($mail)
+    {
+        //Search options
+        $ldaptree = "ou=Forward,dc=pbnl,dc=de";
+        $filter="(|(mail=$mail))";
+
+        //Search
+        $result = ldap_search($this->ldapCon,$ldaptree, $filter) or die ("Error in search query: ".ldap_error($this->ldapCon));
+        $data = ldap_get_entries($this->ldapCon, $result);
+
+        $forwards = Array();
+
+        if($data["count"] != 0)
+        {
+            for($i = 0; $i < $data["count"]; $i++) {
+                if ($data[$i]["forward"]["count"] != 0)
+                    for ($j = 0; $j < $data[$i]["forward"]["count"] ; $j++) {
+                        array_push($forwards, $data[$i]["forward"][$j]);
+                    }
+            }
+        }
+        return $forwards;
+    }
 }

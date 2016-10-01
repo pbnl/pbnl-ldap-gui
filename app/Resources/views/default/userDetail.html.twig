@@ -1,0 +1,102 @@
+{% extends "includes/base.html.twig" %}
+
+{% block title %}Teams{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {% include 'includes/nav.html.twig' %}
+    <div class="container">
+        <br><br>
+        {% include 'includes/messages.html.twig' %}
+        <h2>{{ user.givenName }}</h2>
+        <div class="col-sm-8">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Wert
+                    </th>
+                    <th>
+                        Edit
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <td>
+                        {{user.givenName}}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Uid
+                    </th>
+                    <td>
+                        {{user.uidNumber}}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Vorname
+                    </th>
+                    <td>
+                        {{user.firstName}}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Nachname
+                    </th>
+                    <td>
+                        {{user.secondName}}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Mail
+                    </th>
+                    <td>
+                        {{user.mail}}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Heimverzeichniss
+                    </th>
+                    <td>
+                        {{user.homeDirectory}}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        DN
+                    </th>
+                    <td>
+                        {{user.dn}}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-sm-4">
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+{% endblock %}

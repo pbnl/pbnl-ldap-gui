@@ -37,8 +37,11 @@ class User
             $this->firstName = $data["cn"][0];
             $this->secondName = $data["sn"][0];
             if (isset($data["mail"][0])) $this->mail = $data["mail"][0];
-            //TODO: Weiterleitung holen
-            else $this->mail = "";
+            else {
+                if ($this->ldapService->getForwardForMail($data["givenname"][0] . "@pbnl.de") != false) {
+                    $this->mail = $this->ldapService->getForwardForMail($data["givenname"][0] . "@pbnl.de")[0];
+                }
+            }
         }
         $this->stamm = $this->getStamm($LDAPService);
     }

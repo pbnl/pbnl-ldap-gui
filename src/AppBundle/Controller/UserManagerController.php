@@ -151,4 +151,30 @@ class UserManagerController extends Controller
 
         return $this->redirectToRoute("Alle Benutzer");
     }
+
+    /**
+     * @Route("/user/userDetail", name="Userdetails")
+     * @param Request $request
+     * @return Response
+     */
+    public function showDetailsUser(Request $request)
+    {
+        $loginHandler = $this->get("login");
+        if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
+
+        $errorMessage = Array();
+        $successMessage = Array();
+
+        $uidNumber = $request->get("uidNumber");
+        $org = new Organisation($this->get("ldap.frontend"));
+        $user = $org->getUserManager()->getUserByUid($uidNumber);
+
+
+        //Render the page
+        return $this->render(":default:userDetail.html.twig",array(
+            "user" => $user,
+            "errorMessage"=>$errorMessage,
+            "successMessage"=>$successMessage
+        ));
+    }
 }
