@@ -57,9 +57,6 @@ class TeamController extends Controller
      */
     public function getTeamDetails(Request $request)
     {
-        $loginHandler = $this->get("login");
-        if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
-
         $errorMessage = Array();
         $successMessage = Array();
 
@@ -70,7 +67,10 @@ class TeamController extends Controller
         $teamManager = $org->getTeamManager();
         $team = $teamManager->getAllTeams($gid)[0];
         $team->fetchUserData();
-        if(!$team->isDNMember($this->get("login.User")->getDN())) return $this->redirectToRoute("PermissionError");
+
+        //Security stuff
+        $loginHandler = $this->get("login");
+        if (!$loginHandler->checkPermissions("inTeam:".$team->name)) return $this->redirectToRoute("PermissionError");
 
         //Create the form
         $user = new AddTeamMemberFormData();
@@ -97,9 +97,6 @@ class TeamController extends Controller
      */
     public function addMemberToTeam(Request$request)
     {
-        $loginHandler = $this->get("login");
-        if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
-
         $errorMessage = Array();
         $successMessage = Array();
 
@@ -108,7 +105,9 @@ class TeamController extends Controller
         //Get all users witch are not in the group $gid
         $team = $org->getTeamManager()->getAllTeams($request->get("gid",""))[0];
 
-        if(!$team->isDNMember($this->get("login.User")->getDN())) return $this->redirectToRoute("PermissionError");
+        //Security stuff
+        $loginHandler = $this->get("login");
+        if (!$loginHandler->checkPermissions("inTeam:".$team->name)) return $this->redirectToRoute("PermissionError");
 
         $userManager = $org->getUserManager();
         $users = $userManager->getAllUsers("",$request->get("form[givenName]"));
@@ -138,7 +137,8 @@ class TeamController extends Controller
             //Add the user to the team
             $user = $org->getUserManager()->getUserByName($formDataUser->givenName);
             $team = $org->getTeamManager()->getTeamByGid($formDataUser->gid);
-            if (!$loginHandler->checkPermissions("inStamm:$team->name")) return $this->redirectToRoute("PermissionError");
+            //Security stuff
+            if (!$loginHandler->checkPermissions("inTeam:".$team->name)) return $this->redirectToRoute("PermissionError");
 
             $team->addMember($user->dn);
             array_push($successMessage,"Benutzer hinzugefügt");
@@ -158,18 +158,17 @@ class TeamController extends Controller
      */
     public function delTeamMember(Request $request)
     {
-        $loginHandler = $this->get("login");
-        if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
-
         $errorMessage = Array();
         $successMessage = Array();
 
         $org = new Organisation($this->get("ldap.frontend"));
 
-
+        //get the team
         $team = $org->getTeamManager()->getAllTeams($request->get("gid",""))[0];
 
-        if(!$team->isDNMember($this->get("login.User")->getDN())) return $this->redirectToRoute("PermissionError");
+        //Security stuff
+        $loginHandler = $this->get("login");
+        if (!$loginHandler->checkPermissions("inTeam:".$team->name)) return $this->redirectToRoute("PermissionError");
 
         //Del the user from the team
         $user = $org->getUserManager()->getUserByUid($request->get("uidNumber",""));

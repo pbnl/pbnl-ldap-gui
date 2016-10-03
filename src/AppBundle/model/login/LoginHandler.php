@@ -109,6 +109,10 @@ class LoginHandler
                     $value = explode(":",$requierment)[1];
                     return $con->getAllGroups($value)[0]->isDNMember($session->get("dn"));
                     break;
+                case "inTeam" :
+                    $value = explode(":",$requierment)[1];
+                    return $con->getAllTeams($value)[0]->isDNMember($session->get("dn"));
+                    break;
             }
         }
 
