@@ -13,6 +13,7 @@
         {% include 'includes/messages.html.twig' %}
         <h2>{{ user.givenName }}</h2>
         <div class="col-sm-8">
+            {% if editUserForm == false %}
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -84,8 +85,202 @@
                         {{user.dn}}
                     </td>
                 </tr>
+                <tr>
+                    <th>
+                        Stadt
+                    </th>
+                    <td>
+                        {{user.l}}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        PLZ
+                    </th>
+                    <td>
+                        {{user.postalCode}}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Straße
+                    </th>
+                    <td>
+                        {{user.street}}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Telefonnummer
+                    </th>
+                    <td>
+                        {{user.telephoneNumber}}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Mobil
+                    </th>
+                    <td>
+                        {{user.mobile}}
+                    </td>
+                </tr>
                 </tbody>
             </table>
+            {% endif %}
+            {% if editUserForm != false %}
+                {{ form_start(editUserForm) }}
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Wert
+                        </th>
+                        <th>
+                            Edit
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <td>
+                            {{user.givenName}}
+                        </td>
+                        <td>
+                            Nicht änderbar
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Uid
+                        </th>
+                        <td>
+                            {{user.uidNumber}}
+                        </td>
+                        <td>
+                            Nicht änderbar
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Vorname
+                        </th>
+                        <td>
+                            {{user.firstName}}
+                        </td>
+                        <td>
+                            {{form_widget(editUserForm.firstName)}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Nachname
+                        </th>
+                        <td>
+                            {{user.secondName}}
+                        </td>
+                        <td>
+                            {{form_widget(editUserForm.secondName)}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Mail
+                        </th>
+                        <td>
+                            {{user.mail}}
+                        </td>
+                        <td>
+                            Nicht änderbar
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Heimverzeichniss
+                        </th>
+                        <td>
+                            {{user.homeDirectory}}
+                        </td>
+                        <td>
+                            Nicht änderbar
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            DN
+                        </th>
+                        <td>
+                            {{user.dn}}
+                        </td>
+                        <td>
+                            Nicht änderbar
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Stadt
+                        </th>
+                        <td>
+                            {{user.l}}
+                        </td>
+                        <td>
+                            {{form_widget(editUserForm.l)}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            PLZ
+                        </th>
+                        <td>
+                            {{user.postalCode}}
+                        </td>
+                        <td>
+                            {{form_widget(editUserForm.postalCode)}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Straße
+                        </th>
+                        <td>
+                            {{user.street}}
+                        </td>
+                        <td>
+                            {{form_widget(editUserForm.street)}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Telefonnummer
+                        </th>
+                        <td>
+                            {{user.telephoneNumber}}
+                        </td>
+                        <td>
+                            {{form_widget(editUserForm.telephoneNumber)}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Mobil
+                        </th>
+                        <td>
+                            {{user.mobile}}
+                        </td>
+                        <td>
+                            {{form_widget(editUserForm.mobile)}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                {{ form_end(editUserForm) }}
+            {% endif %}
         </div>
 
         <div class="col-sm-4">

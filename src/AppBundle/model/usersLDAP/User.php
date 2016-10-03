@@ -21,7 +21,12 @@ class User
     public $dn = "";
     public $clearPassword = "";
     public $generatedPassword;
-    public $ouGroup;
+    public $ouGroup = "";
+    public $mobile = "0";
+    public $postalCode = "0";
+    public $street = "0";
+    public $telephoneNumber = "0";
+    public $l = "0";
     private $stamm = "";
     private $ldapService;
 
@@ -36,6 +41,11 @@ class User
             $this->uid = intval($data["uid"][0]);
             $this->firstName = $data["cn"][0];
             $this->secondName = $data["sn"][0];
+            if(isset($data["mobile"][0])) $this->mobile = $data["mobile"][0];
+            if(isset($data["l"][0])) $this->l = $data["l"][0];
+            if(isset($data["postalcode"][0])) $this->postalCode = $data["postalcode"][0];
+            if(isset($data["street"][0])) $this->street = $data["street"][0];
+            if(isset($data["telephonenumber"][0])) $this->telephoneNumber = $data["telephonenumber"][0];
             if (isset($data["mail"][0])) $this->mail = $data["mail"][0];
             else {
                 if ($this->ldapService->getForwardForMail($data["givenname"][0] . "@pbnl.de") != false) {
@@ -51,13 +61,12 @@ class User
         return in_array($this->dn, $group->getMembersDN());
     }
 
-    public function getStamm(LDAPService $ldapFrontend = null)
+    public function getStamm()
     {
         if ($this->stamm != "") return $this->stamm;
-        if($ldapFrontend == null) return "";
-        $staemme = $ldapFrontend->getStammesNames();
+        $staemme = $this->ldapService->getStammesNames();
         foreach ($staemme as $stammName) {
-            $stammGroup = $ldapFrontend->getAllGroups("$stammName")[0];
+            $stammGroup = $this->ldapService->getAllGroups("$stammName")[0];
             if ($this->memberOf($stammGroup)) {
                 $this->stamm = $stammName;
                 return $stammName;
@@ -78,6 +87,11 @@ class User
             if($group->isDNMember($this->dn)) $group->removeMember($this->dn);
         }
         $this->ldapService->removeUserWithDN($this->dn);
+    }
+
+    public function pushNewData()
+    {
+        $this->ldapService->saveNewUserData($this);
     }
 
 }

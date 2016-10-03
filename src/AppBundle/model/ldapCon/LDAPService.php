@@ -466,4 +466,18 @@ class LDAPService
         }
         return $forwards;
     }
+
+    public function saveNewUserData(User $user)
+    {
+        $data = array();
+        $data["sn"] = $user->secondName;
+        $data["uid"] = $user->givenName;
+        $data["l"] = $user->l;
+        $data["mobile"] = $user->mobile;
+        $data["postalcode"] = $user->postalCode;
+        $data["street"] = $user->street;
+        $data["telephonenumber"] = $user->telephoneNumber;
+
+        ldap_modify($this->ldapCon, $user->dn, $data);
+    }
 }

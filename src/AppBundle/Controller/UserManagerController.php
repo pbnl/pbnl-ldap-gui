@@ -159,6 +159,7 @@ class UserManagerController extends Controller
      */
     public function showDetailsUser(Request $request)
     {
+        //security stuff
         $loginHandler = $this->get("login");
         if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
 
@@ -170,8 +171,42 @@ class UserManagerController extends Controller
         $user = $org->getUserManager()->getUserByUid($uidNumber);
 
 
+        //Create the form
+        $org = new Organisation($this->get("ldap.frontend"));
+        $userManager = $org->getUserManager();
+        $user = $userManager->getUserByUid($uidNumber);
+
+
+        $editUserForm = false;
+        //is the logged in user in the same stamm as this user?
+        //than he can edit him
+        $stamm = $user->getStamm();
+        if ($loginHandler->checkPermissions("inStamm:".$stamm)) {
+            $editUserForm = $this->createFormBuilder($user, ['attr' => ['class' => 'form-addAUser']])
+                ->add("firstName", TextType::class, array("attr" => ["placeholder" => "Vorname"], 'label' => "Vorname"))
+                ->add("secondName", TextType::class, array("attr" => ["placeholder" => "Nachname"], 'label' => "Nachname"))
+                ->add("l",TextType::class,array("attr" => ["placeholder" => "Stadt"], 'label' => "Stadt","required" => false))
+                ->add("postalCode",TextType::class,array("attr" => ["placeholder" => "PLZ"], 'label' => "PLZ","required" => false))
+                ->add("street",TextType::class,array("attr" => ["placeholder" => "Straße"], 'label' => "Straße","required" => false))
+                ->add("telephoneNumber",TextType::class,array("attr" => ["placeholder" => "Telefonnummer"], 'label' => "Telefonnummer","required" => false))
+                ->add("mobile",TextType::class,array("attr" => ["placeholder" => "Mobil"], 'label' => "Mobil","required" => false))
+                ->add("send", SubmitType::class, array("label" => "Änderungen speichern", "attr" => ["class" => "btn btn-lg btn-primary btn-block"]))
+                ->getForm();
+
+            //Handel the form input
+            $editUserForm->handleRequest($request);
+            if($editUserForm->isSubmitted() && $editUserForm->isValid())
+            {
+                $user->pushNewData();
+                array_push($successMessage,"Änderungen gespeichert!");
+            }
+
+            $editUserForm = $editUserForm->createView();
+        }
+
         //Render the page
         return $this->render(":default:userDetail.html.twig",array(
+            "editUserForm" => $editUserForm,
             "user" => $user,
             "errorMessage"=>$errorMessage,
             "successMessage"=>$successMessage
