@@ -21,6 +21,7 @@ EXPOSE 80
 RUN service apache2 restart
 
 WORKDIR /var/www/pbnl-ldap-gui/
+RUN chown www-data:www-data ./ -R
 RUN ./composer.phar -n install
 
 WORKDIR /
