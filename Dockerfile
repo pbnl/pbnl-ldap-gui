@@ -14,6 +14,11 @@ RUN mv ./pbnl-ldap-gui /var/www
 RUN rm /etc/apache2/sites-available/000-default.conf
 ADD ./docker-data/000-default.conf /etc/apache2/sites-available/000-default.conf
 
+RUN rm /etc/ldap/ldap.conf
+ADD ./docker-data/ldap.conf /etc/ldap/ldap.conf
+
+ADD ./docker-data/pbnl-ldapserver.pem /etc/ldap/pbnl-ldapserver.pem
+
 RUN a2enmod rewrite
 
 EXPOSE 80
