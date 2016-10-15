@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\model\usersLDAP;
 use AppBundle\model\ldapCon\LDAPService;
+use AppBundle\model\StringMethods;
 
 /**
  * Created by PhpStorm.
@@ -94,4 +95,195 @@ class User
         $this->ldapService->saveNewUserData($this);
     }
 
+    /**
+     * @return string
+     */
+    public function getGivenName()
+    {
+        return $this->givenName;
+    }
+
+    /**
+     * @param string $givenName
+     */
+    public function setGivenName($givenName)
+    {
+        $this->givenName = StringMethods::replaceUmlaute(preg_replace('/[^A-Za-z0-9]+/', '', $givenName));
+    }
+
+    /**
+     * @return int|string
+     */
+    public function getUid()
+    {
+        return $this->uid;
+    }
+
+    /**
+     * @param int|string $uid
+     */
+    public function setUid($uid)
+    {
+        $this->uid = StringMethods::replaceUmlaute(preg_replace('/[^A-Za-z0-9]+/', '', $uid));
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @param string $firstName
+     */
+    public function setFirstName($firstName)
+    {
+        $this->firstName = StringMethods::replaceUmlaute(preg_replace('/[^A-Za-z0-9]+/', '', $firstName));
+    }
+
+    /**
+     * @return string
+     */
+    public function getSecondName()
+    {
+        return $this->secondName;
+    }
+
+    /**
+     * @param string $secondName
+     */
+    public function setSecondName($secondName)
+    {
+        $this->secondName = StringMethods::replaceUmlaute(preg_replace('/[^A-Za-z0-9]+/', '', $secondName));
+    }
+
+    /**
+     * @return int
+     */
+    public function getUidNumber()
+    {
+        return $this->uidNumber;
+    }
+
+    /**
+     * @param int $uidNumber
+     */
+    public function setUidNumber($uidNumber)
+    {
+        $this->uidNumber = $uidNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMail()
+    {
+        return $this->mail;
+    }
+
+    /**
+     * @param string $mail
+     */
+    public function setMail($mail)
+    {
+        $this->mail = $mail;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHomeDirectory()
+    {
+        return $this->homeDirectory;
+    }
+
+    /**
+     * @param string $homeDirectory
+     */
+    public function setHomeDirectory($homeDirectory)
+    {
+        $this->homeDirectory = $homeDirectory;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobile()
+    {
+        return $this->mobile;
+    }
+
+    /**
+     * @param string $mobile
+     */
+    public function setMobile($mobile)
+    {
+        $this->mobile = $mobile;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPostalCode()
+    {
+        return $this->postalCode;
+    }
+
+    /**
+     * @param string $postalCode
+     */
+    public function setPostalCode($postalCode)
+    {
+        $this->postalCode = $postalCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStreet()
+    {
+        return $this->street;
+    }
+
+    /**
+     * @param string $street
+     */
+    public function setStreet($street)
+    {
+        $this->street = $street;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTelephoneNumber()
+    {
+        return $this->telephoneNumber;
+    }
+
+    /**
+     * @param string $telephoneNumber
+     */
+    public function setTelephoneNumber($telephoneNumber)
+    {
+        $this->telephoneNumber = $telephoneNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getL()
+    {
+        return $this->l;
+    }
+
+    /**
+     * @param string $l
+     */
+    public function setL($l)
+    {
+        $this->l = $l;
+    }
 }
