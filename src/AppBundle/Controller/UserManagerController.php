@@ -14,10 +14,12 @@ use AppBundle\model\formDataClasses\UserSearchFormDataHolder;
 use AppBundle\model\usersLDAP\Organisation;
 use AppBundle\model\usersLDAP\People;
 use AppBundle\model\usersLDAP\User;
+use AppBundle\model\xlsxImport\XlsxImport;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -143,11 +145,14 @@ class UserManagerController extends Controller
         $successMessage = Array();
 
         $uidNumber = $request->get("uidNumber");
-
+        $uidNumbers =  explode(";",$uidNumber);
 
         $org = new Organisation($this->get("ldap.frontend"));
-        $user = $org->getUserManager()->getUserByUid($uidNumber);
-        $user->delUser();
+        foreach ($uidNumbers as $oneNumber)
+        {
+            $user = $org->getUserManager()->getUserByUid($oneNumber);
+            $user->delUser();
+        }
 
         return $this->redirectToRoute("Alle Benutzer");
     }
@@ -208,6 +213,67 @@ class UserManagerController extends Controller
         return $this->render(":default:userDetail.html.twig",array(
             "editUserForm" => $editUserForm,
             "user" => $user,
+            "errorMessage"=>$errorMessage,
+            "successMessage"=>$successMessage
+        ));
+    }
+
+    /**
+     * @Route("/user/importUserFromXlsx", name="Importieren von xlsx")
+     * @param Request $request
+     * @return Response
+     */
+    public function importUserFromXlsx(Request $request)
+    {
+        $loginHandler = $this->get("login");
+        if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
+
+        $errorMessage = Array();
+        $successMessage = Array();
+
+        $org = new Organisation($this->get("ldap.frontend"));
+        $ouGroups = $org->getOUGroupsNames();
+        $staemme = $org->getStammesNames();
+
+        $xlsxImporter = new XlsxImport();
+        $xlsxImporterFileForm = $this->createFormBuilder($xlsxImporter,['attr' => ['class' => 'form-xlsxFileUploadForm']])
+            ->add('xlsxFile', FileType::class, array('label' => 'xlsx Datei'))
+            ->add('ouGroup', ChoiceType::class, array(
+                'choices'  => ArrayMethods::valueToKeyAndValue($ouGroups),
+            ))
+            ->add('stamm', ChoiceType::class, array(
+                'choices'  => ArrayMethods::valueToKeyAndValue($staemme),
+            ))
+            ->add("send", SubmitType::class, array("label" => "Hochladen", "attr" => ["class" => "btn btn-lg btn-primary btn-block"]))
+            ->getForm();
+
+        //Handel the request
+        $xlsxImporterFileForm->handleRequest($request);
+        if ($xlsxImporterFileForm->isSubmitted() && $xlsxImporterFileForm->isValid()) {
+            // $file stores the uploaded xlsx file
+            /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
+            $file = $xlsxImporter->xlsxFile;
+
+            // Generate a unique name for the file before saving it
+            $fileName = $this->get("session")->getId().md5(uniqid()).'.'.$file->guessExtension();
+
+            // Move the file to the directory where brochures are stored
+            $file->move($this->getParameter('xlsxFile_directory'),$fileName);
+
+            // Update the 'xlsxFile' property to store the xlsx file name
+            // instead of its contents
+            $xlsxImporter->xlsxFile = $fileName;
+            $xlsxImporter->xlsxFilePath = $this->getParameter('xlsxFile_directory')."/".$fileName;
+
+            $xlsxImporter->parse($this->get('phpexcel'),$org);
+            unlink($xlsxImporter->xlsxFilePath);
+        }
+
+
+
+        //Render the page
+        return $this->render(":default:xlsxImporter.html.twig",array(
+            "xlsxImporterFileForm" => $xlsxImporterFileForm->createView(),
             "errorMessage"=>$errorMessage,
             "successMessage"=>$successMessage
         ));

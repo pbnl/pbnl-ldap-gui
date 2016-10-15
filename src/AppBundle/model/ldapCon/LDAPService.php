@@ -121,10 +121,13 @@ class LDAPService
                     $group->type = "stamm";
 
                     $group->gidNumber =$data[$i]["gidnumber"][0];
-                    $member = $data[$i]["memberuid"];
-                    for ($j = 0;$j < $member["count"];$j++)
-                    {
-                        $group->addMemberToClassArray($member[$j]);
+                    //If the group has member
+                    if(isset($data[$i]["memberuid"])){
+                        $member = $data[$i]["memberuid"];
+                        for ($j = 0;$j < $member["count"];$j++)
+                        {
+                            $group->addMemberToClassArray($member[$j]);
+                        }
                     }
                     array_push($groups,$group);
                 }
@@ -238,12 +241,12 @@ class LDAPService
         $userForLDAP["homedirectory"][0] = "/home/".$user->givenName;
         $userForLDAP["sn"][0] = $user->secondName;
         $userForLDAP["uid"][0] = $user->givenName;
-        $userForLDAP["l"][0] = "Hamburg";
+        $userForLDAP["l"][0] = $user->l;
         $userForLDAP["mail"][0] =  strtolower($user->givenName)."@pbnl.de";
-        $userForLDAP["mobile"][0] = "0";
-        $userForLDAP["postalcode"][0] = "0";
-        $userForLDAP["street"][0] = "0";
-        $userForLDAP["telephonenumber"][0] = "0";
+        $userForLDAP["mobile"][0] = $user->mobile;
+        $userForLDAP["postalcode"][0] = $user->postalCode;
+        $userForLDAP["street"][0] = $user->street;
+        $userForLDAP["telephonenumber"][0] = $user->telephoneNumber;
         $userForLDAP["userpassword"][0] = SSHA::ssha_password_gen($user->clearPassword);
         $userForLDAP["givenname"][0] = $user->givenName;
 
@@ -254,6 +257,7 @@ class LDAPService
 
         //We need this for later
         $userForLDAP["dn"] = "givenName=$user->givenName, ou=$ou, $ldaptree";
+
 
         return new User($this,$userForLDAP);
 

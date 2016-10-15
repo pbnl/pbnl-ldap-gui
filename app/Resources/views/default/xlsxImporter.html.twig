@@ -1,0 +1,31 @@
+{% extends "includes/base.html.twig" %}
+
+{% block title %}Xlsx impotieren{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {% include 'includes/nav.html.twig' %}
+    <div class="container">
+        <br><br>
+        {% include 'includes/messages.html.twig' %}
+        <h2>Xlsx importieren</h2>
+        <div class="col-sm-4">
+            {{ form_start(xlsxImporterFileForm) }}
+            {{ form_end(xlsxImporterFileForm) }}
+        </div>
+
+        <div class="col-sm-4">
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+{% endblock %}
