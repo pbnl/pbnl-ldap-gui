@@ -9,11 +9,16 @@
 namespace AppBundle\model\usersLDAP;
 
 
+use AppBundle\model\ldapCon\AllreadyInGroupException;
 use AppBundle\model\ldapCon\LDAPService;
 
 class ParentGroup
 {
+    /**
+     * @var LDAPService
+     */
     public $LDAPService;
+
     protected $members = Array(); // An array with all dn of the users
     protected $membersUserData = Array(); // An array with all dn of the users
     public $name = "";
@@ -21,6 +26,10 @@ class ParentGroup
     public $gidNumber = "";
     public $type = "";
     private $fetchedData = false;
+    /**
+     * @var GroupManager
+     */
+    private $groupManager = null;
 
     public function __construct(LDAPService $LDAPService)
     {
@@ -61,10 +70,24 @@ class ParentGroup
 
     public function addMember($dn)
     {
-        $this->LDAPService->addUserDNToGroup($dn,$this->name);
+        try
+        {
+            $this->LDAPService->addUserDNToGroup($dn, $this->name);
+        }
+        catch (AllreadyInGroupException $e)
+        {
+            $this->getGroupManager()->getOrg()->session->getFlashBag()->add("notice","Der benutzer $dn war schon in der Gruppe $this->name");
+        }
         $mail = $this->LDAPService->getUserByDN($dn)->mail;
         $name = str_replace("@","",$this->name);
-        if(filter_var($mail, FILTER_VALIDATE_EMAIL)) $this->LDAPService->addMailToForward($mail,"$name@pbnl.de");
+        try
+        {
+            if (filter_var($mail, FILTER_VALIDATE_EMAIL)) $this->LDAPService->addMailToForward($mail, "$name@pbnl.de");
+        }
+        catch (AllreadyInGroupException $e)
+        {
+            //TODO: Add logger
+        }
     }
 
     public function addMemberToClassArray($dn)
@@ -94,5 +117,21 @@ class ParentGroup
         $mail = $this->LDAPService->getUserByDN($dn)->mail;
         $name = str_replace("@","",$this->name);
         if(filter_var($mail, FILTER_VALIDATE_EMAIL)) $this->LDAPService->removeMailFromForward($mail,"$name@pbnl.de");
+    }
+
+    /**
+     * @return GroupManager
+     */
+    public function getGroupManager()
+    {
+        return $this->groupManager;
+    }
+
+    /**
+     * @param GroupManager $groupManager
+     */
+    public function setGroupManager($groupManager)
+    {
+        $this->groupManager = $groupManager;
     }
 }

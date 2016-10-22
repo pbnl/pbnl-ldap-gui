@@ -30,7 +30,7 @@ class AjaxController extends Controller
         $gid = $request->query->get('gid');
         $searchedUserName = $request->query->get('searchedUserName');
 
-        $org = new Organisation($this->get("ldap.frontend"));
+        $org = $this->get("organisation");
 
         //Security stuff
         $teamManager = $org->getTeamManager();

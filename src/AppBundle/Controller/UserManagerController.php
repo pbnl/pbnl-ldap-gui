@@ -11,12 +11,17 @@ namespace AppBundle\Controller;
 
 use AppBundle\model\ArrayMethods;
 use AppBundle\model\formDataClasses\UserSearchFormDataHolder;
+use AppBundle\model\ldapCon\AllreadyInGroupException;
+use AppBundle\model\ldapCon\GroupNotFoundException;
 use AppBundle\model\usersLDAP\Organisation;
 use AppBundle\model\usersLDAP\People;
 use AppBundle\model\usersLDAP\User;
+use AppBundle\model\usersLDAP\UserAlreadyExistException;
+use AppBundle\model\usersLDAP\UserNotUnique;
 use AppBundle\model\xlsxImport\XlsxImport;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -44,7 +49,7 @@ class UserManagerController extends Controller
         $successMessage = Array();
 
         //Get all users and search for name and groupq if wanted
-        $org = new Organisation($this->get("ldap.frontend"));
+        $org = $this->get("organisation");
         $userManager = $org->getUserManager();
 
         //Create search form
@@ -60,7 +65,14 @@ class UserManagerController extends Controller
         $peopleSearchForm->handleRequest($request);
 
         //Search users
-        $userList = $userManager->getAllUsers($userSearchFormDataHolder->groupFilter,$userSearchFormDataHolder->userFilter);
+        $userList = [];
+        try {
+            $userList = $userManager->getAllUsers($userSearchFormDataHolder->groupFilter, $userSearchFormDataHolder->userFilter);
+        }
+        catch (GroupNotFoundException $e)
+        {
+            $this->addFlash("error",$e->getMessage());
+        }
 
         return$this->render(":default:showUsersInOneTabel.html.twig",array(
             "peopleSearchForm" => $peopleSearchForm->createView(),
@@ -85,7 +97,7 @@ class UserManagerController extends Controller
         $successMessage = Array();
 
         //Create the form
-        $org = new Organisation($this->get("ldap.frontend"));
+        $org = $this->get("organisation");
         $userManager = $org->getUserManager();
         $ouGroups = $org->getOUGroupsNames();
         $staemme = $org->getStammesNames();
@@ -114,10 +126,24 @@ class UserManagerController extends Controller
         if($addUserForm->isSubmitted() && $addUserForm->isValid())
         {
             //Create the new user
-            $personAddedToLDAP = $userManager->createNewUser($user);
-            //Handel result and errors
-            if ($personAddedToLDAP == FALSE) array_push($errorMessage,"Benutzer konnte nicht hinzugefügt werden. Benutzer exestiert bereits");
-            else $addedSomeone = TRUE;
+            try
+            {
+                $personAddedToLDAP = $userManager->createNewUser($user);
+                $addedSomeone = TRUE;
+                $this->addFlash("succsess","Benutzer hinzugefügt");
+            }
+            catch (UserNotUnique $e)
+            {
+                $this->addFlash("error",$e->getMessage());
+            }
+            catch (AllreadyInGroupException $e)
+            {
+                $this->addFlash("error",$e->getMessage());
+            }
+            catch (UserAlreadyExistException $e)
+            {
+                $this->addFlash("error",$e->getMessage());
+            }
         }
 
         //Render the page
@@ -147,11 +173,17 @@ class UserManagerController extends Controller
         $uidNumber = $request->get("uidNumber");
         $uidNumbers =  explode(";",$uidNumber);
 
-        $org = new Organisation($this->get("ldap.frontend"));
+        $org = $this->get("organisation");
         foreach ($uidNumbers as $oneNumber)
         {
-            $user = $org->getUserManager()->getUserByUid($oneNumber);
-            $user->delUser();
+            try {
+                $user = $org->getUserManager()->getUserByUid($oneNumber);
+                $user->delUser();
+            }
+            catch (UserNotUnique $e)
+            {
+                $this->addFlash("error",$e->getMessage());
+            }
         }
 
         return $this->redirectToRoute("Alle Benutzer");
@@ -172,12 +204,12 @@ class UserManagerController extends Controller
         $successMessage = Array();
 
         $uidNumber = $request->get("uidNumber");
-        $org = new Organisation($this->get("ldap.frontend"));
+        $org = $this->get("organisation");
         $user = $org->getUserManager()->getUserByUid($uidNumber);
 
 
         //Create the form
-        $org = new Organisation($this->get("ldap.frontend"));
+        $org = $this->get("organisation");
         $userManager = $org->getUserManager();
         $user = $userManager->getUserByUid($uidNumber);
 
@@ -231,7 +263,7 @@ class UserManagerController extends Controller
         $errorMessage = Array();
         $successMessage = Array();
 
-        $org = new Organisation($this->get("ldap.frontend"));
+        $org = $this->get("organisation");
         $ouGroups = $org->getOUGroupsNames();
         $staemme = $org->getStammesNames();
 

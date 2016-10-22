@@ -10,16 +10,24 @@ namespace AppBundle\model\usersLDAP;
 
 
 use AppBundle\model\ldapCon\LDAPService;
+use Monolog\Logger;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\DependencyInjection\Dump\Container;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class Organisation
 {
     public $ldapFrontend ;
+    public $logger;
     private $teamManager;
     private $userManager;
     private $groupManager;
+    public $session;
 
-    public function __construct(LDAPService $LDAPService)
+    public function __construct(LDAPService $LDAPService , Logger $logger, Session $session)
     {
+        $this->session = $session;
+        $this->logger = $logger;
         $this->ldapFrontend = $LDAPService;
     }
 

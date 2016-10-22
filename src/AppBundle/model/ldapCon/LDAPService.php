@@ -14,6 +14,10 @@ use AppBundle\model\SSHA;
 use AppBundle\model\usersLDAP\Group;
 use AppBundle\model\usersLDAP\Team;
 use AppBundle\model\usersLDAP\User;
+use AppBundle\model\usersLDAP\UserNotUnique;
+use Monolog\Logger;
+use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Debug\Exception\ContextErrorException;
 
 class LDAPService
 {
@@ -21,8 +25,9 @@ class LDAPService
     private $LDAPConnector = null;
     private $ldapCon = null;
 
-    function __construct()
+    function __construct(Logger $logger)
     {
+        $this->logger = $logger;
         $this->LDAPConnector = new LDAPConnetor();
         $this->LDAPConnector->intiLDAPConnection();
         $this->ldapCon = $this->LDAPConnector->getCon();
@@ -163,6 +168,10 @@ class LDAPService
                 }
             }
         }
+        else
+        {
+            throw new GroupNotFoundException("The group with the name $groupFilterName does not exist!");
+        }
 
         return $groups;
     }
@@ -220,6 +229,10 @@ class LDAPService
                 }
             }
         }
+        else
+        {
+            throw new GroupNotFoundException("The group with the name $groupFilterName does not exist!");
+        }
 
         return $teams;
     }
@@ -276,7 +289,9 @@ class LDAPService
         $data = ldap_get_entries($this->ldapCon, $result);
 
         //There can be only one user with the name we are looking for
-        if ($data["count"] != 1) return FALSE;
+        if ($data["count"] > 1) $this->logger->error("There are more than one people with the name: $name");
+        if ($data["count"] > 1) throw new UserNotUnique("There are more than one people with the name: $name");
+        if ($data["count"] == 0) throw new UserNotUnique("No user found");
         return new User($this,$data[0]);
     }
 
@@ -291,7 +306,8 @@ class LDAPService
         $data = ldap_get_entries($this->ldapCon, $result);
 
         //There can be only one user with the name we are looking for
-        if ($data["count"] != 1) print_r("There are more than one people with the uidNumber: $uidNumber");
+        if ($data["count"] != 1) $this->logger->error("There are more than one people with the uidNumber: $uidNumber");
+        if ($data["count"] != 1) throw new UserNotUnique("There are more than one people with the uidNumber: $uidNumber");
         return new User($this,$data[0]);
     }
 
@@ -306,7 +322,8 @@ class LDAPService
         $data = ldap_get_entries($this->ldapCon, $result);
 
         //There can be only one user with the dn we are looking for
-        if ($data["count"] != 1) return FALSE;
+        if ($data["count"] != 1) $this->logger->error("There are more than one people with the dn: $dn");
+        if ($data["count"] != 1) throw new UserNotUnique("There are more than one people with the dn: $dn");
         return new User($this,$data[0]);
     }
 
@@ -361,7 +378,14 @@ class LDAPService
         $group_info['memberuid'] = str_replace(", ",",",$userDN);
 
         //Add
-        ldap_mod_add($this->ldapCon,"cn=$group,$ldaptree",$group_info);
+        try
+        {
+            ldap_mod_add($this->ldapCon, "cn=$group,$ldaptree", $group_info);
+        }
+        catch (ContextErrorException $e)
+        {
+            throw new AllreadyInGroupException("User already in group $group");
+        }
     }
 
     /**
@@ -376,7 +400,14 @@ class LDAPService
         $forward_info['forward'] = $mail;
 
         //Add
-        ldap_mod_add($this->ldapCon,"mail=$forward,$ldaptree",$forward_info);
+        try
+        {
+            ldap_mod_add($this->ldapCon,"mail=$forward,$ldaptree",$forward_info);
+        }
+        catch (ContextErrorException $e)
+        {
+            throw new AllreadyInGroupException("User already in forward $forward");
+        }
     }
 
     /**

@@ -1,6 +1,23 @@
-{% for message in errorMessage %}
-    <div class="alert alert-danger" role="alert">{{ message }}</div>
+{% for flash_message in app.session.flashBag.get('notice') %}
+    <div class="flash-notice">
+        <div class="alert alert-warning" role="alert">
+            {{ flash_message }}
+        </div>
+    </div>
 {% endfor %}
-{% for message in successMessage%}
-    <div class="alert alert-success" role="alert">{{ message }}</div>
+
+{% for flash_message in app.session.flashBag.get('error') %}
+    <div class="flash-notice">
+        <div class="alert alert-danger" role="alert">
+            {{ flash_message }}
+        </div>
+    </div>
+{% endfor %}
+
+{% for flash_message in app.session.flashBag.get('succsess') %}
+    <div class="flash-notice">
+        <div class="alert alert-success" role="alert">
+            {{ flash_message }}
+        </div>
+    </div>
 {% endfor %}

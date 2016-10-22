@@ -36,8 +36,8 @@ class LDAPConnetor
         {
             throw new NoLDAPBindDataException("No Data in the ENV-Vars", 1);
         }
-
-        $this->ds = ldap_connect($ip);
+        error_reporting(-1);
+        $this->ds = ldap_connect("ldap://".$ip."");
         ldap_set_option($this->ds, LDAP_OPT_PROTOCOL_VERSION, 3);
         $this->ldap = ldap_bind($this->ds, $bindDn, $bindPasswd);
     }
@@ -51,3 +51,6 @@ class LDAPConnetor
         return $this->ds;
     }
 }
+//
+//$con = new LDAPConnetor();
+//$con->intiLDAPConnection();

@@ -9,7 +9,9 @@
 namespace AppBundle\model\usersLDAP;
 
 
+use AppBundle\model\ldapCon\AllreadyInGroupException;
 use AppBundle\model\ldapCon\LDAPService;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 class UserManager
 {
@@ -28,16 +30,22 @@ class UserManager
      */
     public function createNewUser($user)
     {
-        if(!$this->ldapFrontend->getUserByName($user->givenName))
+        $ldaptree = "ou=People,dc=pbnl,dc=de";
+        try
         {
-            $stamm = $user->getStamm($this->ldapFrontend);
-            $user = $this->ldapFrontend->addAUser($user);
-            $this->org->getGroupManager()->getAllGroups("nordlichter")[0]->addMember($user->dn);
-            $this->org->getGroupManager()->getAllGroups("wiki")[0]->addMember($user->dn);
-            $this->org->getGroupManager()->getAllGroups($stamm)[0]->addMember($user->dn);
-            return $user;
+            $this->ldapFrontend->getUserByName($user->getGivenName());
+            throw new UserAlreadyExistException("The user already exists!");
+
         }
-        else return FALSE;
+        catch (UserNotUnique $e){}
+
+        $stamm = $user->getStamm($this->ldapFrontend);
+        $user = $this->ldapFrontend->addAUser($user);
+
+        $this->org->getGroupManager()->getAllGroups("nordlichter")[0]->addMember($user->dn);
+        $this->org->getGroupManager()->getAllGroups("wiki")[0]->addMember($user->dn);
+        $this->org->getGroupManager()->getAllGroups($stamm)[0]->addMember($user->dn);
+        return $user;
 
     }
 

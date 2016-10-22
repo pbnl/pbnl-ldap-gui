@@ -78,7 +78,6 @@ class LoginHandler
     public function checkPermissions($requierments = "")
     {
         $session = new Session();
-        $con = new LDAPService();
         if($requierments == "")
         {
             return $session->get("loggedIn");
@@ -86,7 +85,7 @@ class LoginHandler
         else
         {
             if(!$session->get("loggedIn")) return false;
-            if($con->getAllGroups("buvo")[0]->isDNMember($session->get("dn"))) return true;
+            if($this->ldapFrontend->getAllGroups("buvo")[0]->isDNMember($session->get("dn"))) return true;
         }
 
         //Splits up the string into an array
@@ -99,19 +98,19 @@ class LoginHandler
             {
                 case "ownStamm" :
                     $value = explode(":",$requierment)[1];
-                    return $con->getAllGroups($session->get("stamm"))[0]->isDNMember($session->get("dn"));
+                    return $this->ldapFrontend->getAllGroups($session->get("stamm"))[0]->isDNMember($session->get("dn"));
                     break;
                 case "inStamm" :
                     $value = explode(":",$requierment)[1];
-                    return $con->getAllGroups($value)[0]->isDNMember($session->get("dn"));
+                    return $this->ldapFrontend->getAllGroups($value)[0]->isDNMember($session->get("dn"));
                     break;
                 case "inGroup" :
                     $value = explode(":",$requierment)[1];
-                    return $con->getAllGroups($value)[0]->isDNMember($session->get("dn"));
+                    return $this->ldapFrontend->getAllGroups($value)[0]->isDNMember($session->get("dn"));
                     break;
                 case "inTeam" :
                     $value = explode(":",$requierment)[1];
-                    return $con->getAllTeams($value)[0]->isDNMember($session->get("dn"));
+                    return $this->ldapFrontend->getAllTeams($value)[0]->isDNMember($session->get("dn"));
                     break;
             }
         }

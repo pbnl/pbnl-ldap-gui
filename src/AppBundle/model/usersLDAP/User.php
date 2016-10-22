@@ -16,6 +16,7 @@ class User
     public $firstName = "";
     public $secondName = "";
     public $uidNumber = 0;
+
     public $mail = "";
     public $hashedPassword = "";
     public $homeDirectory = "";

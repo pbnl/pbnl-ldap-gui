@@ -38,6 +38,19 @@ class GroupManager
 
     public function getAllGroups($search)
     {
-        return $this->ldapFrontend->getAllGroups($search);
+        $goups = $this->ldapFrontend->getAllGroups($search);
+        foreach ($goups as $goup)
+        {
+            $goup->setGroupManager($this);
+        }
+        return $goups;
+    }
+
+    /**
+     * @return Organisation
+     */
+    public function getOrg()
+    {
+        return $this->org;
     }
 }

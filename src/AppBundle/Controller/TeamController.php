@@ -33,7 +33,7 @@ class TeamController extends Controller
         $errorMessage = Array();
         $successMessage = Array();
 
-        $org = new Organisation($this->get("ldap.frontend"));
+        $org = $this->get("organisation");
         $teamManager = $org->getTeamManager();
         $teams = $teamManager->getAllTeams("");
         $myTeams = array();
@@ -63,7 +63,7 @@ class TeamController extends Controller
         //Id of the group we are looking for
         $gid = $request->get("gid","");
 
-        $org = new Organisation($this->get("ldap.frontend"));
+        $org = $this->get("organisation");
         $teamManager = $org->getTeamManager();
         $team = $teamManager->getAllTeams($gid)[0];
         $team->fetchUserData();
@@ -100,7 +100,7 @@ class TeamController extends Controller
         $errorMessage = Array();
         $successMessage = Array();
 
-        $org = new Organisation($this->get("ldap.frontend"));
+        $org = $this->get("organisation");
 
         //Get all users witch are not in the group $gid
         $team = $org->getTeamManager()->getAllTeams($request->get("gid",""))[0];
@@ -161,7 +161,7 @@ class TeamController extends Controller
         $errorMessage = Array();
         $successMessage = Array();
 
-        $org = new Organisation($this->get("ldap.frontend"));
+        $org = $this->get("organisation");
 
         //get the team
         $team = $org->getTeamManager()->getAllTeams($request->get("gid",""))[0];
