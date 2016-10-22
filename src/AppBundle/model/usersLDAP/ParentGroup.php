@@ -86,7 +86,7 @@ class ParentGroup
         }
         catch (AllreadyInGroupException $e)
         {
-            //TODO: Add logger
+            $this->getGroupManager()->getOrg()->session->getFlashBag()->add("notice","Der benutzer $dn war schon in der Gruppe $name@pbnl.de");
         }
     }
 
