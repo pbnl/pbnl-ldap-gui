@@ -214,8 +214,9 @@ class UserManagerController extends Controller
             $user = $userManager->getUserByUid($uidNumber);
 
             //Create the form
-            //is the logged in user in the same stamm as this user?
+            //is the logged in user in the same stamm as this user and a stavo member?
             //than he can edit him
+            //or if the session user is the same as the one who gets edited
             $stamm = $user->getStamm();
             if ($loginHandler->checkPermissions("inStamm:".$stamm.",inGroup:stavo") || $loginHandler->checkPermissions("isUser:$uidNumber")) {
                 $editUserForm = $this->createFormBuilder($user, ['attr' => ['class' => 'form-addAUser']])
@@ -228,7 +229,6 @@ class UserManagerController extends Controller
                     ->add("mobile",TextType::class,array("attr" => ["placeholder" => "Mobil"], 'label' => "Mobil","required" => false))
                     ->add("send", SubmitType::class, array("label" => "Änderungen speichern", "attr" => ["class" => "btn btn-lg btn-primary btn-block"]))
                     ->getForm();
-
                 //Handel the form input
                 $editUserForm->handleRequest($request);
                 if($editUserForm->isSubmitted() && $editUserForm->isValid())

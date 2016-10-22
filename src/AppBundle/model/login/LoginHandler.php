@@ -115,7 +115,7 @@ class LoginHandler
                     break;
                 case "isUser":
                     $value = explode(":",$requierment)[1];
-                    $user = $this->ldapFrontend->getUserByUidNumber($value[1]);
+                    $user = $this->ldapFrontend->getUserByUidNumber($value);
                     if($user->getUidNumber() == $session->get("uidNumber")) return true;
                     return false;
                     break;
