@@ -66,6 +66,7 @@ class LoginHandler
         $person = $people->getUserByName($this->data->name);
         $session->set("stamm",$person->getStamm($this->ldapFrontend));
         $session->set("dn",$person->dn);
+        $session->set("uidNumber",$person->getUidNumber());
     }
 
     public function logout()
@@ -111,6 +112,12 @@ class LoginHandler
                 case "inTeam" :
                     $value = explode(":",$requierment)[1];
                     return $this->ldapFrontend->getAllTeams($value)[0]->isDNMember($session->get("dn"));
+                    break;
+                case "isUser":
+                    $value = explode(":",$requierment)[1];
+                    $user = $this->ldapFrontend->getUserByUidNumber($value[1]);
+                    if($user->getUidNumber() == $session->get("uidNumber")) return true;
+                    return false;
                     break;
             }
         }
