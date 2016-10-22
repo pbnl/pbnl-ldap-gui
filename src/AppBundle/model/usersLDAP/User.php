@@ -2,6 +2,8 @@
 namespace AppBundle\model\usersLDAP;
 use AppBundle\model\ldapCon\LDAPService;
 use AppBundle\model\StringMethods;
+use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\model\validators\constraints as PBNLAssert;
 
 /**
  * Created by PhpStorm.
@@ -11,12 +13,34 @@ use AppBundle\model\StringMethods;
  */
 class User
 {
+    /**
+     * @Assert\NotBlank
+     * @PBNLAssert\IsCorrectPBNLName
+     */
     public $givenName = "";
+    /**
+     * @Assert\NotBlank
+     * @PBNLAssert\IsCorrectPBNLName
+     */
     public $uid = "";
+    /**
+     * @Assert\NotBlank
+     * @PBNLAssert\IsCorrectPBNLName
+     */
     public $firstName = "";
+    /**
+     * @Assert\NotBlank
+     * @PBNLAssert\IsCorrectPBNLName
+     */
     public $secondName = "";
     public $uidNumber = 0;
 
+    /**
+     * @Assert\Email(
+     *     message = "The email '{{ value }}' is not a valid email.",
+     *     checkMX = true
+     * )
+     */
     public $mail = "";
     public $hashedPassword = "";
     public $homeDirectory = "";
@@ -109,7 +133,7 @@ class User
      */
     public function setGivenName($givenName)
     {
-        $this->givenName = StringMethods::replaceUmlaute(preg_replace('/[^A-Za-z0-9]+/', '', $givenName));
+        $this->givenName = $givenName;
     }
 
     /**
@@ -125,7 +149,7 @@ class User
      */
     public function setUid($uid)
     {
-        $this->uid = StringMethods::replaceUmlaute(preg_replace('/[^A-Za-z0-9]+/', '', $uid));
+        $this->uid = $uid;
     }
 
     /**
@@ -141,7 +165,7 @@ class User
      */
     public function setFirstName($firstName)
     {
-        $this->firstName = StringMethods::replaceUmlaute(preg_replace('/[^A-Za-z0-9]+/', '', $firstName));
+        $this->firstName = $firstName;
     }
 
     /**
@@ -157,7 +181,7 @@ class User
      */
     public function setSecondName($secondName)
     {
-        $this->secondName = StringMethods::replaceUmlaute(preg_replace('/[^A-Za-z0-9]+/', '', $secondName));
+        $this->secondName = $secondName;
     }
 
     /**
