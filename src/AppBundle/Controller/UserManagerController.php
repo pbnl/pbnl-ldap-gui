@@ -204,42 +204,48 @@ class UserManagerController extends Controller
         $successMessage = Array();
 
         $uidNumber = $request->get("uidNumber");
-        $org = $this->get("organisation");
-        $user = $org->getUserManager()->getUserByUid($uidNumber);
 
 
-        //Create the form
         $org = $this->get("organisation");
         $userManager = $org->getUserManager();
-        $user = $userManager->getUserByUid($uidNumber);
+        try {
+            $user = $userManager->getUserByUid($uidNumber);
 
+            //Create the form
+            $editUserForm = false;
+            //is the logged in user in the same stamm as this user?
+            //than he can edit him
+            $stamm = $user->getStamm();
+            if ($loginHandler->checkPermissions("inStamm:".$stamm.",inGroup:stavo") || $loginHandler->checkPermissions("isUser:$uidNumber")) {
+                $editUserForm = $this->createFormBuilder($user, ['attr' => ['class' => 'form-addAUser']])
+                    ->add("firstName", TextType::class, array("attr" => ["placeholder" => "Vorname"], 'label' => "Vorname"))
+                    ->add("secondName", TextType::class, array("attr" => ["placeholder" => "Nachname"], 'label' => "Nachname"))
+                    ->add("l",TextType::class,array("attr" => ["placeholder" => "Stadt"], 'label' => "Stadt","required" => false))
+                    ->add("postalCode",TextType::class,array("attr" => ["placeholder" => "PLZ"], 'label' => "PLZ","required" => false))
+                    ->add("street",TextType::class,array("attr" => ["placeholder" => "Straße"], 'label' => "Straße","required" => false))
+                    ->add("telephoneNumber",TextType::class,array("attr" => ["placeholder" => "Telefonnummer"], 'label' => "Telefonnummer","required" => false))
+                    ->add("mobile",TextType::class,array("attr" => ["placeholder" => "Mobil"], 'label' => "Mobil","required" => false))
+                    ->add("send", SubmitType::class, array("label" => "Änderungen speichern", "attr" => ["class" => "btn btn-lg btn-primary btn-block"]))
+                    ->getForm();
 
-        $editUserForm = false;
-        //is the logged in user in the same stamm as this user?
-        //than he can edit him
-        $stamm = $user->getStamm();
-        if ($loginHandler->checkPermissions("inStamm:".$stamm)) {
-            $editUserForm = $this->createFormBuilder($user, ['attr' => ['class' => 'form-addAUser']])
-                ->add("firstName", TextType::class, array("attr" => ["placeholder" => "Vorname"], 'label' => "Vorname"))
-                ->add("secondName", TextType::class, array("attr" => ["placeholder" => "Nachname"], 'label' => "Nachname"))
-                ->add("l",TextType::class,array("attr" => ["placeholder" => "Stadt"], 'label' => "Stadt","required" => false))
-                ->add("postalCode",TextType::class,array("attr" => ["placeholder" => "PLZ"], 'label' => "PLZ","required" => false))
-                ->add("street",TextType::class,array("attr" => ["placeholder" => "Straße"], 'label' => "Straße","required" => false))
-                ->add("telephoneNumber",TextType::class,array("attr" => ["placeholder" => "Telefonnummer"], 'label' => "Telefonnummer","required" => false))
-                ->add("mobile",TextType::class,array("attr" => ["placeholder" => "Mobil"], 'label' => "Mobil","required" => false))
-                ->add("send", SubmitType::class, array("label" => "Änderungen speichern", "attr" => ["class" => "btn btn-lg btn-primary btn-block"]))
-                ->getForm();
+                //Handel the form input
+                $editUserForm->handleRequest($request);
+                if($editUserForm->isSubmitted() && $editUserForm->isValid())
+                {
+                    $user->pushNewData();
+                    $this->addFlash("succsses","Änderungen gespeichert");
+                }
 
-            //Handel the form input
-            $editUserForm->handleRequest($request);
-            if($editUserForm->isSubmitted() && $editUserForm->isValid())
-            {
-                $user->pushNewData();
-                array_push($successMessage,"Änderungen gespeichert!");
+                $editUserForm = $editUserForm->createView();
             }
-
-            $editUserForm = $editUserForm->createView();
         }
+        catch (UserNotUnique $e)
+        {
+            $this->addFlash("error",$e->getMessage());
+        }
+
+
+
 
         //Render the page
         return $this->render(":default:userDetail.html.twig",array(
