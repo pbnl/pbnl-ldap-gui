@@ -11,9 +11,9 @@
     <div class="container">
         <br><br>
         {% include 'includes/messages.html.twig' %}
-        <h2>{{ user.givenName }}</h2>
+    {% if user != false%} <h2>{{ user.givenName }}</h2> {% endif %}
         <div class="col-sm-8">
-            {% if editUserForm == false %}
+            {% if editUserForm == false  and user != false%}
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -128,7 +128,7 @@
                 </tbody>
             </table>
             {% endif %}
-            {% if editUserForm != false %}
+            {% if editUserForm != false and user != false %}
                 {{ form_start(editUserForm) }}
                 <table class="table table-striped">
                     <thead>

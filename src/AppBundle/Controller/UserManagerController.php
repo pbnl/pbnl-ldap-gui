@@ -208,11 +208,12 @@ class UserManagerController extends Controller
 
         $org = $this->get("organisation");
         $userManager = $org->getUserManager();
+        $editUserForm = false;
+        $user = false;
         try {
             $user = $userManager->getUserByUid($uidNumber);
 
             //Create the form
-            $editUserForm = false;
             //is the logged in user in the same stamm as this user?
             //than he can edit him
             $stamm = $user->getStamm();
