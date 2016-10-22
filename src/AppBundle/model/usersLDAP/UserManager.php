@@ -51,7 +51,8 @@ class UserManager
 
     public function getUserByUid($uid)
     {
-        return $this->ldapFrontend->getUserByUidNumber($uid);
+        $user = $this->ldapFrontend->getUserByUidNumber($uid);
+        return $user;
     }
     public function getUserByName($name)
     {
