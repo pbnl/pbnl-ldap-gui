@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\model\formDataClasses\AddTeamMemberFormData;
+use AppBundle\model\ldapCon\UserNotInGroupException;
 use AppBundle\model\usersLDAP\Organisation;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -141,14 +142,11 @@ class TeamController extends Controller
             if (!$loginHandler->checkPermissions("inTeam:".$team->name)) return $this->redirectToRoute("PermissionError");
 
             $team->addMember($user->dn);
-            array_push($successMessage,"Benutzer hinzugefügt");
+            $this->addFlash("success","Benutzer wurde hinzugefügt");
         }
 
 
-        return $this->render(":default:easyMessage.html.twig",array(
-            "errorMessage"=>$errorMessage,
-            "successMessage"=>$successMessage
-        ));
+        return $this->redirectToRoute("Alle Teams");
     }
 
     /**
@@ -158,9 +156,6 @@ class TeamController extends Controller
      */
     public function delTeamMember(Request $request)
     {
-        $errorMessage = Array();
-        $successMessage = Array();
-
         $org = $this->get("organisation");
 
         //get the team
@@ -172,15 +167,16 @@ class TeamController extends Controller
 
         //Del the user from the team
         $user = $org->getUserManager()->getUserByUid($request->get("uidNumber",""));
-        $team->removeMember($user->dn);
+        try
+        {
+            $team->removeMember($user->dn);
+            $this->addFlash("succsses","Benutzer aus dem Team entfernt");
+        }
+        catch (UserNotInGroupException $e)
+        {
+            $this->addFlash("error",$e->getMessage());
+        }
 
-
-        array_push($successMessage,"Benutzer aus dem Team entfert");
-
-
-        return $this->render(":default:easyMessage.html.twig",array(
-            "errorMessage"=>$errorMessage,
-            "successMessage"=>$successMessage
-        ));
+        return $this->redirectToRoute("Alle Teams");
     }
 }

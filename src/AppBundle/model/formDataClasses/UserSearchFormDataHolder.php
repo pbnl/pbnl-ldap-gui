@@ -8,9 +8,14 @@
 
 namespace AppBundle\model\formDataClasses;
 
+use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\model\validators\constraints as PBNLAssert;
 
 class UserSearchFormDataHolder
 {
+    /**
+     * @PBNLAssert\IsCorrectPBNLName
+     */
     public $userFilter = "";
     public $groupFilter = "";
 }

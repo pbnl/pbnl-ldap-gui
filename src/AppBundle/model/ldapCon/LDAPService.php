@@ -422,7 +422,14 @@ class LDAPService
         $group_info['memberuid'] = str_replace(", ",",",$userDN);
 
         //Del
-        ldap_mod_del($this->ldapCon, "cn=$group,$ldaptree", $group_info);
+        try
+        {
+            ldap_mod_del($this->ldapCon, "cn=$group,$ldaptree", $group_info);
+        }
+        catch (ContextErrorException $e)
+        {
+            throw new UserNotInGroupException("Cant del user $userDN from group $group because he does not exist!");
+        }
 
     }
 
@@ -438,7 +445,14 @@ class LDAPService
         $forward_info['forward'] = $mail;
 
         //Del
-        ldap_mod_del($this->ldapCon,"mail=$forward,$ldaptree",$forward_info);
+        try
+        {
+            ldap_mod_del($this->ldapCon, "mail=$forward,$ldaptree", $forward_info);
+        }
+        catch (ContextErrorException $e)
+        {
+            throw new UserNotInGroupException("Cant del mail $mail from forward $forward because he does not exist!");
+        }
     }
 
     /**

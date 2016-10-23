@@ -11,6 +11,8 @@ namespace AppBundle\model\usersLDAP;
 
 use AppBundle\model\ldapCon\AllreadyInGroupException;
 use AppBundle\model\ldapCon\LDAPService;
+use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\model\validators\constraints as PBNLAssert;
 
 class ParentGroup
 {
@@ -20,7 +22,11 @@ class ParentGroup
     public $LDAPService;
 
     protected $members = Array(); // An array with all dn of the users
-    protected $membersUserData = Array(); // An array with all dn of the users
+    protected $membersUserData = Array();
+    /**
+     * @Assert\NotBlank
+     * @PBNLAssert\IsCorrectPBNLName
+     */
     public $name = "";
     public $dn = "";
     public $gidNumber = "";
@@ -82,7 +88,7 @@ class ParentGroup
         $name = str_replace("@","",$this->name);
         try
         {
-            if (filter_var($mail, FILTER_VALIDATE_EMAIL)) $this->LDAPService->addMailToForward($mail, "$name@pbnl.de");
+            $this->LDAPService->addMailToForward($mail, "$name@pbnl.de");
         }
         catch (AllreadyInGroupException $e)
         {
@@ -116,7 +122,7 @@ class ParentGroup
         $this->LDAPService->removeUserDNFromGroup($dn,$this->name);
         $mail = $this->LDAPService->getUserByDN($dn)->mail;
         $name = str_replace("@","",$this->name);
-        if(filter_var($mail, FILTER_VALIDATE_EMAIL)) $this->LDAPService->removeMailFromForward($mail,"$name@pbnl.de");
+        $this->LDAPService->removeMailFromForward($mail,"$name@pbnl.de");
     }
 
     /**

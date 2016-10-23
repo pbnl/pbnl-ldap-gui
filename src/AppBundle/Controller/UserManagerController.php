@@ -234,7 +234,7 @@ class UserManagerController extends Controller
                 if($editUserForm->isSubmitted() && $editUserForm->isValid())
                 {
                     $user->pushNewData();
-                    $this->addFlash("succsses","Änderungen gespeichert");
+                    $this->addFlash("success","Änderungen gespeichert");
                 }
 
                 $editUserForm = $editUserForm->createView();
