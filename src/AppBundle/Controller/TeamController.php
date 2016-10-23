@@ -170,7 +170,7 @@ class TeamController extends Controller
         try
         {
             $team->removeMember($user->dn);
-            $this->addFlash("succsses","Benutzer aus dem Team entfernt");
+            $this->addFlash("success","Benutzer aus dem Team entfernt");
         }
         catch (UserNotInGroupException $e)
         {
