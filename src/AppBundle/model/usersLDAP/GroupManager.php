@@ -29,11 +29,22 @@ class GroupManager
 
     public function getGroupByGid($gid)
     {
-        return $this->ldapFrontend->getAllGroups($gid)[0];
+        $group = $this->ldapFrontend->getAllGroups($gid)[0];
+        $group->setGroupManager($this);
+        return $group;
     }
     public function getGroupByName($name)
     {
+        $group = $this->ldapFrontend->getAllGroups($name)[0];
+        $group->setGroupManager($this);
+        return $group;
+    }
 
+    public function getStavo($stamm)
+    {
+        $stavo = new Stavo($this->ldapFrontend,$stamm);
+        $stavo->setGroupManager($this);
+        return $stavo;
     }
 
     public function getAllGroups($search)

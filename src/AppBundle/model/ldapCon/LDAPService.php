@@ -451,7 +451,7 @@ class LDAPService
         }
         catch (ContextErrorException $e)
         {
-            throw new UserNotInGroupException("Cant del mail $mail from forward $forward because he does not exist!");
+            throw new UserNotInGroupException("Cant del mail $mail from forward $forward because he does not exist! ".$e->getTraceAsString());
         }
     }
 

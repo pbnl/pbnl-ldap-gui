@@ -10,45 +10,20 @@ namespace AppBundle\model\usersLDAP;
 
 use AppBundle\model\ldapCon\LDAPService;
 
-class Stavo
+class Stavo extends ParentGroup
 {
-    private $members = Array();
-    private $ldap;
+    protected $stammesName;
 
     public function __construct(LDAPService $ldap, $name)
     {
-        $this->ldap = $ldap;
+        $this->LDAPService = $ldap;
+        $this->name = "stavo";
+        $this->stammesName = $name;
         $stamm = $ldap->getAllGroups($name)[0];
         $stavos = $ldap->getAllGroups("stavo")[0];
         $stavo = $stamm->getMembersOfGroupB($stavos);
 
         $this->members = $stavo->getMembersDN();
+
     }
-
-    public function getMembersDN()
-    {
-        return $this->members;
-    }
-
-    public function getMembersUser()
-    {
-        $membersUser = Array();
-        foreach ($this->members as $memberDN)
-        {
-            array_push($membersUser,$this->ldap->getUserByDN($memberDN));
-        }
-        return $membersUser;
-    }
-
-    public function addMemberByDN($userDN)
-    {
-        $this->ldap->addUserDNToGroup($userDN,"stavo");
-    }
-
-    public function delMemberByDN($userDN)
-    {
-        $this->ldap->removeUserDNFromGroup($userDN,"stavo");
-    }
-
-
 }

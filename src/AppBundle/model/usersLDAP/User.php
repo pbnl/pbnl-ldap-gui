@@ -14,22 +14,18 @@ use AppBundle\model\validators\constraints as PBNLAssert;
 class User
 {
     /**
-     * @Assert\NotBlank
      * @PBNLAssert\IsCorrectPBNLName
      */
     public $givenName = "";
     /**
-     * @Assert\NotBlank
      * @PBNLAssert\IsCorrectPBNLName
      */
     public $uid = "";
     /**
-     * @Assert\NotBlank
      * @PBNLAssert\IsCorrectPBNLName
      */
     public $firstName = "";
     /**
-     * @Assert\NotBlank
      * @PBNLAssert\IsCorrectPBNLName
      */
     public $secondName = "";
