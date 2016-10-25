@@ -9,10 +9,13 @@
 namespace AppBundle\Controller;
 
 use AppBundle\model\formDataClasses\AddTeamMemberFormData;
+use AppBundle\model\ldapCon\GroupNotFoundException;
 use AppBundle\model\ldapCon\UserNotInGroupException;
 use AppBundle\model\usersLDAP\Organisation;
+use AppBundle\model\usersLDAP\UserNotUnique;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -166,13 +169,13 @@ class TeamController extends Controller
         if (!$loginHandler->checkPermissions("inTeam:".$team->name)) return $this->redirectToRoute("PermissionError");
 
         //Del the user from the team
-        $user = $org->getUserManager()->getUserByUid($request->get("uidNumber",""));
         try
         {
+            $user = $org->getUserManager()->getUserByUid($request->get("uidNumber",""));
             $team->removeMember($user->dn);
             $this->addFlash("success","Benutzer aus dem Team entfernt");
         }
-        catch (UserNotInGroupException $e)
+        catch (Exception $e)
         {
             $this->addFlash("error",$e->getMessage());
         }
