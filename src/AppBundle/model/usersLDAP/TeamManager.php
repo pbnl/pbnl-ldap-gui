@@ -21,7 +21,9 @@ class TeamManager extends GroupManager
 
     public function getTeamByGid($gid)
     {
-        return $this->ldapFrontend->getAllTeams($gid)[0];
+        $team = $this->ldapFrontend->getAllTeams($gid)[0];
+        $team->setGroupManager($this);
+        return $team;
     }
     public function getTeamByName($name)
     {
@@ -30,6 +32,11 @@ class TeamManager extends GroupManager
 
     public function getAllTeams($search)
     {
-        return $this->ldapFrontend->getAllTeams($search);
+        $teams = $this->ldapFrontend->getAllTeams($search);
+        foreach ($teams as $team)
+        {
+            $team->setGroupManager($this);
+        }
+        return $teams;
     }
 }
