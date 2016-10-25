@@ -119,7 +119,7 @@ class StammController extends Controller
         try
         {
             $stamm->removeMember($userManager->getUserByUid($uidNumber)->dn);
-            $this->addFlash("succsses","User wurde aus dem Stavo gelöscht");
+            $this->addFlash("success","User wurde aus dem Stavo gelöscht");
         }
         catch (Exception $e)
         {
@@ -163,8 +163,15 @@ class StammController extends Controller
         {
             //Create the new user
             $stavo = $groupManager->getStavo($request->get("form[stamm]"));
-            $stavo->addMember($user->dn);
-            $this->addFlash("succsses","Benutzer zum Stavo hinzugefügt");
+            try
+            {
+                $stavo->addMember($user->dn);
+                $this->addFlash("success","Benutzer zum Stavo hinzugefügt");
+            }
+            catch (Exception $e)
+            {
+                $this->addFlash("error",$e->getMessage());
+            }
         }
         return$this->redirectToRoute("Zeige Stavo");
     }

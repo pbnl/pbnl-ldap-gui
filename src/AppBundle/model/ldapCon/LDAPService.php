@@ -231,7 +231,7 @@ class LDAPService
         }
         else
         {
-            throw new GroupNotFoundException("The group with the name $groupFilterName does not exist!");
+            throw new GroupNotFoundException("The group with the name $teamFilterName does not exist!");
         }
 
         return $teams;
@@ -272,9 +272,8 @@ class LDAPService
         $userForLDAP["dn"] = "givenName=$user->givenName, ou=$ou, $ldaptree";
 
 
+        //TODO: Add error handling
         return new User($this,$userForLDAP);
-
-
 
     }
 
@@ -384,6 +383,7 @@ class LDAPService
         }
         catch (ContextErrorException $e)
         {
+            //TODO: Maybe create group
             throw new AllreadyInGroupException("User already in group $group");
         }
     }
@@ -406,6 +406,15 @@ class LDAPService
         }
         catch (ContextErrorException $e)
         {
+            //Check if the forward exist
+            $forwardGroup = $this->getForwardForMail($forward);
+            if($forwardGroup == [])
+            {
+                $this->logger->addAlert("Forward $forward does not exist");
+                //Create forward and add the first mail
+                $this->createForward($forward,$mail);
+                return;
+            }
             throw new AllreadyInGroupException("User already in forward $forward");
         }
     }
@@ -428,6 +437,7 @@ class LDAPService
         }
         catch (ContextErrorException $e)
         {
+            //TODO: Maybe create group
             throw new UserNotInGroupException("Cant del user $userDN from group $group because he does not exist!");
         }
 
@@ -451,7 +461,8 @@ class LDAPService
         }
         catch (ContextErrorException $e)
         {
-            throw new UserNotInGroupException("Cant del mail $mail from forward $forward because he does not exist! ".$e->getTraceAsString());
+            //TODO: Does the group exist
+            throw new UserNotInGroupException("Cant del mail $mail from forward $forward because it does not exist!");
         }
     }
 
@@ -462,6 +473,7 @@ class LDAPService
     public function removeUserWithDN($userDN)
     {
         //Del
+        //TODO: Add error handling
         ldap_delete($this->ldapCon,$userDN);
     }
 
@@ -513,6 +525,7 @@ class LDAPService
                     }
             }
         }
+        //TODO: Add error handling
         return $forwards;
     }
 
@@ -527,6 +540,22 @@ class LDAPService
         $data["street"] = $user->street;
         $data["telephonenumber"] = $user->telephoneNumber;
 
+        //TODO: Add error handling
         ldap_modify($this->ldapCon, $user->dn, $data);
+    }
+
+    public function createForward($forward,$mail)
+    {
+        $forwardForLDAP = Array();
+        $forwardForLDAP["objectclass"][0] = "pbnlMailAlias";
+        $forwardForLDAP["mail"][0] = $forward;
+        $forwardForLDAP["forward"][0] = $mail;
+
+
+        $ldaptree = "ou=Forward,dc=pbnl,dc=de";
+
+        ldap_add($this->ldapCon, "mail=$forward, $ldaptree", $forwardForLDAP);
+
+        //TODO: Add error handling
     }
 }
