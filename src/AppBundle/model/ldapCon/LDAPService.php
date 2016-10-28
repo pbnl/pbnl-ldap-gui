@@ -18,6 +18,7 @@ use AppBundle\model\usersLDAP\UserNotUnique;
 use Monolog\Logger;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Debug\Exception\ContextErrorException;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class LDAPService
 {
@@ -25,9 +26,10 @@ class LDAPService
     private $LDAPConnector = null;
     private $ldapCon = null;
 
-    function __construct(Logger $logger)
+    function __construct(Logger $logger,Session $session)
     {
         $this->logger = $logger;
+        $this->session = $session;
         $this->LDAPConnector = new LDAPConnetor();
         $this->LDAPConnector->intiLDAPConnection();
         $this->ldapCon = $this->LDAPConnector->getCon();
@@ -411,6 +413,7 @@ class LDAPService
             if($forwardGroup == [])
             {
                 $this->logger->addAlert("Forward $forward does not exist");
+                $this->session->getFlashBag()->add("notice","We added the group $forward, because it did not exist.");
                 //Create forward and add the first mail
                 $this->createForward($forward,$mail);
                 return;
@@ -461,8 +464,16 @@ class LDAPService
         }
         catch (ContextErrorException $e)
         {
-            //TODO: Does the group exist
-            throw new UserNotInGroupException("Cant del mail $mail from forward $forward because it does not exist!");
+            if($this->getForwardForMail($forward) == [])
+            {
+                $this->logger->addInfo("The froward $forward does not exist. Because of this we cant delet the $mail from the forward");
+                throw new GroupNotFoundException("The froward $forward does not exist. Because of this we cant delet the $mail from the forward");
+            }
+            else
+            {
+                $this->logger->addInfo("Cant del mail $mail from forward $forward because it does not exist!");
+                throw new UserNotInGroupException("Cant del mail $mail from forward $forward because it does not exist!");
+            }
         }
     }
 
