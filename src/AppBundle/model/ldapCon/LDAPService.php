@@ -440,8 +440,15 @@ class LDAPService
         }
         catch (ContextErrorException $e)
         {
-            //TODO: Maybe create group
-            throw new UserNotInGroupException("Cant del user $userDN from group $group because he does not exist!");
+            if(count($this->getAllGroups($group)) == 0 )
+            {
+            $this->logger->addInfo("The group $group does not exist. Because of this we cant delet the $userDN from the group");
+            throw new GroupNotFoundException("The group $group does not exist. Because of this we cant delet the $userDN from the group");
+            }
+            else {
+                $this->logger->addInfo("Cant del user $userDN from group $group because he does not exist!");
+                throw new UserNotInGroupException("Cant del user $userDN from group $group because he does not exist!");
+            }
         }
 
     }
