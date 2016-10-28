@@ -11,6 +11,7 @@ namespace AppBundle\model\usersLDAP;
 
 use AppBundle\model\ldapCon\AllreadyInGroupException;
 use AppBundle\model\ldapCon\LDAPService;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Validator\Constraints as Assert;
 use AppBundle\model\validators\constraints as PBNLAssert;
 
@@ -122,7 +123,14 @@ class ParentGroup
         $this->LDAPService->removeUserDNFromGroup($dn,$this->name);
         $mail = $this->LDAPService->getUserByDN($dn)->mail;
         $name = str_replace("@","",$this->name);
-        $this->LDAPService->removeMailFromForward($mail,"$name@pbnl.de");
+        try
+        {
+            $this->LDAPService->removeMailFromForward($mail, "$name@pbnl.de");
+        }
+        catch (Exception $e)
+        {
+            $this->getGroupManager()->getOrg()->session->getFlashBag()->add("notice",$e->getMessage());
+        }
     }
 
     /**
