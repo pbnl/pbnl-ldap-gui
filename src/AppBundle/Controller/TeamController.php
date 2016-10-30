@@ -69,7 +69,15 @@ class TeamController extends Controller
 
         $org = $this->get("organisation");
         $teamManager = $org->getTeamManager();
-        $team = $teamManager->getAllTeams($gid)[0];
+        try
+        {
+            $team = $teamManager->getAllTeams($gid)[0];
+        }
+        catch (GroupNotFoundException $e)
+        {
+            $this->addFlash("notice","Group not found");
+            return $this->redirectToRoute("Alle Teams");
+        }
         $team->fetchUserData();
 
         //Security stuff
@@ -101,18 +109,28 @@ class TeamController extends Controller
      */
     public function addMemberToTeam(Request$request)
     {
+        //TODO: Jonathan kann nicht hinzugefügt werden!!!!!
         $errorMessage = Array();
         $successMessage = Array();
 
         $org = $this->get("organisation");
+        $logger = $this->get("logger");
 
-        //Get all users witch are not in the group $gid
-        $team = $org->getTeamManager()->getAllTeams($request->get("gid",""))[0];
+        try
+        {
+            //Get Team
+            $team = $org->getTeamManager()->getAllTeams($request->get("gid", ""))[0];
+        }
+        catch (GroupNotFoundException $e)
+        {
+            $this->addFlash("notice","Group not found");
+        }
 
         //Security stuff
         $loginHandler = $this->get("login");
         if (!$loginHandler->checkPermissions("inTeam:".$team->name)) return $this->redirectToRoute("PermissionError");
 
+        //Get all users witch are not in the group $gid
         $userManager = $org->getUserManager();
         $users = $userManager->getAllUsers("",$request->get("form[givenName]"));
         $usersNotInGroup = array();
@@ -139,13 +157,21 @@ class TeamController extends Controller
         if($addMemberForm->isSubmitted() && $addMemberForm->isValid())
         {
             //Add the user to the team
-            $user = $org->getUserManager()->getUserByName($formDataUser->givenName);
-            $team = $org->getTeamManager()->getTeamByGid($formDataUser->gid);
-            //Security stuff
-            if (!$loginHandler->checkPermissions("inTeam:".$team->name)) return $this->redirectToRoute("PermissionError");
+            try
+            {
+                $user = $org->getUserManager()->getUserByName($formDataUser->givenName);
+                $team = $org->getTeamManager()->getTeamByGid($formDataUser->gid);
+                //Security stuff
+                if (!$loginHandler->checkPermissions("inTeam:" . $team->name)) return $this->redirectToRoute("PermissionError");
 
-            $team->addMember($user->dn);
-            $this->addFlash("success","Benutzer wurde hinzugefügt");
+                $team->addMember($user->dn);
+                $this->addFlash("success","Benutzer wurde hinzugefügt");
+            }
+            catch (Exception $e)
+            {
+                $this->addFlash("error",$e->getMessage());
+            }
+
         }
 
 
