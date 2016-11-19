@@ -12,7 +12,8 @@ namespace AppBundle\model\login;
 use AppBundle\model\ldapCon\LDAPConnetor;
 use AppBundle\model\ldapCon\LDAPService;
 use AppBundle\model\SSHA;
-use AppBundle\model\usersLDAP\People;
+use AppBundle\model\usersLDAP\Organisation;
+use Monolog\Logger;
 use NoLDAPBindDataException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -21,10 +22,12 @@ class LoginHandler
 {
 
     private $ldapFrontend;
+    protected $org;
 
-    public function __construct(LDAPService $ldapFrontend)
+    public function __construct(LDAPService $ldapFrontend,Logger $logger,Organisation $organisationg)
     {
         $this->ldapFrontend = $ldapFrontend;
+        $this->org = $organisationg;
     }
 
     /**
@@ -62,8 +65,10 @@ class LoginHandler
         $session->set("loggedIn",TRUE);
         $session->set("name",$this->data->name);
 
-        $people = new People($this->ldapFrontend);
-        $person = $people->getUserByName($this->data->name);
+
+
+        $userManager = $this->org->getUserManager();
+        $person = $userManager->getUserByName($this->data->name);
         $session->set("stamm",$person->getStamm($this->ldapFrontend));
         $session->set("dn",$person->dn);
         $session->set("uidNumber",$person->getUidNumber());
