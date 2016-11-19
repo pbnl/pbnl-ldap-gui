@@ -12,7 +12,7 @@ before_script:
   - ls -la
   - sudo rm /etc/ldap/slapd.d/* -R
   - sudo rm /var/lib/ldap/* -R
-  - sudo cp ./ldap-test-files/slapd.d/* /etc/ldap/slapd.d/
-  - sudo cp ./ldap-test-files/ldap/* /var/lib/ldap/
+  - sudo cp ./ldap-test-files/slapd.d/* /etc/ldap/slapd.d/ -R
+  - sudo cp ./ldap-test-files/ldap/* /var/lib/ldap/ -R
   - sudo service slapd start
   
