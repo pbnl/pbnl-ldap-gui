@@ -52,7 +52,7 @@ class StartPageController extends Controller
      */
     public function permissionErrorPage(Request $request)
     {
-        array_push($errorMessage,"PermissionError");
+        $this->addFlash("error","PermissionError");
 
         return$this->render("/default/permissionError.html.twig",array(
         ));

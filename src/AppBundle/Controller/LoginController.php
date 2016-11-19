@@ -50,7 +50,7 @@ class LoginController extends Controller
             $loginHandler = $this->get("login");
             if ($loginHandler->login($loginDataHolder) == FALSE)
             {
-                array_push($errorMassage, "Name oder Passwort falsch!");
+                $this->addFlash("error","Name oder Passwort falsch!");
             }
             else
             {
