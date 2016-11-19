@@ -26,8 +26,10 @@ class StartPageController extends Controller
         if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
 
 
-        $people = new People($this->get("ldap.frontend"));
-        $groups = $people->getGroups();
+        $org = $this->get("organisation");
+        $userManager = $org->getUserManager();
+        $groupManager = $org->getGroupManager();
+        $groups = $groupManager->getAllGroups("");
 
         $memberCount = 0;
         $groupNames = Array();

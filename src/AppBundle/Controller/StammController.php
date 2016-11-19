@@ -35,11 +35,12 @@ class StammController extends Controller
         $loginHandler = $this->get("login");
         if (!$loginHandler->checkPermissions("inStamm:".$request->get("stamm",$session->get("stamm")))) return $this->redirectToRoute("PermissionError");
 
-        //Get all users and search for name and groupq if wanted
-        $people = new People($this->get("ldap.frontend"));
+
+        $org = $this->get("organisation");
+        $userManager= $org->getUserManager();
 
         //Search users
-        $peopleList = $people->getAllUsers($request->get("stamm",$session->get("stamm")),"");
+        $peopleList = $userManager->getAllUsers($request->get("stamm",$session->get("stamm")),"");
 
         return$this->render(":default:showUsersInOneTabel.html.twig",array(
             "users"=>$peopleList,
