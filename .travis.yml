@@ -7,3 +7,11 @@ addons:
     - slapd
 before_script:
   - echo "Before Script"
+  - service slapd stop
+  - sleep 3
+  - rm /etc/ldap/slapd.d/* -R
+  - rm /var/lib/ldap/* -R
+  - cp ./pbnl/pbnl-ldap-gui/ldap-test-files/slapd.d/* /etc/ldap/slapd.d/
+  - cp ./pbnl/pbnl-ldap-gui/ldap-test-files/ldap/* /var/lib/ldap/
+  - service slapd start
+  
