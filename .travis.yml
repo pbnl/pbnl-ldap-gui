@@ -5,3 +5,5 @@ addons:
     packages:
     - ldap-utils
     - slapd
+before_script:
+  - echo "Before Script"
