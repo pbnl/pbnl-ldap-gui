@@ -25,8 +25,6 @@ class StartPageController extends Controller
         $loginHandler = $this->get("login");
         if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
 
-        $errorMessage = Array();
-        $successMessage = Array();
 
         $people = new People($this->get("ldap.frontend"));
         $groups = $people->getGroups();
@@ -45,8 +43,6 @@ class StartPageController extends Controller
         return$this->render("default/startPage.html.twig",array(
             "groupNames" => $groupNames,
             "groupCounts" => $groubCount,
-            "errorMessage"=>$errorMessage,
-            "successMessage"=>$successMessage
 
         ));
     }
@@ -56,14 +52,9 @@ class StartPageController extends Controller
      */
     public function permissionErrorPage(Request $request)
     {
-        $errorMessage = Array();
-        $successMessage = Array();
-
         array_push($errorMessage,"PermissionError");
 
         return$this->render("/default/permissionError.html.twig",array(
-            "errorMessage"=>$errorMessage,
-            "successMessage"=>$successMessage
         ));
     }
 }

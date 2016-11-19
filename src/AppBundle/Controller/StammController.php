@@ -29,9 +29,6 @@ class StammController extends Controller
      */
     public function getStamm(Request $request)
     {
-        $errorMessage = Array();
-        $successMessage = Array();
-
         $session = new Session();
 
         //Security stuff
@@ -46,9 +43,6 @@ class StammController extends Controller
 
         return$this->render(":default:showUsersInOneTabel.html.twig",array(
             "users"=>$peopleList,
-            "errorMessage"=>$errorMessage,
-            "successMessage"=>$successMessage
-
         ));
     }
 
@@ -98,9 +92,6 @@ class StammController extends Controller
      */
     public function delStavoMember(Request $request)
     {
-        $errorMessage = Array();
-        $successMessage = Array();
-
         //The stavo the user will get removed from
         $stammName = $request->get("stamm");
 

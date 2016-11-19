@@ -33,9 +33,6 @@ class LoginController extends Controller
             return $this->redirectToRoute("Startpage");
         }
 
-        $errorMassage = Array();
-        $successMessage = Array();
-
         //Creats a loginform
         $loginDataHolder= new LoginDataHolder();
         $loginForm = $this->createFormBuilder($loginDataHolder,['attr' => ['class' => 'form-signin']])
@@ -65,8 +62,6 @@ class LoginController extends Controller
         //return the default loginpage
         return $this->render("default/login.html.twig", array(
             "loginForm"=>$loginForm->createView(),
-            "errorMessage"=>$errorMassage,
-            "successMessage"=>$successMessage
         ));
     }
 

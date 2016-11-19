@@ -34,9 +34,6 @@ class TeamController extends Controller
         $loginHandler = $this->get("login");
         if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
 
-        $errorMessage = Array();
-        $successMessage = Array();
-
         $org = $this->get("organisation");
         $teamManager = $org->getTeamManager();
         $teams = $teamManager->getAllTeams("");
@@ -49,8 +46,6 @@ class TeamController extends Controller
         return $this->render(":default:showTeams.html.twig",array(
 
             "teamList" => $myTeams,
-            "errorMessage"=>$errorMessage,
-            "successMessage"=>$successMessage
         ));
     }
 
@@ -61,9 +56,6 @@ class TeamController extends Controller
      */
     public function getTeamDetails(Request $request)
     {
-        $errorMessage = Array();
-        $successMessage = Array();
-
         //Id of the group we are looking for
         $gid = $request->get("gid","");
 
@@ -97,8 +89,6 @@ class TeamController extends Controller
         return $this->render(":default:teamDetail.html.twig",array(
             "addTeamMemberForm" => $addMemberForm->createView(),
             "team" => $team,
-            "errorMessage"=>$errorMessage,
-            "successMessage"=>$successMessage
         ));
     }
 
@@ -110,9 +100,6 @@ class TeamController extends Controller
     public function addMemberToTeam(Request$request)
     {
         //TODO: Jonathan kann nicht hinzugefügt werden!!!!!
-        $errorMessage = Array();
-        $successMessage = Array();
-
         $org = $this->get("organisation");
         $logger = $this->get("logger");
 

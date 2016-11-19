@@ -45,9 +45,6 @@ class UserManagerController extends Controller
         $loginHandler = $this->get("login");
         if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
 
-        $errorMessage = Array();
-        $successMessage = Array();
-
         //Get all users and search for name and groupq if wanted
         $org = $this->get("organisation");
         $userManager = $org->getUserManager();
@@ -77,8 +74,6 @@ class UserManagerController extends Controller
         return$this->render(":default:showUsersInOneTabel.html.twig",array(
             "peopleSearchForm" => $peopleSearchForm->createView(),
             "users"=>$userList,
-            "errorMessage"=>$errorMessage,
-            "successMessage"=>$successMessage
 
         ));
     }
@@ -92,9 +87,6 @@ class UserManagerController extends Controller
     {
         $loginHandler = $this->get("login");
         if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
-        
-        $errorMessage = Array();
-        $successMessage = Array();
 
         //Create the form
         $org = $this->get("organisation");
@@ -150,10 +142,7 @@ class UserManagerController extends Controller
         return $this->render("default/addAUser.html.twig",array(
             "addAUserForm" => $addUserForm->createView(),
             "addedPerson" => $personAddedToLDAP,
-            "addedSomeone" => $addedSomeone,
-            "errorMessage"=>$errorMessage,
-            "successMessage"=>$successMessage
-
+            "addedSomeone" => $addedSomeone
         ));
     }
 
@@ -166,9 +155,6 @@ class UserManagerController extends Controller
     {
         $loginHandler = $this->get("login");
         if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
-
-        $errorMessage = Array();
-        $successMessage = Array();
 
         $uidNumber = $request->get("uidNumber");
         $uidNumbers =  explode(";",$uidNumber);
@@ -199,9 +185,6 @@ class UserManagerController extends Controller
         //security stuff
         $loginHandler = $this->get("login");
         if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
-
-        $errorMessage = Array();
-        $successMessage = Array();
 
         $uidNumber = $request->get("uidNumber");
 
@@ -252,8 +235,6 @@ class UserManagerController extends Controller
         return $this->render(":default:userDetail.html.twig",array(
             "editUserForm" => $editUserForm,
             "user" => $user,
-            "errorMessage"=>$errorMessage,
-            "successMessage"=>$successMessage
         ));
     }
 
@@ -266,9 +247,6 @@ class UserManagerController extends Controller
     {
         $loginHandler = $this->get("login");
         if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
-
-        $errorMessage = Array();
-        $successMessage = Array();
 
         $org = $this->get("organisation");
         $ouGroups = $org->getOUGroupsNames();
@@ -313,8 +291,6 @@ class UserManagerController extends Controller
         //Render the page
         return $this->render(":default:xlsxImporter.html.twig",array(
             "xlsxImporterFileForm" => $xlsxImporterFileForm->createView(),
-            "errorMessage"=>$errorMessage,
-            "successMessage"=>$successMessage
         ));
     }
 }
