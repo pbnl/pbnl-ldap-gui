@@ -9,6 +9,7 @@ before_script:
   - echo "Before Script"
   - sudo service slapd stop
   - sleep 3
+  - ls -la
   - sudo rm /etc/ldap/slapd.d/* -R
   - sudo rm /var/lib/ldap/* -R
   - sudo cp ./pbnl/pbnl-ldap-gui/ldap-test-files/slapd.d/* /etc/ldap/slapd.d/
