@@ -1,11 +1,13 @@
 language: php
+php:
+  - '7.0'
 sudo: required
 addons:
   apt:
     packages:
     - ldap-utils
     - slapd
-    - php5-ldap
+    - php-ldap
 before_script:
   - echo "Before Script"
   - service apache2 restart
