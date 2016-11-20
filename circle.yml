@@ -1,7 +1,6 @@
 dependencies:
   pre:
     - export DEBIAN_FRONTEND=noninteractive
-    - sudo export DEBIAN_FRONTEND=noninteractive
     - sudo -E apt-get -yq update &>> ~/apt-get-update.log
     - sudo -E apt-get -yq --no-install-suggests --no-install-recommends --force-yes ldap-utils slapd
     - echo "Before Script"
