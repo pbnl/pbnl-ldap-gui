@@ -24,10 +24,11 @@ class LoginHandler
     private $ldapFrontend;
     protected $org;
 
-    public function __construct(LDAPService $ldapFrontend,Logger $logger,Organisation $organisationg)
+    public function __construct(LDAPService $ldapFrontend,Logger $logger,Organisation $organisationg,Session $session)
     {
         $this->ldapFrontend = $ldapFrontend;
         $this->org = $organisationg;
+        $this->session = $session;
     }
 
     /**
@@ -61,7 +62,7 @@ class LoginHandler
      */
     private function loginSuccess()
     {
-        $session = new Session();
+        $session = $this->session;
         $session->set("loggedIn",TRUE);
         $session->set("name",$this->data->name);
 
@@ -76,14 +77,14 @@ class LoginHandler
 
     public function logout()
     {
-        $session = new Session();
+        $session = $this->session;
         $session->set("loggedIn",FALSE);
         $session->set("name","");
     }
 
     public function checkPermissions($requierments = "")
     {
-        $session = new Session();
+        $session = $this->session;
         if($requierments == "")
         {
             return $session->get("loggedIn");
