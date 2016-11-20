@@ -63,7 +63,6 @@ class LoginControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/startPage');
-        var_dump("efef");
         $this->assertGreaterThan(
             0,
             $crawler->filter('html:contains("permissionError")')->count()
