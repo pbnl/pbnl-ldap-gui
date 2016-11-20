@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Tests\AppBundle\LoginAction;
 
 
-class ShowAllUserTestClass extends WebTestCase
+class ShowAllUserTest extends WebTestCase
 {
     public function testShowAllUsers()
     {
