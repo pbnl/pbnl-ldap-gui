@@ -10,6 +10,9 @@
     <php>
         <ini name="error_reporting" value="-1" />
         <server name="KERNEL_DIR" value="app/" />
+        <env name="LDAP_IP" value="127.0.0.1"/>
+        <env name="LDAP_BIND_PWD" value="passwd"/>
+        <env name="LDAP_BIND_DN" value="cn=admin,dc=pbnl,dc=de"/>
     </php>
 
     <testsuites>
