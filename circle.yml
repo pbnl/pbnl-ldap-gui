@@ -1,7 +1,8 @@
 dependencies:
   pre:
     - export DEBIAN_FRONTEND=noninteractive
-    - sudo apt-get update; sudo apt-get install ldap-utils slapd
+    - DEBIAN_FRONTEND=noninteractive
+    - sudo apt-get update; sudo apt-get -q -y install  ldap-utils slapd
     - echo "Before Script"
     - sudo service slapd stop
     - sleep 3
