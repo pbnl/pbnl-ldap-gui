@@ -9,7 +9,7 @@ services:
         arguments: ["@logger","@session"]
     login:
         class: AppBundle\model\login\LoginHandler
-        arguments: ['@ldap.frontend',"@logger","@organisation"]
+        arguments: ['@ldap.frontend',"@logger","@organisation","@session"]
     login.User:
             class: AppBundle\model\login\loggedInUserService
             arguments: ['@ldap.frontend']
