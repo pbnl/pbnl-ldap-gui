@@ -22,6 +22,10 @@ class LoginControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/logout');
 
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
+        if($client->getResponse()->getStatusCode() == 500)
+        {
+            var_dump($client->getResponse());
+        }
     }
 
     public function testLogin()
