@@ -6,7 +6,6 @@ addons:
     - ldap-utils
     - slapd
     - php5-ldap
-    - php7-ldap
 before_script:
   - echo "Before Script"
   - sudo service slapd stop
