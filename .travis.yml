@@ -1,13 +1,11 @@
 language: php
-php:
-  - '7.0'
 sudo: required
 addons:
   apt:
     packages:
     - ldap-utils
     - slapd
-    - php-ldap
+    - php5-ldap
 before_script:
   - echo "Before Script"
   - sudo service slapd stop
