@@ -22,7 +22,7 @@ class LoginControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/logout');
 
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
-        var_dump($client->getResponse());
+        var_dump($client->getResponse()->getContent());
     }
 
     public function testLogin()
@@ -31,10 +31,10 @@ class LoginControllerTest extends WebTestCase
         $client = static::createClient();
         $crawler = $client->request('GET', '/logout');
 
-        var_dump($client->getResponse());
+        var_dump($client->getResponse()->getContent());
 
         $crawler = $client->request('GET', '/login');
-        var_dump($client->getResponse());
+        var_dump($client->getResponse()->getContent());
         $form = $crawler->selectButton('Login')->form();
 
         $form['form[name]'] = 'Paul';
