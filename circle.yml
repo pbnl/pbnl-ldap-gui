@@ -6,7 +6,6 @@ dependencies:
     - echo "Before Script"
     - echo date.timezone =UTC >> /opt/circleci/php/5.6.17/etc/php.ini
     - sudo service slapd stop
-    - sudo service slapd status
     - sudo rm /etc/ldap/slapd.d/* -R
     - sudo rm /var/lib/ldap/* -R
     - sudo cp ./ldap-test-files/slapd.d/* /etc/ldap/slapd.d/ -R
