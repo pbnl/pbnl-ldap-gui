@@ -11,7 +11,7 @@ before_script:
   - sudo service slapd stop
   - sleep 3
   - ls -la
-  - sudo service slapd start
+  - sudo service slapd status
   - sudo rm /etc/ldap/slapd.d/* -R
   - sudo rm /var/lib/ldap/* -R
   - sudo cp ./ldap-test-files/slapd.d/* /etc/ldap/slapd.d/ -R
