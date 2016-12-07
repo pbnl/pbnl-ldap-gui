@@ -2,6 +2,7 @@
 [![Test Coverage](https://codeclimate.com/github/pbnl/pbnl-ldap-gui/badges/coverage.svg)](https://codeclimate.com/github/pbnl/pbnl-ldap-gui/coverage)
 [![Issue Count](https://codeclimate.com/github/pbnl/pbnl-ldap-gui/badges/issue_count.svg)](https://codeclimate.com/github/pbnl/pbnl-ldap-gui)
 
+[![CircleCI](https://circleci.com/gh/pbnl/pbnl-ldap-gui.svg?style=svg)](https://circleci.com/gh/pbnl/pbnl-ldap-gui)
 A Symfony project created on August 1, 2016, 11:07 pm.
 
 Ein GUI für das PBNL-LDAP
