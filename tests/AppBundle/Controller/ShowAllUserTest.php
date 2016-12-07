@@ -41,6 +41,7 @@ class ShowAllUserTest extends WebTestCase
             0,
             $crawler->filter('td:contains("givenName=Paul,ou=Ambronen,ou=People,dc=pbnl,dc=de")')->count()
         );
+
     }
 
     public function testSearchForGroup()
