@@ -8,7 +8,6 @@ dependencies:
     - sudo service slapd stop
     - sleep 3
     - ls -la
-    - sudo service slapd start
     - sudo rm /etc/ldap/slapd.d/* -R
     - sudo rm /var/lib/ldap/* -R
     - sudo cp ./ldap-test-database/slapd.d/* /etc/ldap/slapd.d/ -R
