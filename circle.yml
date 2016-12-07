@@ -9,9 +9,8 @@ dependencies:
     - sleep 3
     - ls -la
     - sudo rm /etc/ldap/slapd.d/* -R
-    - sudo rm /var/lib/ldap/* -R
-    - sudo cp ./ldap-test-database/slapd.d/* /etc/ldap/slapd.d/ -R
+    - sudo slapadd -n 0 -F /etc/ldap/slapd.d -l ./ldap-test-database/config.ldif
+    - sudo slapadd -n 1 -l ./ldap-test-database/data.ldif
     - sudo chown openldap:openldap /etc/ldap/slapd.d/ -R
-    - sudo cp ./ldap-test-database/ldap/* /var/lib/ldap/ -R
     - sudo chown openldap:openldap /var/lib/ldap/ -R
     - sudo service slapd start
