@@ -50,13 +50,13 @@ class ShowAllUserTest extends WebTestCase
         $crawler = $client->request('GET', '/user/schowAllUsers');
 
         $form = $crawler->selectButton('Suchen')->form();
-        $form['form[groupFilter]'] = 'tronjer';
+        $form['form[groupFilter]'] = 'testStamm';
         $crawler = $client->submit($form);
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertGreaterThan(
             0,
-            $crawler->filter('td:contains("givenName=TestTronjerMember,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de")')->count()
+            $crawler->filter('td:contains("givenName=wgthththzjzj,ou=testStamm,ou=People,dc=pbnl,dc=de")')->count()
         );
     }
 }
