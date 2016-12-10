@@ -16,3 +16,7 @@ services:
     organisation:
         class: AppBundle\model\usersLDAP\Organisation
         arguments: ['@ldap.frontend',"@logger","@session"]
+    your.monolog.service.id:
+        class: Monolog\Formatter\LineFormatter
+        calls:
+            - [includeStacktraces]
