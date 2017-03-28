@@ -63,6 +63,7 @@ class User
             $this->uid = intval($data["uid"][0]);
             $this->firstName = $data["cn"][0];
             $this->secondName = $data["sn"][0];
+            $this->hashedPassword = $data["userPassword"][0];
             if(isset($data["mobile"][0])) $this->mobile = $data["mobile"][0];
             if(isset($data["l"][0])) $this->l = $data["l"][0];
             if(isset($data["postalcode"][0])) $this->postalCode = $data["postalcode"][0];
@@ -94,6 +95,7 @@ class User
                 return $stammName;
             }
         }
+        return "";
     }
 
     public function setStamm($stamm)
