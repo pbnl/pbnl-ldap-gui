@@ -8,6 +8,11 @@ imports:
 parameters:
     locale: de
     xlsxfile_directory: '%kernel.root_dir%/../web/uploads/xlsx'
+    env(DATABASE_HOST): localhost
+    env(DATABASE_PORT): 3306
+    env(DATABASE_NAME): pbnl_doctrine
+    env(DATABASE_USER): pbnl_doctrine
+    env(DATABASE_PWD): hucDuiixIZ69Th2U
 
 framework:
     #esi:             ~
@@ -42,11 +47,11 @@ twig:
 doctrine:
     dbal:
         driver:   pdo_mysql
-        host:     "%database_host%"
-        port:     "%database_port%"
-        dbname:   "%database_name%"
-        user:     "%database_user%"
-        password: "%database_password%"
+        host: '%env(DATABASE_HOST)%'
+        port: '%env(DATABASE_HOST)%'
+        dbname: '%env(DATABASE_HOST)%'
+        user: '%env(DATABASE_HOST)%'
+        password: '%env(DATABASE_HOST)%'
         charset:  UTF8
         # if using pdo_sqlite as your database driver:
         #   1. add the path in parameters.yml
