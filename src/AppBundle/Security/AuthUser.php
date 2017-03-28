@@ -17,6 +17,9 @@ class AuthUser implements UserInterface, EquatableInterface
     private $password;
     private $salt;
     private $roles;
+    private $dn;
+    private $stamm;
+    private $givenName;
 
     public function __construct($username, $password, $salt, array $roles)
     {
@@ -69,5 +72,53 @@ class AuthUser implements UserInterface, EquatableInterface
         }
 
         return true;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDn()
+    {
+        return $this->dn;
+    }
+
+    /**
+     * @param mixed $dn
+     */
+    public function setDn($dn)
+    {
+        $this->dn = $dn;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStamm()
+    {
+        return $this->stamm;
+    }
+
+    /**
+     * @param mixed $stamm
+     */
+    public function setStamm($stamm)
+    {
+        $this->stamm = $stamm;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGivenName()
+    {
+        return $this->givenName;
+    }
+
+    /**
+     * @param mixed $givenName
+     */
+    public function setGivenName($givenName)
+    {
+        $this->givenName = $givenName;
     }
 }

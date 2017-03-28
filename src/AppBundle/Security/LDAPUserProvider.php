@@ -45,6 +45,7 @@ class LDAPUserProvider implements UserProviderInterface
         }
 
         if ($user != null) {
+
             // skip the "{SSHA}"
             $b64 = substr($user->hashedPassword, 6);
 
@@ -62,7 +63,11 @@ class LDAPUserProvider implements UserProviderInterface
             if($this->ldapFrontend->getAllGroups("stavo")[0]->isDNMember($user->getDN())) array_push($roles,"ROLE_STAVO") ;
             if($this->ldapFrontend->getAllGroups("buvo")[0]->isDNMember($user->getDN())) array_push($roles,"ROLE_BUVO");
 
-            return new AuthUser($username, $sha, $salt, $roles);
+            $authUser = new AuthUser($username, $sha, $salt, $roles);
+            $authUser->setDn($user->getDn());
+            $authUser->setGivenName($user->getGivenName());
+            $authUser->setStamm($user->getStamm());
+            return $authUser;
         }
 
         throw new UsernameNotFoundException(
