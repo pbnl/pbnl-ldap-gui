@@ -41,6 +41,8 @@ class User
     public $hashedPassword = "";
     public $homeDirectory = "";
     public $dn = "";
+
+
     public $clearPassword = "";
     public $generatedPassword;
     public $ouGroup = "";
@@ -308,5 +310,21 @@ class User
     public function setL($l)
     {
         $this->l = $l;
+    }
+
+    /**
+     * @return mixed|string
+     */
+    public function getDn()
+    {
+        return $this->dn;
+    }
+
+    /**
+     * @param mixed|string $dn
+     */
+    public function setDn($dn)
+    {
+        $this->dn = $dn;
     }
 }

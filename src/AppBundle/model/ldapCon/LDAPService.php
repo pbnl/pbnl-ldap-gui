@@ -279,7 +279,7 @@ class LDAPService
 
     }
 
-    public function getUserByName($name)
+    public function getUserByGivenname($name)
     {
         //Search options
         $ldaptree = "ou=People,dc=pbnl,dc=de";
@@ -404,9 +404,22 @@ class LDAPService
         //Add
         try
         {
-            ldap_mod_add($this->ldapCon,"mail=$forward,$ldaptree",$forward_info);
+            if (!ldap_mod_add($this->ldapCon,"mail=$forward,$ldaptree",$forward_info))
+            {
+                //Check if the forward exist
+                $forwardGroup = $this->getForwardForMail($forward);
+                if($forwardGroup == [])
+                {
+                    $this->logger->addAlert("Forward $forward does not exist");
+                    $this->session->getFlashBag()->add("notice","We added the group $forward, because it did not exist.");
+                    //Create forward and add the first mail
+                    $this->createForward($forward,$mail);
+                    return;
+                }
+                throw new AllreadyInGroupException("User already in forward $forward");
+            }
         }
-        catch (ContextErrorException $e)
+        catch (\ErrorException $e)
         {
             //Check if the forward exist
             $forwardGroup = $this->getForwardForMail($forward);

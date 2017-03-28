@@ -8,6 +8,7 @@ imports:
 parameters:
     locale: de
     xlsxfile_directory: '%kernel.root_dir%/../web/uploads/xlsx'
+    security.encoder.digest.class: AppBundle\Security\MessageDigestPasswordEncoder
     env(DATABASE_HOST): localhost
     env(DATABASE_PORT): 3306
     env(DATABASE_NAME): pbnl_doctrine

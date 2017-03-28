@@ -22,9 +22,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class LoginController extends Controller
 {
-    /**
-     * @Route("/login", name="Login")
-     */
     public function defaultLoginPage(Request $request)
     {
         //If your are logged in you get redirected to the startPage
@@ -65,9 +62,6 @@ class LoginController extends Controller
         ));
     }
 
-    /**
-     * @Route("/logout",name="Logout")
-     */
     public function logout()
     {
         $loginHandler = $this->get("login");
