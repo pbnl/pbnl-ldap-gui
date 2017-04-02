@@ -7,9 +7,6 @@ services:
     ldap.frontend:
         class: AppBundle\model\ldapCon\LDAPService
         arguments: ["@logger","@session"]
-    login:
-        class: AppBundle\model\login\LoginHandler
-        arguments: ['@ldap.frontend',"@logger","@organisation","@session"]
     organisation:
         class: AppBundle\model\usersLDAP\Organisation
         arguments: ['@ldap.frontend',"@logger","@session"]
