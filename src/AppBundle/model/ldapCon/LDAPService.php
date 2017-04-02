@@ -235,6 +235,7 @@ class LDAPService
         {
             throw new GroupNotFoundException("The group with the name $teamFilterName does not exist!");
         }
+        if(count($teams) == 0) throw new GroupNotFoundException("The team with the name $teamFilterName does not exist! (But maybe a group?)");
 
         return $teams;
     }

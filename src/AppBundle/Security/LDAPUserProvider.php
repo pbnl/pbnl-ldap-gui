@@ -9,6 +9,7 @@
 namespace AppBundle\Security;
 
 use AppBundle\model\ldapCon\LDAPService;
+use AppBundle\model\usersLDAP\Organisation;
 use AppBundle\model\usersLDAP\UserNotUnique;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -24,12 +25,14 @@ class LDAPUserProvider implements UserProviderInterface
     private $session;
     private $logger;
     private $ldapFrontend;
+    private $organsation;
 
-    public function __construct(LDAPService $LDAPService , Logger $logger, Session $session)
+    public function __construct(LDAPService $LDAPService , Logger $logger, Session $session,Organisation $organisation)
     {
         $this->session = $session;
         $this->logger = $logger;
         $this->ldapFrontend = $LDAPService;
+        $this->organisation = $organisation;
     }
 
     public function loadUserByUsername($username)
@@ -59,14 +62,23 @@ class LDAPUserProvider implements UserProviderInterface
 
             $roles = array();
             array_push($roles,"ROLE_NORMAL");
-            if($user->getStamm() != "") array_push($roles,"ROLE_STMM_".$user->getStamm());
+            if($user->getStamm() != "") array_push($roles,"ROLE_STAMM_".$user->getStamm());
             if($this->ldapFrontend->getAllGroups("stavo")[0]->isDNMember($user->getDN())) array_push($roles,"ROLE_STAVO") ;
             if($this->ldapFrontend->getAllGroups("buvo")[0]->isDNMember($user->getDN())) array_push($roles,"ROLE_BUVO");
+
+
+            $teamManager = $this->organisation->getTeamManager();
+            $teams = $teamManager->getAllTeams("");
+            foreach ($teams as $team)
+            {
+                if($team->isDNMember($user->getDn())) array_push($roles,"ROLE_TEAM_".$team->name);
+            }
 
             $authUser = new AuthUser($username, $sha, $salt, $roles);
             $authUser->setDn($user->getDn());
             $authUser->setGivenName($user->getGivenName());
             $authUser->setStamm($user->getStamm());
+            $authUser->setUidNumber($user->getUidNumber());
             return $authUser;
         }
 

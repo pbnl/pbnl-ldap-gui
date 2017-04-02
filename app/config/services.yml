@@ -10,9 +10,6 @@ services:
     login:
         class: AppBundle\model\login\LoginHandler
         arguments: ['@ldap.frontend',"@logger","@organisation","@session"]
-    login.User:
-            class: AppBundle\model\login\loggedInUserService
-            arguments: ['@ldap.frontend']
     organisation:
         class: AppBundle\model\usersLDAP\Organisation
         arguments: ['@ldap.frontend',"@logger","@session"]
@@ -22,6 +19,6 @@ services:
             - [includeStacktraces]
     ldap_user_provider:
             class: AppBundle\Security\LDAPUserProvider
-            arguments: ['@ldap.frontend',"@logger","@session"]
+            arguments: ['@ldap.frontend',"@logger","@session","@organisation"]
     ssha_encoder:
         class: AppBundle\Security\MessageDigestPasswordEncoder

@@ -6,6 +6,7 @@
          backupGlobals="false"
          colors="true"
          bootstrap="app/autoload.php"
+         convertErrorsToExceptions="false"
          convertNoticesToExceptions="false"
          convertWarningsToExceptions="false"
 >

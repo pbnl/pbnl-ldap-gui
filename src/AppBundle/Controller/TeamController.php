@@ -31,16 +31,14 @@ class TeamController extends Controller
      */
     public function getAllTeams(Request $request)
     {
-        $loginHandler = $this->get("login");
-        if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
-
         $org = $this->get("organisation");
         $teamManager = $org->getTeamManager();
         $teams = $teamManager->getAllTeams("");
         $myTeams = array();
+        $authUser = $this->get('security.token_storage')->getToken()->getUser();
         foreach ($teams as $team)
         {
-            if($team->isDNMember($this->get("login.User")->getDN())) array_push($myTeams,$team);
+            if($team->isDNMember($authUser->getDN())) array_push($myTeams,$team);
         }
 
         return $this->render(":default:showTeams.html.twig",array(
@@ -70,12 +68,12 @@ class TeamController extends Controller
             $this->addFlash("notice","Group not found");
             return $this->redirectToRoute("Alle Teams");
         }
-        $team->fetchUserData();
-
         //Security stuff
-        $loginHandler = $this->get("login");
-        if (!$loginHandler->checkPermissions("inTeam:".$team->name)) return $this->redirectToRoute("PermissionError");
+        $this->denyAccessUnlessGranted('ROLE_TEAM_'.$team->name, null, 'Unable to access this page!');
 
+
+        $team->fetchUserData();
+        
         //Create the form
         $user = new AddTeamMemberFormData();
         $addMemberForm = $this->createFormBuilder($user,['attr' => ['class' => 'form-addTeamMemberForm']])

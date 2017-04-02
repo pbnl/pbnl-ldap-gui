@@ -42,9 +42,6 @@ class UserManagerController extends Controller
      */
     public function getAllUsers(Request $request)
     {
-        $loginHandler = $this->get("login");
-        if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
-
         //Get all users and search for name and groupq if wanted
         $org = $this->get("organisation");
         $userManager = $org->getUserManager();
@@ -85,9 +82,6 @@ class UserManagerController extends Controller
      */
     public function addAUser(Request $request)
     {
-        $loginHandler = $this->get("login");
-        if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
-
         //Create the form
         $org = $this->get("organisation");
         $userManager = $org->getUserManager();
@@ -153,9 +147,6 @@ class UserManagerController extends Controller
      */
     public function delUser(Request $request)
     {
-        $loginHandler = $this->get("login");
-        if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
-
         $uidNumber = $request->get("uidNumber");
         $uidNumbers =  explode(";",$uidNumber);
 
@@ -182,10 +173,6 @@ class UserManagerController extends Controller
      */
     public function showDetailsUser(Request $request)
     {
-        //security stuff
-        $loginHandler = $this->get("login");
-        if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
-
         $uidNumber = $request->get("uidNumber");
 
 
@@ -201,7 +188,11 @@ class UserManagerController extends Controller
             //than he can edit him
             //or if the session user is the same as the one who gets edited
             $stamm = $user->getStamm();
-            if ($loginHandler->checkPermissions("inStamm:".$stamm.",inGroup:stavo") || $loginHandler->checkPermissions("isUser:$uidNumber")) {
+            //Security stuff
+            $authUser = $this->get('security.token_storage')->getToken()->getUser();
+            if ($stamm == $authUser->getStamm() ||
+                $authUser->getUidNumber() == $uidNumber ||
+                $this->get('security.authorization_checker')->isGranted('ROLE_BUVO')) {
                 $editUserForm = $this->createFormBuilder($user, ['attr' => ['class' => 'form-addAUser']])
                     ->add("firstName", TextType::class, array("attr" => ["placeholder" => "Vorname"], 'label' => "Vorname"))
                     ->add("secondName", TextType::class, array("attr" => ["placeholder" => "Nachname"], 'label' => "Nachname"))
@@ -245,9 +236,6 @@ class UserManagerController extends Controller
      */
     public function importUserFromXlsx(Request $request)
     {
-        $loginHandler = $this->get("login");
-        if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
-
         $org = $this->get("organisation");
         $ouGroups = $org->getOUGroupsNames();
         $staemme = $org->getStammesNames();

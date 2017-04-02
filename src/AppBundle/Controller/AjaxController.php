@@ -24,8 +24,7 @@ class AjaxController extends Controller
      * @return Response
      */
     public function getUsersNotInGroup(Request $request){
-        $loginHandler = $this->get("login");
-        if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
+
 
         $gid = $request->query->get('gid');
         $searchedUserName = $request->query->get('searchedUserName');
@@ -36,7 +35,9 @@ class AjaxController extends Controller
         $teamManager = $org->getTeamManager();
         $team = $teamManager->getAllTeams($request->get("gid",""))[0];
 
-        if(!$team->isDNMember($this->get("login.User")->getDN())) return $this->redirectToRoute("PermissionError");
+
+        $authUser = $this->get('security.token_storage')->getToken()->getUser();
+        if(!$team->isDNMember($authUser->getDN())) throw $this->createAccessDeniedException();
 
         $userManager = $org->getUserManager();
         $users = $userManager->getAllUsers("",$searchedUserName);

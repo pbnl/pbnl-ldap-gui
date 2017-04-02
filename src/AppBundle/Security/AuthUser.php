@@ -20,6 +20,7 @@ class AuthUser implements UserInterface, EquatableInterface
     private $dn;
     private $stamm;
     private $givenName;
+    private $uidNumber;
 
     public function __construct($username, $password, $salt, array $roles)
     {
@@ -121,4 +122,21 @@ class AuthUser implements UserInterface, EquatableInterface
     {
         $this->givenName = $givenName;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getUidNumber()
+    {
+        return $this->uidNumber;
+    }
+
+    /**
+     * @param mixed $uidNumber
+     */
+    public function setUidNumber($uidNumber)
+    {
+        $this->uidNumber = $uidNumber;
+    }
+
 }
