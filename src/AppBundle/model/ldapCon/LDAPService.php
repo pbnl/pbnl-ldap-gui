@@ -318,14 +318,21 @@ class LDAPService
         $ldaptree = $dn;
         $filter="(objectClass=*)";
 
+        $result = "";
         //Search
-        $result = ldap_search($this->ldapCon,$ldaptree, $filter) or die ("Error in search query: ".ldap_error($this->ldapCon));
-        $data = ldap_get_entries($this->ldapCon, $result);
-
-        //There can be only one user with the dn we are looking for
-        if ($data["count"] != 1) $this->logger->error("There are more than one people with the dn: $dn");
-        if ($data["count"] != 1) throw new UserNotUnique("There are more than one people with the dn: $dn");
-        return new User($this,$data[0]);
+        try
+        {
+            $result = ldap_search($this->ldapCon, $ldaptree, $filter) or die ("Error in search query: " . ldap_error($this->ldapCon));
+            $data = ldap_get_entries($this->ldapCon, $result);
+        }
+        catch (ContextErrorException $e)
+        {
+            throw new UserNotUnique("There is no person with the dn: $dn");
+        }
+            //There can be only one user with the dn we are looking for
+            if ($data["count"] != 1) $this->logger->error("There are more than one people with the dn: $dn");
+            if ($data["count"] != 1) throw new UserNotUnique("There are more than one people with the dn: $dn");
+            return new User($this, $data[0]);
     }
 
     public function getHighestUidNumber()
