@@ -19,9 +19,8 @@ class LoginAction
         $crawler = $client->request('GET', '/login');
 
         $form = $crawler->selectButton('Login')->form();
-
-        $form['form[name]'] = 'Paul';
-        $form['form[password]'] = 'passwd';
+        $form['_username'] = 'Paul';
+        $form['_password'] = 'passwd';
 
         $crawler = $client->submit($form);
         return $client;

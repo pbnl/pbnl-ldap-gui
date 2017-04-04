@@ -22,6 +22,7 @@ class LoginControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/logout');
 
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
+        //TODO: Only asserting 302 is not enough
     }
 
     public function testLogin()
@@ -34,11 +35,14 @@ class LoginControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/login');
         $form = $crawler->selectButton('Login')->form();
 
-        $form['form[name]'] = 'Paul';
-        $form['form[password]'] = 'passwd';
+        $form['_username'] = 'Paul';
+        $form['_password'] = 'passwd';
 
         $crawler = $client->submit($form);
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
+        $crawler = $client->followRedirect();
+        $crawler = $client->followRedirect();
+        $this->assertContains('Startpage', $client->getResponse()->getContent());
 
         //Uncorrect login
         $client = static::createClient();
@@ -48,14 +52,14 @@ class LoginControllerTest extends WebTestCase
 
         $form = $crawler->selectButton('Login')->form();
 
-        $form['form[name]'] = 'Paul';
-        $form['form[password]'] = 'hans';
+        $form['_username'] = 'Paul';
+        $form['_password'] = 'hans';
 
         $crawler = $client->submit($form);
-        $this->assertGreaterThan(
-            0,
-            $crawler->filter('html:contains("Name oder Passwort falsch!")')->count()
-        );
+        $this->assertTrue($client->getResponse()->isRedirect());
+        $crawler = $client->followRedirect();
+        $this->assertContains('Invalid credentials.', $client->getResponse()->getContent());
+
 
     }
 
@@ -63,9 +67,6 @@ class LoginControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/startPage');
-        $this->assertGreaterThan(
-            0,
-            $crawler->filter('html:contains("permissionError")')->count()
-        );
+        $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 }
