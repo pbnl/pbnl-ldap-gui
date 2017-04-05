@@ -48,7 +48,7 @@ class MaterialRequest
     /**
      * @ORM\Column(type="decimal", scale=0)
      */
-    private $offerYear;
+    private $requestYear;
 
     /**
      * Get id
@@ -132,29 +132,6 @@ class MaterialRequest
         return $this->date;
     }
 
-    /**
-     * Set offerYear
-     *
-     * @param string $offerYear
-     *
-     * @return materialProposal
-     */
-    public function setOfferYear($offerYear)
-    {
-        $this->offerYear = $offerYear;
-
-        return $this;
-    }
-
-    /**
-     * Get offerYear
-     *
-     * @return string
-     */
-    public function getOfferYear()
-    {
-        return $this->offerYear;
-    }
 
     /**
      * Set materialPieceID
@@ -178,5 +155,29 @@ class MaterialRequest
     public function getMaterialPieceID()
     {
         return $this->materialPieceID;
+    }
+
+    /**
+     * Set requestYear
+     *
+     * @param string $requestYear
+     *
+     * @return MaterialRequest
+     */
+    public function setRequestYear($requestYear)
+    {
+        $this->requestYear = $requestYear;
+
+        return $this;
+    }
+
+    /**
+     * Get requestYear
+     *
+     * @return string
+     */
+    public function getRequestYear()
+    {
+        return $this->requestYear;
     }
 }
