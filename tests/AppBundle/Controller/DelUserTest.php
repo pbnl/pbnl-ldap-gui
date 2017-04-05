@@ -31,15 +31,17 @@ class DelUserTest extends WebTestCase
         $crawler = $client->submit($form);
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertContains('ToDel', $client->getResponse()->getContent());
         $this->assertGreaterThan(
             0,
             $crawler->filter('td:contains("ToDel")')->count()
         );
 
 
-        UserTools::doesUserExist("ToDel",$client,$this);
+        UserTools::doesUserExist("ToDel",$client,$this,true);
 
-        $crawler = $client->request('GET', '/user/showAllUsers');
-        $crawler->filter('a:contains("ToDel")')->filter('div:contains("Wollen sie wirklich")')->selectButton("Löschen");
+        UserTools::delUser("ToDel",$client);
+
+        UserTools::doesUserExist("ToDel",$client,$this,False);
     }
 }
