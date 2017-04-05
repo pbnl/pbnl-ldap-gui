@@ -32,6 +32,7 @@ class AddUserTest extends WebTestCase
         $crawler = $client->submit($form);
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertContains('TestUser22', $client->getResponse()->getContent());
         $this->assertGreaterThan(
             0,
             $crawler->filter('td:contains("TestUser22")')->count()
@@ -39,6 +40,8 @@ class AddUserTest extends WebTestCase
 
 
         UserTools::doesUserExist("TestUser22",$client,$this);
+
+        UserTools::delUser("TestUser22",$client);
     }
 
 public function testAddUserAlreadyExists()
