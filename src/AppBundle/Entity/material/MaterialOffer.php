@@ -13,9 +13,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="materialOffer")
+ * @ORM\Table(name="MaterialOffer")
  */
-class materialOffer
+class MaterialOffer
 {
     /**
      * @ORM\Column(type="integer")
