@@ -49,10 +49,10 @@ doctrine:
     dbal:
         driver:   pdo_mysql
         host: '%env(DATABASE_HOST)%'
-        port: '%env(DATABASE_HOST)%'
-        dbname: '%env(DATABASE_HOST)%'
-        user: '%env(DATABASE_HOST)%'
-        password: '%env(DATABASE_HOST)%'
+        port: '%env(DATABASE_PORT)%'
+        dbname: '%env(DATABASE_NAME)%'
+        user: '%env(DATABASE_USER)%'
+        password: '%env(DATABASE_PWD)%'
         charset:  UTF8
         # if using pdo_sqlite as your database driver:
         #   1. add the path in parameters.yml
