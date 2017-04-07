@@ -41,7 +41,7 @@ class MaterialRequest
     private $quantity;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      */
     private $date;
 

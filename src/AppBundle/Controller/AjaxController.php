@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 
+use AppBundle\Entity\material\MaterialOffer;
 use AppBundle\model\usersLDAP\Organisation;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,6 +50,44 @@ class AjaxController extends Controller
         }
 
         $response = array("code" => 100, "success" => true, "users"=>$usersNotInGroup);
+
+        return new Response(json_encode($response));
+    }
+
+    /**
+     * @Route("/ajax/addMaterialOffer", name="addMaterialOffer")
+     * @param Request $request
+     * @return Response
+     */
+    public function addMaterialOffer(Request $request){
+
+
+        $name = $request->query->get('offerName');
+        $description = $request->query->get('offerDescription');
+        $url = $request->query->get('offerURL');
+        $price = $request->query->get('offerPrice');
+
+        $offer = new MaterialOffer();
+        $offer->setDescription($description);
+        $offer->setPrice($price);
+        $offer->setUrl($url);
+        $offer->setName($name);
+
+        $authUser = $this->get('security.token_storage')->getToken()->getUser();
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($offer);
+        $em->flush();
+
+
+        $response = array("code" => 100,
+            "success" => true,
+            "materialOfferId"=>$offer->getId(),
+            "materialOfferName"=>$offer->getName(),
+            "materialOfferDescription"=>$offer->getDescription(),
+            "materialOfferPrice"=>$offer->getPrice(),
+            "materialOfferURL"=>$offer->getUrl()
+        );
 
         return new Response(json_encode($response));
     }

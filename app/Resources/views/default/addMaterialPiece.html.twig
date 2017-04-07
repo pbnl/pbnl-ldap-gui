@@ -1,0 +1,58 @@
+{% extends "includes/base.html.twig" %}
+
+{% block title %}Material hinzufügen{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+
+{% block body %}
+    {% include 'includes/nav.html.twig' %}
+<div class="container">
+    <br><br>
+    {% include 'includes/messages.html.twig' %}
+    <br><br>
+
+    <h2 class="form-signin-heading">Erstelle einen Materialstück</h2>
+    <div class="col-sm-8">
+        {% form_theme addPieceForm 'bootstrap_3_horizontal_layout.html.twig' %}
+        {{ form_start(addPieceForm) }}
+        {{ form_end(addPieceForm) }}
+    </div>
+    <div class="col-sm-12">
+        <h3 class="form-signin-heading">Angebote</h3>
+    </div>
+    <div class="col-sm-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Beschreibung</th>
+                    <th>URL</th>
+                    <th>Preis</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <form id="addMaterialOfferForm" action="javascript:sendAddMaterialOfferRequest();">
+                    <div class="form-group">
+                        <tr>
+                            <td><input required type="text" placeholder="Name" class="form-control" id="offerName"></td>
+                            <td><textarea required type="text" placeholder="Beschreibung" class="form-control" id="offerDescription" rows="3"></textarea></td>
+                            <td><input required type="url" placeholder="URL" class="form-control" id="offerURL"></td>
+                            <td><input required type="number" min="1" step="any" placeholder="Preis" class="form-control" id="offerPrice"> </td>
+                            <td><button id="addMaterialOffer" type="submit" class="btn btn-primary">Hinzufügen</button></td>
+                        </tr>
+                    </div>
+                </form>
+            </tbody>
+        </table>
+    </div>
+    {% endblock %}
+
+    {% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/addOffer.js') }}"></script>
+
+{% endblock %}

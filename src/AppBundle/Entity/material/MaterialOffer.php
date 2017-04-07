@@ -40,6 +40,11 @@ class MaterialOffer
     private $description;
 
     /**
+     * @ORM\Column(type="text")
+     */
+    private $name;
+
+    /**
      * Get id
      *
      * @return integer
@@ -119,5 +124,29 @@ class MaterialOffer
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return MaterialOffer
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

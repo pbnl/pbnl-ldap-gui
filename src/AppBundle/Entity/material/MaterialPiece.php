@@ -31,9 +31,14 @@ class MaterialPiece
     private $id;
 
     /**
-     * @ORM\Column(type="array")
+     * @ORM\Column(type="string", length=200)
      */
     private $offersIds;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $description;
 
     /**
      * Set name
@@ -69,12 +74,37 @@ class MaterialPiece
         return $this->id;
     }
 
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return MaterialPiece
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
     /**
      * Set offersIds
      *
-     * @param array $offersIds
+     * @param string $offersIds
      *
-     * @return materialPiece
+     * @return MaterialPiece
      */
     public function setOffersIds($offersIds)
     {
@@ -86,7 +116,7 @@ class MaterialPiece
     /**
      * Get offersIds
      *
-     * @return array
+     * @return string
      */
     public function getOffersIds()
     {

@@ -1,0 +1,74 @@
+{% extends "includes/base.html.twig" %}
+
+{% block title %}Alle Materialanträge{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {% include 'includes/nav.html.twig' %}
+    <div class="container">
+        <br><br>
+        {% include 'includes/messages.html.twig' %}
+        <div class="col-sm-6">
+            <a class="btn btn-default" href="{{ path('Erstelle einen Materialantrag') }}"> Antrag stellen</a>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>
+                    Nr
+                </th>
+                <th>
+                    Id
+                </th>
+                <th>
+                    Stamm
+                </th>
+                <th>
+                   Anzahl
+                </th>
+                <th>
+                    Materialnummer
+                </th>
+                <th>
+                    Materialname
+                </th>
+                <th>
+                    Erstellungsjahr
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for materialRequest in materialRequests %}
+                <tr>
+                    <td>
+                        {{ loop.index}}
+                    </td>
+                    <td>
+                        {{ materialRequest.id}}
+                    </td>
+                    <td>
+                        {{ materialRequest.stamm}}
+                    </td>
+                    <td>
+                        {{ materialRequest.quantity}}
+                    </td>
+                    <td>
+                        {{ materialRequest.materialPieceID}}
+                    </td>
+                    <td>
+                        {{ materialPieces[materialRequest.materialPieceID].getName}}
+                    </td>
+                    <td>
+                        {{ materialRequest.requestYear}}
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
