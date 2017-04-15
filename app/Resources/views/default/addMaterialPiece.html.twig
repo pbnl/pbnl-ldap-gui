@@ -24,7 +24,7 @@
         <h3 class="form-signin-heading">Angebote</h3>
     </div>
     <div class="col-sm-12">
-        <table class="table">
+        <table class="table" id="offerTable">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -35,7 +35,7 @@
                 </tr>
             </thead>
             <tbody>
-                <form id="addMaterialOfferForm" action="javascript:sendAddMaterialOfferRequest();">
+                <form id="addMaterialOfferForm" action="javascript:sendAddMaterialOfferRequest(0);">
                     <div class="form-group">
                         <tr>
                             <td><input required type="text" placeholder="Name" class="form-control" id="offerName"></td>
@@ -53,6 +53,7 @@
 
     {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('js/addOffer.js') }}"></script>
+    <script src="{{ asset('js/materialOfferFunctions.js') }}"></script>
+    <script src="{{ asset('js/addMaterialPiece.js') }}"></script>
 
 {% endblock %}

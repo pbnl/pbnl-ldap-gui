@@ -66,6 +66,7 @@ class AjaxController extends Controller
         $description = $request->query->get('offerDescription');
         $url = $request->query->get('offerURL');
         $price = $request->query->get('offerPrice');
+        $pieceId = $request->query->get("associatedMaterialPieceID",0);
 
         $offer = new MaterialOffer();
         $offer->setDescription($description);
@@ -79,6 +80,12 @@ class AjaxController extends Controller
         $em->persist($offer);
         $em->flush();
 
+        $materialPiece = $em->getRepository('AppBundle:material\MaterialPiece')
+            ->find($pieceId);
+        if($materialPiece->getOffersIds() == "") $materialPiece->setOffersIds($offer->getId());
+        else $materialPiece->setOffersIds($materialPiece->getOffersIds() . " ; " . $offer->getId());
+        $em->flush();
+
 
         $response = array("code" => 100,
             "success" => true,
@@ -87,6 +94,51 @@ class AjaxController extends Controller
             "materialOfferDescription"=>$offer->getDescription(),
             "materialOfferPrice"=>$offer->getPrice(),
             "materialOfferURL"=>$offer->getUrl()
+        );
+
+        return new Response(json_encode($response));
+    }
+
+    /**
+     * @Route("/ajax/delMaterialOffer", name="ajaxDelOffer")
+     * @param Request $request
+     * @return Response
+     */
+    public function delMaterialOffer(Request $request){
+
+        try {
+            $id = $request->get("id");
+            $pieceId = $request->get("pieceId");
+        }catch (Exception $e)
+        {
+            $response = array("code" => 404);
+            return new Response(json_encode($response));
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $materialOffer = $em->getRepository('AppBundle:material\MaterialOffer')
+            ->find($id);
+
+        $materialPiece = $em->getRepository('AppBundle:material\MaterialPiece')
+            ->find($pieceId);
+
+        if (!$materialOffer && !$materialPiece) {
+            $response = array("code" => 404);
+            return new Response(json_encode($response));
+        }
+
+        $em->remove($materialOffer);
+        $em->flush();
+
+        $offerIds = $materialPiece->getOffersIds();
+        if(strpos($offerIds, ' ; '.$id) !== false) $offerIds=str_replace(" ; ".$id,"",$offerIds);
+        else if(strpos($offerIds, $id.' ; ') !== false) $offerIds=str_replace($id." ; ","",$offerIds);
+        else if(strpos($offerIds, $id) !== false) $offerIds=str_replace($id,"",$offerIds);
+        $materialPiece->setOffersIds($offerIds);
+        $em->flush();
+
+        $response = array("code" => 100,
+            "success" => true,
         );
 
         return new Response(json_encode($response));

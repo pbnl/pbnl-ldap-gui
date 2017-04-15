@@ -22,14 +22,14 @@
         </div>
         <div class="col-sm-8">
             <h3 class="form-signin-heading">Material</h3>
-            <a class="btn btn-default" href="{{ path('Erstelle eine Materialstück') }}"> Materialstück erstellen</a>
+            <a class="btn btn-primary" href="{{ path('Erstelle eine Materialstück') }}"> Materialstück erstellen</a>
         </div>
 
         <table class="table table-striped">
             <thead>
             <tr>
                 <th>
-                    Id
+                    Material ID
                 </th>
                 <th>
                     Name
@@ -39,6 +39,8 @@
                 </th>
                 <th>
                     Beschreibung
+                </th>
+                <th>
                 </th>
             </tr>
             </thead>
@@ -56,6 +58,9 @@
                     </td>
                     <td>
                         {{ materialPiece.description}}
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" href="{{ path('Loesche einen Materialstueck', {'id': materialPiece.id}) }}">Löschen</a>
                     </td>
                 </tr>
             {% endfor %}

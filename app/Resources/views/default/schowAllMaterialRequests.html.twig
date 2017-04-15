@@ -12,14 +12,13 @@
         <br><br>
         {% include 'includes/messages.html.twig' %}
         <div class="col-sm-6">
-            <a class="btn btn-default" href="{{ path('Erstelle einen Materialantrag') }}"> Antrag stellen</a>
+            <a class="btn btn-primary" href="{{ path('Erstelle einen Materialantrag') }}"> Antrag stellen</a>
         </div>
-        <table class="table table-striped">
+        <br>
+        <br><br>
+        <table id="materialRequestsTable" class="table tablesorter">
             <thead>
             <tr>
-                <th>
-                    Nr
-                </th>
                 <th>
                     Id
                 </th>
@@ -38,16 +37,14 @@
                 <th>
                     Erstellungsjahr
                 </th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
             {% for materialRequest in materialRequests %}
                 <tr>
                     <td>
-                        {{ loop.index}}
-                    </td>
-                    <td>
-                        {{ materialRequest.id}}
+                        <a href="{{ path('Zeige einen Antrag', {'id': materialRequest.id}) }}">{{ materialRequest.id}}</a>
                     </td>
                     <td>
                         {{ materialRequest.stamm}}
@@ -56,13 +53,16 @@
                         {{ materialRequest.quantity}}
                     </td>
                     <td>
-                        {{ materialRequest.materialPieceID}}
+                        <a href="{{ path('Zeige ein Materialstück', {'id': materialRequest.materialPieceID}) }}">{{ materialRequest.materialPieceID}}</a>
                     </td>
                     <td>
-                        {{ materialPieces[materialRequest.materialPieceID].getName}}
+                        <a href="{{ path('Zeige ein Materialstück', {'id': materialRequest.materialPieceID}) }}">{{ materialPieces[materialRequest.materialPieceID].getName}}</a>
                     </td>
                     <td>
                         {{ materialRequest.requestYear}}
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" href="{{ path('Loesche einen Materialantrag', {'id': materialRequest.id}) }}">Löschen</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -71,4 +71,8 @@
         </table>
     </div>
 
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/materialRequestShowAll.js') }}"></script>
 {% endblock %}
