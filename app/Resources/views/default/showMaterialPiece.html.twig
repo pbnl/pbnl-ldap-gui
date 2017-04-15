@@ -1,0 +1,160 @@
+{% extends "includes/base.html.twig" %}
+
+{% block title %}Materialstück{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {% include 'includes/nav.html.twig' %}
+    <div class="container">
+        <br><br>
+        {% include 'includes/messages.html.twig' %}
+        {% if materialPiece != false%} <h2>{{ materialPiece.id }}</h2> {% endif %}
+        <div class="col-sm-8">
+            {% if editMaterialPieceForm== false  and materialPiece != false%}
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Wert
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <td>
+                            {{materialPiece.name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Beschreibung
+                        </th>
+                        <td>
+                            {{materialPiece.description}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Angebotsnummern
+                        </th>
+                        <td>
+                            {{materialPiece.offersIds}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            {% endif %}
+            {% if editMaterialPieceForm != false and materialPiece != false %}
+                {% form_theme editMaterialPieceForm 'bootstrap_3_horizontal_layout.html.twig' %}
+                {{ form_start(editMaterialPieceForm) }}
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Wert
+                        </th>
+                        <th>
+                            Edit
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <td>
+                            {{materialPiece.name}}
+                        </td>
+                        <td>
+                            {{form_widget(editMaterialPieceForm.name)}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Beschreibung
+                        </th>
+                        <td>
+                            {{materialPiece.description}}
+                        </td>
+                        <td>
+                            {{form_widget(editMaterialPieceForm.description)}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Angebotsnummern
+                        </th>
+                        <td>
+                            {{materialPiece.offersIds}}
+                        </td>
+                        <td>
+                            {{form_widget(editMaterialPieceForm.offersIds)}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                {{ form_end(editMaterialPieceForm) }}
+            {% endif %}
+        </div>
+
+        <div class="col-sm-4">
+
+        </div>
+        <div class="col-sm-12">
+            <table class="table" id="offerTable">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Beschreibung</th>
+                    <th>URL</th>
+                    <th>Preis</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <form id="addMaterialOfferForm" action="javascript:sendAddMaterialOfferRequest({{ materialPiece.id }});">
+                    <div class="form-group">
+                        <tr>
+                            <td><input required type="text" placeholder="Name" class="form-control" id="offerName"></td>
+                            <td><textarea required type="text" placeholder="Beschreibung" class="form-control" id="offerDescription" rows="3"></textarea></td>
+                            <td><input required type="url" placeholder="URL" class="form-control" id="offerURL"></td>
+                            <td><input required type="number" min="1" step="any" placeholder="Preis" class="form-control" id="offerPrice"> </td>
+                            <td><button id="addMaterialOffer" type="submit" class="btn btn-primary">Hinzufügen</button></td>
+                        </tr>
+                    </div>
+                </form>
+                {% for materialOffer in materialOffers %}
+                    <tr id="offerTablePiece{{ materialOffer.getId }}">
+                        <td>{{ materialOffer.getName }}</td>
+                        <td>{{ materialOffer.getDescription }}</td>
+                        <td>{{ materialOffer.getURL }}</td>
+                        <td>{{ materialOffer.getPrice }}</td>
+                        <td><a class="btn btn-danger" onclick="ajaxDelMaterialOffer({{ materialOffer.getId }},{{ materialPiece.id }});return false;">Löschen</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/materialOfferFunctions.js') }}"></script>
+
+{% endblock %}

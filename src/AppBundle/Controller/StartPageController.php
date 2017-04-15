@@ -22,10 +22,6 @@ class StartPageController extends Controller
      */
     public function getStartPage(Request $request)
     {
-        $loginHandler = $this->get("login");
-        if (!$loginHandler->checkPermissions("")) return $this->redirectToRoute("PermissionError");
-
-
         $org = $this->get("organisation");
         $userManager = $org->getUserManager();
         $groupManager = $org->getGroupManager();

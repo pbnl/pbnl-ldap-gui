@@ -1,0 +1,75 @@
+{% extends "includes/base.html.twig" %}
+
+{% block title %}Benutzer hinzufügen{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+
+{% block body %}
+    {% include 'includes/nav.html.twig' %}
+    <div class="container">
+        <br><br>
+        {% include 'includes/messages.html.twig' %}
+        <br><br>
+
+        <h2 class="form-signin-heading">Erstelle einen Antrag</h2>
+        <div class="col-sm-8">
+        {% form_theme addRequestForm 'bootstrap_3_horizontal_layout.html.twig' %}
+            {{ form_start(addRequestForm) }}
+            {{ form_end(addRequestForm) }}
+        </div>
+        <div class="col-sm-8">
+            <h3 class="form-signin-heading">Material</h3>
+            <a class="btn btn-primary" href="{{ path('Erstelle eine Materialstück') }}"> Materialstück erstellen</a>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>
+                    Material ID
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    OfferIds
+                </th>
+                <th>
+                    Beschreibung
+                </th>
+                <th>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for materialPiece in materialPiecesByID %}
+                <tr>
+                    <td>
+                        {{ materialPiece.id}}
+                    </td>
+                    <td>
+                        {{ materialPiece.name}}
+                    </td>
+                    <td>
+                        {{ materialPiece.offersIds}}
+                    </td>
+                    <td>
+                        {{ materialPiece.description}}
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" href="{{ path('Loesche einen Materialstueck', {'id': materialPiece.id}) }}">Löschen</a>
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+{% endblock %}

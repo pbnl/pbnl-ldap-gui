@@ -15,6 +15,7 @@ monolog:
     handlers:
         main:
             type: stream
+            formatter: your.monolog.service.id
             path: "%kernel.logs_dir%/%kernel.environment%.log"
             level: debug
             channels: [!event]

@@ -41,6 +41,8 @@ class User
     public $hashedPassword = "";
     public $homeDirectory = "";
     public $dn = "";
+
+
     public $clearPassword = "";
     public $generatedPassword;
     public $ouGroup = "";
@@ -63,6 +65,7 @@ class User
             $this->uid = intval($data["uid"][0]);
             $this->firstName = $data["cn"][0];
             $this->secondName = $data["sn"][0];
+            $this->hashedPassword = $data["userpassword"][0];
             if(isset($data["mobile"][0])) $this->mobile = $data["mobile"][0];
             if(isset($data["l"][0])) $this->l = $data["l"][0];
             if(isset($data["postalcode"][0])) $this->postalCode = $data["postalcode"][0];
@@ -94,6 +97,7 @@ class User
                 return $stammName;
             }
         }
+        return "";
     }
 
     public function setStamm($stamm)
@@ -306,5 +310,21 @@ class User
     public function setL($l)
     {
         $this->l = $l;
+    }
+
+    /**
+     * @return mixed|string
+     */
+    public function getDn()
+    {
+        return $this->dn;
+    }
+
+    /**
+     * @param mixed|string $dn
+     */
+    public function setDn($dn)
+    {
+        $this->dn = $dn;
     }
 }

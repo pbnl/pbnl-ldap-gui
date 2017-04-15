@@ -24,3 +24,4 @@ function getUrlVars() {
     });
     return vars;
 }
+

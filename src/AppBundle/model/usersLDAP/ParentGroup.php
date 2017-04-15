@@ -70,7 +70,14 @@ class ParentGroup
 
         foreach ($this->members as $member)
         {
-            $return[$this->LDAPService->getUserByDN($member)->givenName] = $member;
+            try
+            {
+                $return[$this->LDAPService->getUserByDN($member)->givenName] = $member;
+            }
+            catch (UserNotUnique $e)
+            {
+                $this->getGroupManager()->getOrg()->session->getFlashBag()->add("error","Der user mit der DN $member konnte nicht geladen werden!");
+            }
         }
         return $return;
     }
@@ -112,8 +119,14 @@ class ParentGroup
         $this->membersUserData = Array();
         foreach ($this->members as $member)
         {
-            $oneUser = $this->LDAPService->getUserByDN($member);
-            array_push($this->membersUserData,$oneUser);
+            try {
+                $oneUser = $this->LDAPService->getUserByDN($member);
+                array_push($this->membersUserData,$oneUser);
+            }
+            catch (UserNotUnique $e)
+            {
+                $this->getGroupManager()->getOrg()->session->getFlashBag()->add("error","Der user mit der DN $member konnte nicht geladen werden!");
+            }
         }
         $this->fetchedData = true;
     }

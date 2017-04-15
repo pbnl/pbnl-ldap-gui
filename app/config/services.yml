@@ -7,12 +7,15 @@ services:
     ldap.frontend:
         class: AppBundle\model\ldapCon\LDAPService
         arguments: ["@logger","@session"]
-    login:
-        class: AppBundle\model\login\LoginHandler
-        arguments: ['@ldap.frontend',"@logger","@organisation"]
-    login.User:
-            class: AppBundle\model\login\loggedInUserService
-            arguments: ['@ldap.frontend']
     organisation:
         class: AppBundle\model\usersLDAP\Organisation
         arguments: ['@ldap.frontend',"@logger","@session"]
+    your.monolog.service.id:
+        class: Monolog\Formatter\LineFormatter
+        calls:
+            - [includeStacktraces]
+    ldap_user_provider:
+            class: AppBundle\Security\LDAPUserProvider
+            arguments: ['@ldap.frontend',"@logger","@session","@organisation"]
+    ssha_encoder:
+        class: AppBundle\Security\MessageDigestPasswordEncoder
