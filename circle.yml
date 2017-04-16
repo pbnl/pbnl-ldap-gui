@@ -2,7 +2,7 @@ dependencies:
   pre:
     - export DEBIAN_FRONTEND=noninteractive
     - sudo -E apt-get -yq update &>> ~/apt-get-update.log
-    - export DEBIAN_FRONTEND=noninteractive; sudo apt-get -yq --no-install-suggests --no-install-recommends --force-yes install ldap-utils slapd php5-ldap
+    - export DEBIAN_FRONTEND=noninteractive; sudo apt-get -yq --no-install-suggests --no-install-recommends --force-yes install ldap-utils slapd php-ldap php
     - echo "Before Script"
     - echo date.timezone =UTC >> /opt/circleci/php/5.6.17/etc/php.ini
     - sudo service slapd stop
