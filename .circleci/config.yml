@@ -22,4 +22,11 @@ jobs:
                     sudo chown openldap:openldap /var/lib/ldap/ -R ; \
                     sudo service slapd start
             - run: php composer.phar install --no-interaction
+            - run:
+                name: Install phpunit
+                command: |
+                    wget https://phar.phpunit.de/phpunit-6.1.phar && \
+                    chmod +x phpunit-6.1.phar && \
+                    sudo mv phpunit-6.1.phar /usr/local/bin/phpunit && \
+                    phpunit --version
             - run: vendor/bin/phpunit
