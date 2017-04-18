@@ -3,9 +3,9 @@ jobs:
     build:
         working_directory: /var/www/html
         steps:
-          - run: apt-get update && apt-get -y install git unzip zlib1g-dev
-          - checkout
-          - run:
+            - run: apt-get update && apt-get -y install git unzip zlib1g-dev
+            - checkout
+            - run:
               name: Install LDAP
               command: |
                 export DEBIAN_FRONTEND=noninteractive && \
@@ -17,4 +17,4 @@ jobs:
                 sudo chown openldap:openldap /etc/ldap/slapd.d/ -R && \
                 sudo chown openldap:openldap /var/lib/ldap/ -R && \
                 sudo service slapd start
-         - run: vendor/bin/phpunit
+             - run: vendor/bin/phpunit
