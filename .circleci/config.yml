@@ -8,7 +8,7 @@ jobs:
             DEBIAN_FRONTEND: "noninteractive"
         working_directory: /var/www/html
         steps:
-            - run: apt-get update && apt-get -y install git unzip zlib1g-dev sudo
+            - run: apt-get update && apt-get -y install git unzip zlib1g-dev sudo php
             - checkout
             - run:
                 name: Install LDAP
