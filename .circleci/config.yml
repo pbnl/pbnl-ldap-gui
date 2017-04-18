@@ -8,7 +8,7 @@ jobs:
             DEBIAN_FRONTEND: "noninteractive"
         working_directory: /var/www/html
         steps:
-            - run: apt-get update && apt-get -y install git unzip zlib1g-dev sudo php
+            - run: apt-get update && apt-get -y install git unzip zlib1g-dev sudo php php7.0-mbstring php7.0-zip php7.0-xml
             - checkout
             - run:
                 name: Install LDAP
@@ -21,5 +21,5 @@ jobs:
                     sudo chown openldap:openldap /etc/ldap/slapd.d/ -R ; \
                     sudo chown openldap:openldap /var/lib/ldap/ -R ; \
                     sudo service slapd start
-            - run: php composer.phar install
+            - run: php composer.phar install --no-interaction
             - run: vendor/bin/phpunit
