@@ -17,4 +17,4 @@ jobs:
                     sudo chown openldap:openldap /etc/ldap/slapd.d/ -R && \
                     sudo chown openldap:openldap /var/lib/ldap/ -R && \
                     sudo service slapd start
-             - run: vendor/bin/phpunit
+            - run: vendor/bin/phpunit
