@@ -1,0 +1,723 @@
+dn: dc=pbnl,dc=de
+objectClass: top
+objectClass: dcObject
+objectClass: organization
+o: pbnl
+dc: pbnl
+structuralObjectClass: organization
+entryUUID: 7b9ea5bc-07fa-1036-9cb3-ab4578b287a2
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905212141Z
+entryCSN: 20160905212141.458825Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20160905212141Z
+
+dn: cn=admin,dc=pbnl,dc=de
+objectClass: simpleSecurityObject
+objectClass: organizationalRole
+cn: admin
+description: LDAP administrator
+structuralObjectClass: organizationalRole
+entryUUID: 7ba0349a-07fa-1036-9cb4-ab4578b287a2
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905212141Z
+userPassword:: e3NzaGF9R0lob2FublJSNGc4UUVET1k0WTlUM1B4RytIMTBaU0wzSS82Ymc9P
+ Q==
+entryCSN: 20161125225612.548486Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20161125225612Z
+
+dn: ou=Group,dc=pbnl,dc=de
+ou: Group
+objectClass: organizationalUnit
+description: Alle Nordlichter
+structuralObjectClass: organizationalUnit
+entryUUID: 300bf738-07fc-1036-89c5-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213353Z
+entryCSN: 20160905213353.661894Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20160905213353Z
+
+dn: cn=ambronen,ou=Group,dc=pbnl,dc=de
+cn: ambronen
+objectClass: posixGroup
+gidNumber: 503
+memberUid: givenName=Paul,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=tth,ou=Ambronen,ou=People,dc=pbnl,dc=de
+structuralObjectClass: posixGroup
+entryUUID: 300d0bf0-07fc-1036-89c6-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213353Z
+description: stammGroup
+entryCSN: 20161125225659.236735Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20161125225659Z
+
+dn: cn=tronjer,ou=Group,dc=pbnl,dc=de
+cn: tronjer
+objectClass: posixGroup
+gidNumber: 504
+memberUid: givenName=Peanut,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+structuralObjectClass: posixGroup
+entryUUID: 300d935e-07fc-1036-89c7-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213353Z
+description: stammGroup
+entryCSN: 20161125225901.123737Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20161125225901Z
+
+dn: cn=minas,ou=Group,dc=pbnl,dc=de
+cn: minas
+objectClass: posixGroup
+gidNumber: 506
+memberUid: givenName=Fuh,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+structuralObjectClass: posixGroup
+entryUUID: 300e6bda-07fc-1036-89c9-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213353Z
+description: stammGroup
+entryCSN: 20161125225819.785667Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20161125225819Z
+
+dn: cn=buvo,ou=Group,dc=pbnl,dc=de
+cn: buvo
+gidNumber: 502
+objectClass: posixGroup
+memberUid: givenName=kassenmonster,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+structuralObjectClass: posixGroup
+entryUUID: 300f5856-07fc-1036-89cb-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213353Z
+entryCSN: 20161125225707.175101Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20161125225707Z
+
+dn: cn=stavo,ou=Group,dc=pbnl,dc=de
+cn: stavo
+gidNumber: 508
+objectClass: posixGroup
+memberUid: givenName=Japs,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+structuralObjectClass: posixGroup
+entryUUID: 300fbae4-07fc-1036-89cc-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213353Z
+entryCSN: 20161125225838.286773Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20161125225838Z
+
+dn: cn=schulung,ou=Group,dc=pbnl,dc=de
+cn: schulung
+gidNumber: 509
+objectClass: posixGroup
+memberUid: givenName=Kaja,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Paul,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Vollkorn,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Uhrmel,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Mimia,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Jada,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Nico,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Kurzer,ou=AHP,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Schummel,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Jan,ou=Heruler,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Atuja,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Wuehli,ou=Munin,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Wolf,ou=Eisbaeren,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Nutzlos,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Daffy,ou=Heruler,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Saeuerling,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Clown,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Jonathan,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+structuralObjectClass: posixGroup
+entryUUID: 30102074-07fc-1036-89cd-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213353Z
+description: teamGroup
+entryCSN: 20161025215248.333666Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20161025215248Z
+
+dn: ou=Forward,dc=pbnl,dc=de
+objectClass: organizationalUnit
+ou: Forward
+structuralObjectClass: organizationalUnit
+entryUUID: 30125d80-07fc-1036-89d4-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213353Z
+entryCSN: 20160905213353.703835Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20160905213353Z
+
+dn: ou=People,dc=pbnl,dc=de
+ou: People
+description: Alle Mitglieder
+objectClass: organizationalUnit
+structuralObjectClass: organizationalUnit
+entryUUID: 30136900-07fc-1036-89d8-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213353Z
+entryCSN: 20160905213353.710685Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20160905213353Z
+
+dn: ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+objectClass: organizationalUnit
+ou: Hagen von Tronje
+structuralObjectClass: organizationalUnit
+entryUUID: 3013a7bc-07fc-1036-89d9-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213353Z
+entryCSN: 20160905213353.712291Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20160905213353Z
+
+dn: ou=Ambronen,ou=People,dc=pbnl,dc=de
+objectClass: organizationalUnit
+ou: Ambronen
+structuralObjectClass: organizationalUnit
+entryUUID: 3013e786-07fc-1036-89da-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213353Z
+entryCSN: 20160905213353.713924Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20160905213353Z
+
+dn: ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+objectClass: organizationalUnit
+ou: Minas Tirith
+structuralObjectClass: organizationalUnit
+entryUUID: 301423d6-07fc-1036-89db-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213353Z
+entryCSN: 20160905213353.715468Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20160905213353Z
+
+dn: ou=Heruler,ou=People,dc=pbnl,dc=de
+objectClass: organizationalUnit
+ou: Heruler
+structuralObjectClass: organizationalUnit
+entryUUID: 30145d74-07fc-1036-89dc-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213353Z
+entryCSN: 20160905213353.716944Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20160905213353Z
+
+dn: cn=nordlichter,ou=Group,dc=pbnl,dc=de
+cn: nordlichter
+gidNumber: 501
+objectClass: posixGroup
+memberUid: givenName=Jonathan,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Schummel,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Saeuerling,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Momo,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Clown,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Bene,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Hauke,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Fuh,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Kruemel,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Stefan,ou=Heruler,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Penny,ou=Tolken,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Sky,ou=Tolken,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Wuehli,ou=Munin,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Naenia,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Anna,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Arne,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Bluemchen,ou=Munin,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Borstie,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Caspar,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Daffy,ou=Heruler,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Dori,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Eilan,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Einstein,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Eip,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Flo,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Freya,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Hannah,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Jan,ou=Heruler,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Many,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Markus,ou=Heruler,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Patrick,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Pott,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Schlauby,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Stetson,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Torben,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Torf,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Uglug,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=sjoko,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Wolf,ou=Eisbaeren,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Kathrin,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Japs,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Tschaja,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Tody,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Nabbel,ou=Foerderer,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Lucela,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Trinidee,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Kaja,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Schnacki,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Marleen,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Dalia,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Paul,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Keara,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Lynn,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Finya,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Uhrmel,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Vollkorn,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Joju,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Nico,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Tanka,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Bjarne,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Julkea,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Nutzlos,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Lennart,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Paikea,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Kjell,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Held,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Duvessja,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Atuja,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Naja,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Gerrit,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Mimia,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Amidia,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Hans,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Kanojo,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Rahnia,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=jLukas,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=ei-pott,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Negy,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Akilah,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Lia,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Mimo,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Multi,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Pumba,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Jada,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Jule,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Luca,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Pojke,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Kajo,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Katha,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Awjez,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Luna,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Copine,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Merry,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Niels,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Varonis,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Plabu,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Touwly,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Glon,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Balci,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Gwinna,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Ara,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Sol,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Mim,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Slik,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Pixie,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Youme,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Yemaya,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Peach,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Honey,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Lakritz,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=nano,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Tweety,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Swimblebee,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Jeti,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Merus,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Peanut,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Saja,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Cassjopaja,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Headshot,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Dewey,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Phelann,ou=Ynys Avilion,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Maggy,ou=Ynys Avilion,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Enara,ou=Ynys Avilion,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Fjaeril,ou=Ynys Avilion,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Gjoergy,ou=Ynys Avilion,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Ityaro,ou=Ynys Avilion,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Migno,ou=Ynys Avilion,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Phytea,ou=Ynys Avilion,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Pjakku,ou=Ynys Avilion,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Pueck,ou=Ynys Avilion,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Sajupa,ou=Ynys Avilion,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Schmu,ou=Ynys Avilion,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Sluv,ou=Ynys Avilion,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Sweschi,ou=Ynys Avilion,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Tiu,ou=Ynys Avilion,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Wesjoli,ou=Ynys Avilion,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Malua,ou=Ynys Avilion,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Matu,ou=Ynys Avilion,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Finn,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Blitzi,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Spam,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Sumo,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=kassenmonster,ou=Minas Tirith,ou=People,dc=pbnl,dc=de
+memberUid: givenName=honny,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=tth,ou=Ambronen,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Miriam,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Sj,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Milena,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Norea,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Edana,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Paulina,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Finja,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=NoaSophie,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Aliyeh,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Laelia,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Lirio,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Nori,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Yari,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Fury,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Nevaja,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Avery,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Nevio,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Youka,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Feritas,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Chunji,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Jizu,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Gjrgy,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Kajoschu,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Pck,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Fjril,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=Leijona,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=hwd,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=wgthththzjzj,ou=testStamm,ou=People,dc=pbnl,dc=de
+structuralObjectClass: posixGroup
+entryUUID: 3015350a-07fc-1036-89df-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213353Z
+entryCSN: 20161015204138.578255Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20161015204138Z
+
+dn: ou=Dummy,ou=People,dc=pbnl,dc=de
+objectClass: organizationalUnit
+ou: Dummy
+structuralObjectClass: organizationalUnit
+entryUUID: 30161088-07fc-1036-89e1-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213353Z
+entryCSN: 20160905213353.728080Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20160905213353Z
+
+dn: cn=uniedition,ou=Dummy,ou=People,dc=pbnl,dc=de
+sn: uniedition
+cn: uniedition
+gidNumber: 0
+homeDirectory: /dev/null
+objectClass: person
+objectClass: posixAccount
+uid: uniedition
+uidNumber: 0
+userPassword:: e1NTSEF9UnppYVkrZDdINnRtUzNieXR6Yi84UUU0aVkzQnVSMzNGcWRUSFE9P
+ Q==
+structuralObjectClass: person
+entryUUID: 301e58c4-07fc-1036-89f8-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213353Z
+entryCSN: 20160905213353.782359Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20160905213353Z
+
+dn: cn=wiki,ou=Group,dc=pbnl,dc=de
+cn: wiki
+gidNumber: 0
+objectClass: posixGroup
+memberUid: givenName=hwd,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=wgthththzjzj,ou=testStamm,ou=People,dc=pbnl,dc=de
+structuralObjectClass: posixGroup
+entryUUID: 301eb24c-07fc-1036-89f9-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213353Z
+entryCSN: 20161125225752.599934Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20161125225752Z
+
+dn: ou=Ynys Avilion,ou=People,dc=pbnl,dc=de
+ou: Ynys Avilion
+objectClass: organizationalUnit
+structuralObjectClass: organizationalUnit
+entryUUID: abec7a1c-07fc-1036-8a0f-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213721Z
+entryCSN: 20160905213721.493008Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20160905213721Z
+
+dn: cn=webmaster@schulung.pbnl.de,ou=Group,dc=pbnl,dc=de
+cn: webmaster@schulung.pbnl.de
+objectClass: posixGroup
+memberUid: givenName=Jonathan,ou=Hagen von Tronje,ou=People,dc=pbnl,dc=de
+gidNumber: 523
+description:: RGllc2UgR3J1cHBlIGhhdCBXZWJEQVYtWnVncmlmZiBmw7xyIHNjaHVsdW5nLn
+ BibmwuZGUu
+structuralObjectClass: posixGroup
+entryUUID: ac0f317e-07fc-1036-8a77-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213721Z
+entryCSN: 20160905213721.720528Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20160905213721Z
+
+dn: mail=webmaster@ambronen.de,ou=Forward,dc=pbnl,dc=de
+mail: webmaster@ambronen.de
+objectClass: pbnlMailAlias
+structuralObjectClass: pbnlMailAlias
+entryUUID: ac10dfc4-07fc-1036-8a7c-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213721Z
+forward: wwd@pbnl.de
+entryCSN: 20161125222900.062959Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20161125222900Z
+
+dn: cn=webmaster@ambronen.pbnl.de,ou=Group,dc=pbnl,dc=de
+cn: webmaster@ambronen.pbnl.de
+objectClass: posixGroup
+memberUid: givenName=Paul,ou=Ambronen,ou=People,dc=pbnl,dc=de
+gidNumber: 527
+structuralObjectClass: posixGroup
+entryUUID: ac113726-07fc-1036-8a7d-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213721Z
+description:: RGllc2UgR3J1cHBlIGhhdCBXZWJEQVYtWnVncmlmZiBmw7xyIGFtYnJvbmVuLn
+ BibmwuZGUuIHRlYW1Hcm91cA==
+entryCSN: 20161125225906.032985Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20161125225906Z
+
+dn: givenName=Paul,ou=Ambronen,ou=People,dc=pbnl,dc=de
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: pbnlAccount
+gidNumber: 501
+uidNumber: 559
+homeDirectory: /home/Paul
+structuralObjectClass: inetOrgPerson
+entryUUID: ac13d422-07fc-1036-8a84-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213721Z
+cn: Paul
+givenName: Paul
+uid: Paul
+mobile: baum
+street: 0
+telephoneNumber: 0
+sn: Hans
+l: Hans
+postalCode: Hans
+mail: hans@pbnl.de
+userPassword:: e3NzaGF9OE10MGNFSHVNS1VSTk8xSjNpbVBjU3ljSVR5U1RxVURlTG9ZNEE9P
+ Q==
+entryCSN: 20161125225630.402473Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20161125225630Z
+
+dn: cn=Harald,ou=Dummy,ou=People,dc=pbnl,dc=de
+gidNumber: 0
+uidNumber: 0
+objectClass: person
+objectClass: posixAccount
+homeDirectory: /dev/null
+sn:: SsOka2Vs
+uid: harald
+cn: Harald
+userPassword:: e1NTSEF9U1ZvbGdwQWVOWWRoN21nY2JsTU5FNnlrMkFpQmhMSW9IS0d3cFE9P
+ Q==
+structuralObjectClass: person
+entryUUID: ac1ec5d0-07fc-1036-8a94-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213721Z
+entryCSN: 20160905213721.822627Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20160905213721Z
+
+dn: cn=Hartmut,ou=Dummy,ou=People,dc=pbnl,dc=de
+gidNumber: 0
+uidNumber: 0
+objectClass: person
+objectClass: posixAccount
+homeDirectory: /dev/null
+cn: Hartmut
+sn: Meis
+uid: hartmut
+userPassword:: e1NTSEF9bTFDNzhsdE1TTkpYWnpBOG5yL05FbE9CeDJDR1Q4dExaaHNsUHc9P
+ Q==
+structuralObjectClass: person
+entryUUID: ac20be8a-07fc-1036-8a98-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213721Z
+entryCSN: 20160905213721.835548Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20160905213721Z
+
+dn: cn=Guido,ou=Dummy,ou=People,dc=pbnl,dc=de
+gidNumber: 0
+uidNumber: 0
+objectClass: person
+objectClass: posixAccount
+homeDirectory: /dev/null
+cn: Guido
+sn: Junge
+uid: guido
+userPassword:: e1NTSEF9cGxaay85UTZVaTRjSlNFZUUvbW4wVWZReTVlS1ZCZzhvNHNSQWc9P
+ Q==
+structuralObjectClass: person
+entryUUID: ac227c48-07fc-1036-8a99-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213721Z
+entryCSN: 20160905213721.846958Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20160905213721Z
+
+dn: cn=Erwin,ou=Dummy,ou=People,dc=pbnl,dc=de
+gidNumber: 0
+uidNumber: 0
+objectClass: person
+objectClass: posixAccount
+homeDirectory: /dev/null
+cn: Erwin
+sn: Geyer
+uid: erwin
+userPassword:: e1NTSEF9bTZSTFliU3FhcGhZcDdTVEhqVXQyb1dtZWlmaWJheFVsV3RsUFE9P
+ Q==
+structuralObjectClass: person
+entryUUID: ac22db5c-07fc-1036-8a9a-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213721Z
+entryCSN: 20160905213721.849394Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20160905213721Z
+
+dn: cn=Martin,ou=Dummy,ou=People,dc=pbnl,dc=de
+gidNumber: 0
+uidNumber: 0
+objectClass: person
+objectClass: posixAccount
+homeDirectory: /dev/null
+cn: Martin
+sn: Sibbel
+uid: martin
+userPassword:: e1NTSEF9Mmx4TWNvZVYxQ2k5SjE2TlVSOEZQamdWWUFLK1dGWkpaTGlkR3c9P
+ Q==
+structuralObjectClass: person
+entryUUID: ac2331b0-07fc-1036-8a9b-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213721Z
+entryCSN: 20160905213721.851605Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20160905213721Z
+
+dn: cn=Rainer,ou=Dummy,ou=People,dc=pbnl,dc=de
+gidNumber: 0
+uidNumber: 0
+objectClass: person
+objectClass: posixAccount
+homeDirectory: /dev/null
+cn: Rainer
+sn: Storhas
+uid: rainer
+userPassword:: e1NTSEF9ck4zNGNnMjQrSE5uek1rTWtKbGVBV3NVZWxGUHlGa1ZnNU9yL0E9P
+ Q==
+structuralObjectClass: person
+entryUUID: ac238c78-07fc-1036-8a9c-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213721Z
+entryCSN: 20160905213721.853924Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20160905213721Z
+
+dn: mail=ambronen@pbnl.de,ou=Forward,dc=pbnl,dc=de
+mail: ambronen@pbnl.de
+forward: paul@pbnl.de
+forward: tth@pbnl.de
+objectClass: pbnlMailAlias
+structuralObjectClass: pbnlMailAlias
+entryUUID: ac6a01c6-07fc-1036-8af7-c9d07847b537
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160905213722Z
+entryCSN: 20161125222835.464098Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20161125222835Z
+
+dn: mail=wiki@pbnl.de,ou=Forward,dc=pbnl,dc=de
+mail: wiki@pbnl.de
+forward: hwd@pbnl.de
+forward: wgthththzjzj@pbnl.de
+objectClass: pbnlMailAlias
+structuralObjectClass: pbnlMailAlias
+entryUUID: d36f9b36-16d0-1036-8814-270bf2c77955
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160924183117Z
+entryCSN: 20161125222911.233967Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20161125222911Z
+
+dn: mail=nordlichter@pbnl.de,ou=Forward,dc=pbnl,dc=de
+forward: hwd@pbnl.de
+forward: wgthththzjzj@pbnl.de
+objectClass: pbnlMailAlias
+structuralObjectClass: pbnlMailAlias
+entryUUID: d9b7d418-16d0-1036-8816-270bf2c77955
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20160924183127Z
+mail: nordlichter@pbnl.de
+entryCSN: 20161125222846.324993Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20161125222846Z
+
+dn: cn=testStamm,ou=Group,dc=pbnl,dc=de
+description: stammGroup
+cn: testStamm
+objectClass: posixGroup
+structuralObjectClass: posixGroup
+entryUUID: fefce80a-1e94-1036-9ea8-077ae6735b7e
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20161004154309Z
+memberUid: givenName=hwd,ou=testStamm,ou=People,dc=pbnl,dc=de
+memberUid: givenName=wgthththzjzj,ou=testStamm,ou=People,dc=pbnl,dc=de
+gidNumber: 601
+entryCSN: 20161125225846.481152Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20161125225846Z
+
+dn: ou=testStamm,ou=People,dc=pbnl,dc=de
+ou: testStamm
+objectClass: organizationalUnit
+structuralObjectClass: organizationalUnit
+entryUUID: 1227bd88-1e95-1036-9eaa-077ae6735b7e
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20161004154342Z
+entryCSN: 20161004154342.093005Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20161004154342Z
+
+dn: givenName=wgthththzjzj,ou=testStamm,ou=People,dc=pbnl,dc=de
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: pbnlAccount
+cn: wgtth
+gidNumber: 501
+uidNumber: 810
+homeDirectory: /home/wgthththzjzj
+sn: wgth
+uid: wgthththzjzj
+l: 0
+mail: wgthththzjzj@pbnl.de
+mobile: 0
+postalCode: 0
+street: 0
+telephoneNumber: 0
+userPassword:: e1NTSEF9RHVQZzh5Tis3ZkxBRHJWSnluTlFKQTJReGJUMzBhandrYWRSM3c9P
+ Q==
+givenName: wgthththzjzj
+structuralObjectClass: inetOrgPerson
+entryUUID: eaa74b9c-2764-1036-8921-55fcb2e6708e
+creatorsName: cn=admin,dc=pbnl,dc=de
+createTimestamp: 20161015205140Z
+entryCSN: 20161015205140.442064Z#000000#000#000000
+modifiersName: cn=admin,dc=pbnl,dc=de
+modifyTimestamp: 20161015205140Z
+

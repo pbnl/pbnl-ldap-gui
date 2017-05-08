@@ -1,0 +1,164 @@
+{% extends "includes/base.html.twig" %}
+
+{% block title %}Materialantrag{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {% include 'includes/nav.html.twig' %}
+    <div class="container">
+        <br><br>
+        {% include 'includes/messages.html.twig' %}
+        {% if request != false%} <h2>{{ request.id }}</h2> {% endif %}
+        <div class="col-sm-8">
+            {% if editRequestForm== false  and request != false%}
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Wert
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th>
+                            Stamm
+                        </th>
+                        <td>
+                            {{request.stamm}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Anzahl
+                        </th>
+                        <td>
+                            {{request.quantity}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Materialnummer
+                        </th>
+                        <td>
+                            {{request.materialPieceID}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Erstellungsdatum
+                        </th>
+                        <td>
+                            request.date
+                            TODO: Zeige Datum
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Erstellungsjahr
+                        </th>
+                        <td>
+                            {{request.requestYear}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            {% endif %}
+            {% if editRequestForm != false and request != false %}
+                {% form_theme editRequestForm 'bootstrap_3_horizontal_layout.html.twig' %}
+                {{ form_start(editRequestForm) }}
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Wert
+                        </th>
+                        <th>
+                            Edit
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th>
+                            Stamm
+                        </th>
+                        <td>
+                            {{request.stamm}}
+                        </td>
+                        <td>
+                            Nicht editirbar
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Anzahl
+                        </th>
+                        <td>
+                            {{request.quantity}}
+                        </td>
+                        <td>
+                            {{form_widget(editRequestForm.quantity)}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Materialnummer
+                        </th>
+                        <td>
+                            {{request.materialPieceID}}
+                        </td>
+                        <td>
+                            {{form_widget(editRequestForm.materialPieceID)}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Erstellungsdatum
+                        </th>
+                        <td>
+                            request.date
+                            TODO: Zeige Datum
+                        </td>
+                        <td>
+                            Nicht editirbar
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Erstellungsjahr
+                        </th>
+                        <td>
+                            {{request.requestYear}}
+                        </td>
+                        <td>
+                            Nicht editirbar
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                {{ form_end(editRequestForm) }}
+            {% endif %}
+        </div>
+
+        <div class="col-sm-4">
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+{% endblock %}

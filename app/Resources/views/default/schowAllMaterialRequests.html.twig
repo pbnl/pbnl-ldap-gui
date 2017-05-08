@@ -1,0 +1,78 @@
+{% extends "includes/base.html.twig" %}
+
+{% block title %}Alle Materialanträge{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {% include 'includes/nav.html.twig' %}
+    <div class="container">
+        <br><br>
+        {% include 'includes/messages.html.twig' %}
+        <div class="col-sm-6">
+            <a class="btn btn-primary" href="{{ path('Erstelle einen Materialantrag') }}"> Antrag stellen</a>
+        </div>
+        <br>
+        <br><br>
+        <table id="materialRequestsTable" class="table tablesorter">
+            <thead>
+            <tr>
+                <th>
+                    Id
+                </th>
+                <th>
+                    Stamm
+                </th>
+                <th>
+                   Anzahl
+                </th>
+                <th>
+                    Materialnummer
+                </th>
+                <th>
+                    Materialname
+                </th>
+                <th>
+                    Erstellungsjahr
+                </th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for materialRequest in materialRequests %}
+                <tr>
+                    <td>
+                        <a href="{{ path('Zeige einen Antrag', {'id': materialRequest.id}) }}">{{ materialRequest.id}}</a>
+                    </td>
+                    <td>
+                        {{ materialRequest.stamm}}
+                    </td>
+                    <td>
+                        {{ materialRequest.quantity}}
+                    </td>
+                    <td>
+                        <a href="{{ path('Zeige ein Materialstück', {'id': materialRequest.materialPieceID}) }}">{{ materialRequest.materialPieceID}}</a>
+                    </td>
+                    <td>
+                        <a href="{{ path('Zeige ein Materialstück', {'id': materialRequest.materialPieceID}) }}">{{ materialPieces[materialRequest.materialPieceID].getName}}</a>
+                    </td>
+                    <td>
+                        {{ materialRequest.requestYear}}
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" href="{{ path('Loesche einen Materialantrag', {'id': materialRequest.id}) }}">Löschen</a>
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/materialRequestShowAll.js') }}"></script>
+{% endblock %}

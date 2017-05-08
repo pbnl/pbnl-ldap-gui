@@ -32,8 +32,8 @@ class StammController extends Controller
         $session = new Session();
 
         //Security stuff
-        $loginHandler = $this->get("login");
-        if (!$loginHandler->checkPermissions("inStamm:".$request->get("stamm",$session->get("stamm")))) return $this->redirectToRoute("PermissionError");
+        $authUser = $this->get('security.token_storage')->getToken()->getUser();
+        $this->denyAccessUnlessGranted('ROLE_STAMM_'.$request->get("stamm",$authUser->getStamm()), null, 'Unable to access this page!');
 
 
         $org = $this->get("organisation");
@@ -59,8 +59,9 @@ class StammController extends Controller
         $stamm = $session->get("stamm");
 
         //Security stuff
-        $loginHandler = $this->get("login");
-        if (!$loginHandler->checkPermissions("inStamm:".$request->get("stamm",$stamm))) return $this->redirectToRoute("PermissionError");
+        $authUser = $this->get('security.token_storage')->getToken()->getUser();
+        $this->denyAccessUnlessGranted('ROLE_STAMM_'.$request->get("stamm",$authUser->getStamm()), null, 'Unable to access this page!');
+        $this->denyAccessUnlessGranted('ROLE_STAVO', null, 'Unable to access this page!');
 
         $group = $groupManager->getStavo($request->get("stamm",$stamm))->getMembersUser();
 
@@ -96,8 +97,10 @@ class StammController extends Controller
         //The stavo the user will get removed from
         $stammName = $request->get("stamm");
 
-        $loginHandler = $this->get("login");
-        if (!$loginHandler->checkPermissions("inStamm:$stammName,inGroup:stavo")) return $this->redirectToRoute("PermissionError");
+        //Security stuff
+        $authUser = $this->get('security.token_storage')->getToken()->getUser();
+        $this->denyAccessUnlessGranted('ROLE_STAMM_'.$stammName, null, 'Unable to access this page!');
+        $this->denyAccessUnlessGranted('ROLE_STAVO', null, 'Unable to access this page!');
 
         //Get the stamm
         $org = $this->get("organisation");
@@ -128,8 +131,11 @@ class StammController extends Controller
      */
     public function addStavoMember(Request $request)
     {
-        $loginHandler = $this->get("login");
-        if (!$loginHandler->checkPermissions("inStamm:".$request->get('form[stamm]').",inGroup:stavo")) return $this->redirectToRoute("PermissionError");
+
+        //Security stuff
+        $authUser = $this->get('security.token_storage')->getToken()->getUser();
+        $this->denyAccessUnlessGranted('ROLE_STAMM_'.$request->get('form[stamm]'), null, 'Unable to access this page!');
+        $this->denyAccessUnlessGranted('ROLE_STAVO', null, 'Unable to access this page!');
 
         $org = $this->get("organisation");
         $people = $org->getUserManager();

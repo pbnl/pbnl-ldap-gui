@@ -235,6 +235,7 @@ class LDAPService
         {
             throw new GroupNotFoundException("The group with the name $teamFilterName does not exist!");
         }
+        if(count($teams) == 0) throw new GroupNotFoundException("The team with the name $teamFilterName does not exist! (But maybe a group?)");
 
         return $teams;
     }
@@ -279,7 +280,7 @@ class LDAPService
 
     }
 
-    public function getUserByName($name)
+    public function getUserByGivenname($name)
     {
         //Search options
         $ldaptree = "ou=People,dc=pbnl,dc=de";
@@ -318,14 +319,21 @@ class LDAPService
         $ldaptree = $dn;
         $filter="(objectClass=*)";
 
+        $result = "";
         //Search
-        $result = ldap_search($this->ldapCon,$ldaptree, $filter) or die ("Error in search query: ".ldap_error($this->ldapCon));
-        $data = ldap_get_entries($this->ldapCon, $result);
-
-        //There can be only one user with the dn we are looking for
-        if ($data["count"] != 1) $this->logger->error("There are more than one people with the dn: $dn");
-        if ($data["count"] != 1) throw new UserNotUnique("There are more than one people with the dn: $dn");
-        return new User($this,$data[0]);
+        try
+        {
+            $result = ldap_search($this->ldapCon, $ldaptree, $filter) or die ("Error in search query: " . ldap_error($this->ldapCon));
+            $data = ldap_get_entries($this->ldapCon, $result);
+        }
+        catch (ContextErrorException $e)
+        {
+            throw new UserNotUnique("There is no person with the dn: $dn");
+        }
+            //There can be only one user with the dn we are looking for
+            if ($data["count"] != 1) $this->logger->error("There are more than one people with the dn: $dn");
+            if ($data["count"] != 1) throw new UserNotUnique("There are more than one people with the dn: $dn");
+            return new User($this, $data[0]);
     }
 
     public function getHighestUidNumber()
@@ -404,9 +412,22 @@ class LDAPService
         //Add
         try
         {
-            ldap_mod_add($this->ldapCon,"mail=$forward,$ldaptree",$forward_info);
+            if (!ldap_mod_add($this->ldapCon,"mail=$forward,$ldaptree",$forward_info))
+            {
+                //Check if the forward exist
+                $forwardGroup = $this->getForwardForMail($forward);
+                if($forwardGroup == [])
+                {
+                    $this->logger->addAlert("Forward $forward does not exist");
+                    $this->session->getFlashBag()->add("notice","We added the group $forward, because it did not exist.");
+                    //Create forward and add the first mail
+                    $this->createForward($forward,$mail);
+                    return;
+                }
+                throw new AllreadyInGroupException("User already in forward $forward");
+            }
         }
-        catch (ContextErrorException $e)
+        catch (\ErrorException $e)
         {
             //Check if the forward exist
             $forwardGroup = $this->getForwardForMail($forward);

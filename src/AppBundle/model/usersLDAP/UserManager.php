@@ -33,7 +33,7 @@ class UserManager
         $ldaptree = "ou=People,dc=pbnl,dc=de";
         try
         {
-            $this->ldapFrontend->getUserByName($user->getGivenName());
+            $this->ldapFrontend->getUserByGivenname($user->getGivenName());
             throw new UserAlreadyExistException("The user already exists!");
 
         }
@@ -56,7 +56,7 @@ class UserManager
     }
     public function getUserByName($name)
     {
-        return $this->ldapFrontend->getUserByName($name);
+        return $this->ldapFrontend->getUserByGivenname($name);
     }
 
     /**

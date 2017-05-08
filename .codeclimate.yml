@@ -1,0 +1,25 @@
+engines:
+  eslint:
+    enabled: true
+  csslint:
+    enabled: true
+  phpcodesniffer:
+    enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - javascript:
+      - php:
+ratings:
+  paths:
+  - src/**
+  - app/**
+  - web/**
+
+exclude_paths:
+- "tests/"
+- "spec/"
+- "**/vendor/"
+- "var/"
+- "bin/"

@@ -34,7 +34,11 @@ class LDAPConnetor
         } 
         else
         {
-            throw new NoLDAPBindDataException("No Data in the ENV-Vars", 1);
+            //throw new NoLDAPBindDataException("No Data in the ENV-Vars", 1);
+            //Use standard data for debugging with unit tests
+            $ip = "127.0.0.1";
+            $bindDn = "cn=admin,dc=pbnl,dc=de";
+            $bindPasswd = "passwd";
         }
         error_reporting(-1);
         $this->ds = ldap_connect("ldap://".$ip."");
