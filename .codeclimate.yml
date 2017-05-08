@@ -7,13 +7,8 @@ engines:
     enabled: true
   csslint:
     enabled: true
-  duplication:
+  phpcodesniffer:
     enabled: true
-    config:
-      languages:
-      - ruby:
-        mass_threshold: 30
-      - javascript
 ratings:
   paths:
   - src/**
