@@ -23,3 +23,4 @@ jobs:
                     sudo service slapd start
             - run: php composer.phar install --no-interaction --dev
             - run: ./vendor/bin/phpunit
+            - run: CODECLIMATE_REPO_TOKEN=f32beb6d34d6cd896ddabbbcb1f073212fdea57edbe677402039364db69a6bd0 ./vendor/bin/test-reporter
