@@ -27,7 +27,7 @@ class LDAPUserProvider implements UserProviderInterface
     private $ldapFrontend;
     private $organsation;
 
-    public function __construct(LDAPService $LDAPService , Logger $logger, Session $session,Organisation $organisation)
+    public function __construct(LDAPService $LDAPService , Logger $logger, Session $session, Organisation $organisation)
     {
         $this->session = $session;
         $this->logger = $logger;
@@ -41,9 +41,7 @@ class LDAPUserProvider implements UserProviderInterface
         $user  = null;
         try {
             $user = $this->ldapFrontend->getUserByGivenname($username);
-        }
-        catch (UserNotUnique $e)
-        {
+        } catch (UserNotUnique $e) {
             $user = null;
         }
 
@@ -62,16 +60,23 @@ class LDAPUserProvider implements UserProviderInterface
 
             $roles = array();
             array_push($roles,"ROLE_NORMAL");
-            if($user->getStamm() != "") array_push($roles,"ROLE_STAMM_".$user->getStamm());
-            if($this->ldapFrontend->getAllGroups("stavo")[0]->isDNMember($user->getDN())) array_push($roles,"ROLE_STAVO") ;
-            if($this->ldapFrontend->getAllGroups("buvo")[0]->isDNMember($user->getDN())) array_push($roles,"ROLE_BUVO");
+            if ($user->getStamm() != "") {
+                array_push($roles, "ROLE_STAMM_".$user->getStamm());
+            }
+            if ($this->ldapFrontend->getAllGroups("stavo")[0]->isDNMember($user->getDN())) {
+                array_push($roles, "ROLE_STAVO") ;
+            }
+            if ($this->ldapFrontend->getAllGroups("buvo")[0]->isDNMember($user->getDN())) {
+                array_push($roles, "ROLE_BUVO");
+            }
 
 
             $teamManager = $this->organisation->getTeamManager();
             $teams = $teamManager->getAllTeams("");
-            foreach ($teams as $team)
-            {
-                if($team->isDNMember($user->getDn())) array_push($roles,"ROLE_TEAM_".$team->name);
+            foreach ($teams as $team) {
+                if ($team->isDNMember($user->getDn())) {
+                    array_push($roles, "ROLE_TEAM_".$team->name);
+                }
             }
 
             $authUser = new AuthUser($username, $sha, $salt, $roles);
