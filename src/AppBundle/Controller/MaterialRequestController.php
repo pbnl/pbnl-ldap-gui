@@ -43,7 +43,7 @@ class MaterialRequestController extends Controller
             $materialPiecesByID[$id] = $materialPiece;
         }
 
-        return $this->render(":default:schowAllMaterialRequests.html.twig",array(
+        return $this->render(":default:schowAllMaterialRequests.html.twig", array(
             "materialRequests" => $materialRequests,
             "materialPieces" => $materialPiecesByID,
         ));
@@ -62,12 +62,12 @@ class MaterialRequestController extends Controller
         $materialRequest->setRequestYear(getdate()["year"]);
 
         $addRequestForm = $this->createFormBuilder($materialRequest)
-            ->add("stamm",TextType::class ,array("attr"=>["readonly"=>"","placeholder"=>"Stamm"],"label"=>"Stamm"))
-            ->add("quantity",IntegerType::class, array("attr"=>["placeholder"=>"Anzahl"],'label' => "Anzahl"))
-            ->add("materialPieceID",IntegerType::class, array("attr"=>["placeholder"=>"Von unten aussuchen"],'label' => "Material ID"))
-            ->add("date",DateType::class ,array("attr"=>["readonly"=>"","placeholder"=>"Datum"],"label"=>"Erstellungsdatum"))
-            ->add("requestYear",IntegerType::class ,array("attr"=>["readonly"=>"","placeholder"=>"Jahr"],"label"=>"Erstellungsjahr"))
-            ->add("save",SubmitType::class, array("label" => "Antrag stellen","attr"=>["class"=>"btn btn-lg btn-primary btn-block"]))
+            ->add("stamm", TextType::class, array("attr"=>["readonly"=>"","placeholder"=>"Stamm"],"label"=>"Stamm"))
+            ->add("quantity", IntegerType::class, array("attr"=>["placeholder"=>"Anzahl"],'label' => "Anzahl"))
+            ->add("materialPieceID", IntegerType::class, array("attr"=>["placeholder"=>"Von unten aussuchen"],'label' => "Material ID"))
+            ->add("date", DateType::class, array("attr"=>["readonly"=>"","placeholder"=>"Datum"],"label"=>"Erstellungsdatum"))
+            ->add("requestYear", IntegerType::class, array("attr"=>["readonly"=>"","placeholder"=>"Jahr"],"label"=>"Erstellungsjahr"))
+            ->add("save", SubmitType::class, array("label" => "Antrag stellen","attr"=>["class"=>"btn btn-lg btn-primary btn-block"]))
             ->getForm();
 
         $addRequestForm->handleRequest($request);
@@ -98,7 +98,7 @@ class MaterialRequestController extends Controller
             $materialPiecesByID[$id] = $materialPiece;
         }
 
-        return $this->render(":default:addMaterialRequest.html.twig",array(
+        return $this->render(":default:addMaterialRequest.html.twig", array(
             "addRequestForm" => $addRequestForm->createView(),
             "materialPiecesByID" => $materialPiecesByID,
         ));
@@ -114,10 +114,10 @@ class MaterialRequestController extends Controller
         $materialPiece = new MaterialPiece();
 
         $addPieceForm = $this->createFormBuilder($materialPiece)
-            ->add("name",TextType::class ,array("attr"=>["placeholder"=>"Name"],"label"=>"Name"))
-            ->add("description",TextType::class,array("attr"=>["placeholder"=>"Beschreibung"],"label"=>"Beschreibung"))
-            ->add("offersIds",TextType::class, array("attr"=>["class"=>"readonly","pattern"=>"[0-9]+( ; [0-9]+)*","placeholder"=>"Ids"],"label"=>"Materialofferids"))
-            ->add("save",SubmitType::class, array("label" => "Materialstück erstellen","attr"=>["class"=>"btn btn-lg btn-primary btn-block"]))
+            ->add("name", TextType::class, array("attr"=>["placeholder"=>"Name"],"label"=>"Name"))
+            ->add("description", TextType::class, array("attr"=>["placeholder"=>"Beschreibung"],"label"=>"Beschreibung"))
+            ->add("offersIds", TextType::class, array("attr"=>["class"=>"readonly","pattern"=>"[0-9]+( ; [0-9]+)*","placeholder"=>"Ids"],"label"=>"Materialofferids"))
+            ->add("save", SubmitType::class, array("label" => "Materialstück erstellen","attr"=>["class"=>"btn btn-lg btn-primary btn-block"]))
             ->getForm();
 
         $addPieceForm->handleRequest($request);
@@ -133,7 +133,7 @@ class MaterialRequestController extends Controller
             return $this->redirectToRoute('Erstelle einen Materialantrag');
         }
 
-        return $this->render(":default:addMaterialPiece.html.twig",array(
+        return $this->render(":default:addMaterialPiece.html.twig", array(
             "addPieceForm" => $addPieceForm->createView(),
         ));
     }
@@ -147,9 +147,8 @@ class MaterialRequestController extends Controller
 
         try {
             $id = $request->get("id");
-        }catch (Exception $e)
-        {
-            $this->addFlash("error","Keine ID");
+        } catch (Exception $e) {
+            $this->addFlash("error", "Keine ID");
             return $this->redirectToRoute("Zeige alle Materialanträge");
         }
 
@@ -158,14 +157,14 @@ class MaterialRequestController extends Controller
             ->find($id);
 
         if (!$materialRequest) {
-            $this->addFlash("error",'Kein Antrag gefunden: id '.$id);
+            $this->addFlash("error", 'Kein Antrag gefunden: id '.$id);
             return $this->redirectToRoute("Zeige alle Materialanträge");
         }
 
         $this->denyAccessUnlessGranted('ROLE_STAMM_'.$materialRequest->getStamm(), null, 'Unable to access this page!');
         $em->remove($materialRequest);
         $em->flush();
-        $this->addFlash("success",'Antrag gelöscht: id '.$id);
+        $this->addFlash("success", 'Antrag gelöscht: id '.$id);
 
         return $this->redirectToRoute("Zeige alle Materialanträge");
     }
@@ -179,9 +178,8 @@ class MaterialRequestController extends Controller
 
         try {
             $id = $request->get("id");
-        }catch (Exception $e)
-        {
-            $this->addFlash("error","Keine ID");
+        } catch (Exception $e) {
+            $this->addFlash("error", "Keine ID");
             return $this->redirectToRoute("Zeige alle Materialanträge");
         }
 
@@ -190,14 +188,14 @@ class MaterialRequestController extends Controller
             ->find($id);
 
         if (!$materialPiece) {
-            $this->addFlash("error",'Kein Materialstück gefunden: id '.$id);
+            $this->addFlash("error", 'Kein Materialstück gefunden: id '.$id);
             return $this->redirectToRoute("Zeige alle Materialanträge");
         }
 
         $this->denyAccessUnlessGranted('ROLE_STAVO', null, 'Unable to access this page!');
         $em->remove($materialPiece);
         $em->flush();
-        $this->addFlash("success",'Materialstück gelöscht: id '.$id);
+        $this->addFlash("success", 'Materialstück gelöscht: id '.$id);
 
         return $this->redirectToRoute("Zeige alle Materialanträge");
     }
@@ -211,9 +209,8 @@ class MaterialRequestController extends Controller
 
         try {
             $id = $request->get("id");
-        }catch (Exception $e)
-        {
-            $this->addFlash("error","Keine ID");
+        } catch (Exception $e) {
+            $this->addFlash("error", "Keine ID");
             return $this->redirectToRoute("Zeige alle Materialanträge");
         }
 
@@ -222,14 +219,14 @@ class MaterialRequestController extends Controller
             ->find($id);
 
         if (!$materialRequest) {
-            $this->addFlash("error",'Kein Materialantrag gefunden: id '.$id);
+            $this->addFlash("error", 'Kein Materialantrag gefunden: id '.$id);
             return $this->redirectToRoute("Zeige alle Materialanträge");
         }
 
         $editRequestForm = $this->createFormBuilder($materialRequest)
-            ->add("quantity",IntegerType::class, array("attr"=>["placeholder"=>"Anzahl"],'label' => "Anzahl"))
-            ->add("materialPieceID",IntegerType::class, array("attr"=>["placeholder"=>"Von unten aussuchen"],'label' => "Material ID"))
-            ->add("save",SubmitType::class, array("label" => "Daten speichern","attr"=>["class"=>"btn btn-lg btn-primary btn-block"]))
+            ->add("quantity", IntegerType::class, array("attr"=>["placeholder"=>"Anzahl"],'label' => "Anzahl"))
+            ->add("materialPieceID", IntegerType::class, array("attr"=>["placeholder"=>"Von unten aussuchen"],'label' => "Material ID"))
+            ->add("save", SubmitType::class, array("label" => "Daten speichern","attr"=>["class"=>"btn btn-lg btn-primary btn-block"]))
             ->getForm();
 
         $editRequestForm->handleRequest($request);
@@ -240,15 +237,17 @@ class MaterialRequestController extends Controller
 
             $em->persist($materialRequest);
             $em->flush();
-            $this->addFlash("success","Änderungen gespeichert");
+            $this->addFlash("success", "Änderungen gespeichert");
             return $this->redirectToRoute('Zeige alle Materialanträge');
         }
 
         $editRequestForm = $editRequestForm->createView();
 
-        if(!$this->get('security.authorization_checker')->isGranted('ROLE_STAMM_'.$materialRequest->getStamm())) $editRequestForm = false;
+        if (!$this->get('security.authorization_checker')->isGranted('ROLE_STAMM_'.$materialRequest->getStamm())){
+            $editRequestForm = false;
+        }
 
-        return $this->render(":default:showMaterialRequest.html.twig",array(
+        return $this->render(":default:showMaterialRequest.html.twig", array(
             "editRequestForm" => $editRequestForm,
             "request" => $materialRequest,
         ));
@@ -263,9 +262,8 @@ class MaterialRequestController extends Controller
 
         try {
             $id = $request->get("id");
-        }catch (Exception $e)
-        {
-            $this->addFlash("error","Keine ID");
+        } catch (Exception $e) {
+            $this->addFlash("error", "Keine ID");
             return $this->redirectToRoute("Zeige alle Materialanträge");
         }
 
@@ -274,24 +272,23 @@ class MaterialRequestController extends Controller
             ->find($id);
 
         if (!$materialPiece) {
-            $this->addFlash("error",'Kein Materialstück gefunden: id '.$id);
+            $this->addFlash("error", 'Kein Materialstück gefunden: id '.$id);
             return $this->redirectToRoute("Zeige alle Materialanträge");
         }
 
 
         $offerIdsArray = explode(" ; ",$materialPiece->getOffersIds());
         $offers = array();
-        foreach ($offerIdsArray as $offer)
-        {
+        foreach ($offerIdsArray as $offer) {
             $materialOffer = $em->getRepository('AppBundle:material\MaterialOffer')
                 ->find($offer);
             array_push($offers,$materialOffer);
         }
         $editMaterialPieceForm = $this->createFormBuilder($materialPiece)
-            ->add("name",TextType::class, array("attr"=>["placeholder"=>"Name"],'label' => "Name"))
-            ->add("description",TextareaType::class, array("attr"=>["placeholder"=>"Beschreibung"],'label' => "Beschreibung"))
-            ->add("offersIds",TextType::class, array("attr"=>["class"=>"readonly","pattern"=>"[0-9]+( ; [0-9]+)*","placeholder"=>"Angebotsnummern"],'label' => "Angebotsnummern"))
-            ->add("save",SubmitType::class, array("label" => "Daten speichern","attr"=>["class"=>"btn btn-lg btn-primary btn-block"]))
+            ->add("name", TextType::class, array("attr"=>["placeholder"=>"Name"],'label' => "Name"))
+            ->add("description", TextareaType::class, array("attr"=>["placeholder"=>"Beschreibung"],'label' => "Beschreibung"))
+            ->add("offersIds", TextType::class, array("attr"=>["class"=>"readonly","pattern"=>"[0-9]+( ; [0-9]+)*","placeholder"=>"Angebotsnummern"],'label' => "Angebotsnummern"))
+            ->add("save", SubmitType::class, array("label" => "Daten speichern","attr"=>["class"=>"btn btn-lg btn-primary btn-block"]))
             ->getForm();
 
         $editMaterialPieceForm->handleRequest($request);
@@ -307,7 +304,7 @@ class MaterialRequestController extends Controller
 
         $editMaterialPieceForm = $editMaterialPieceForm->createView();
 
-        return $this->render(":default:showMaterialPiece.html.twig",array(
+        return $this->render(":default:showMaterialPiece.html.twig", array(
             "editMaterialPieceForm" => $editMaterialPieceForm,
             "materialPiece" => $materialPiece,
             "materialOffers" => $offers,
