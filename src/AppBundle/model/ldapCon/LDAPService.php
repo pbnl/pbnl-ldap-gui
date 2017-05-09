@@ -8,7 +8,6 @@
 
 namespace AppBundle\model\ldapCon;
 
-
 use AppBundle\model\login\LoginDataHolder;
 use AppBundle\model\SSHA;
 use AppBundle\model\usersLDAP\Group;
@@ -26,7 +25,7 @@ class LDAPService
     private $LDAPConnector = null;
     private $ldapCon = null;
 
-    function __construct(Logger $logger,Session $session)
+    public function __construct(Logger $logger,Session $session)
     {
         $this->logger = $logger;
         $this->session = $session;
@@ -43,49 +42,47 @@ class LDAPService
      *
      * @return array
      */
-    public function getAllUsers($groupFilterName = "",$userFilterName="")
+    public function getAllUsers($groupFilterName = "", $userFilterName = "")
     {
         //Search options
         $ldaptree = "ou=People,dc=pbnl,dc=de";
 
         //Search filters
-        if($userFilterName != "") $filter="(&(objectClass=inetOrgPerson) (givenname=*$userFilterName*))";
-        else $filter="(&(objectClass=inetOrgPerson))";
+        if ($userFilterName != "") {
+            $filter = "(&(objectClass=inetOrgPerson) (givenname=*$userFilterName*))";
+        }
+        else {
+            $filter = "(&(objectClass=inetOrgPerson))";
+        }
 
         //Search
-        $result = ldap_search($this->ldapCon,$ldaptree, $filter) or die ("Error in search query: ".ldap_error($this->ldapCon));
+        $result = ldap_search($this->ldapCon, $ldaptree, $filter) or die ("Error in search query: " . ldap_error($this->ldapCon));
         $data = ldap_get_entries($this->ldapCon, $result);
 
-        $people = Array();
+        $people = array();
 
-        if($data["count"] != 0)
-        {
-            for($i = 0; $i < $data["count"]; $i++) {
-                $user = new User($this,$data[$i]);
-                array_push($people,$user);
+        if ($data["count"] != 0){
+            for ($i = 0; $i < $data["count"]; $i++){
+                $user = new User($this, $data[$i]);
+                array_push($people, $user);
             }
         }
 
         //if you look for a special group
-        if ($groupFilterName != "")
-        {
-            $filteredPeople = Array();
+        if ($groupFilterName != ""){
+            $filteredPeople = array();
             //get the group
             $filterGroup = $this->getAllGroups($groupFilterName)[0];
             //who is in the group?
-            foreach ($people as $onePerson)
-            {
-                if($onePerson->memberOF($filterGroup))
-                {
-                    array_push($filteredPeople,$onePerson);
+            foreach ($people as $onePerson){
+                if($onePerson->memberOF($filterGroup)){
+                    array_push($filteredPeople, $onePerson);
                 }
             }
             return $filteredPeople;
         }
         else
-        {
             return $people;
-        }
     }
 
     /**
@@ -101,27 +98,22 @@ class LDAPService
         $ldaptree = "ou=Group,dc=pbnl,dc=de";
 
         //Search filters
-        if ($groupFilterName != "")
-        {
+        if ($groupFilterName != ""){
             $filter="(&(objectClass=posixGroup)(cn=$groupFilterName))";
         }
-        else
-        {
+        else{
             $filter="(&(objectClass=posixGroup))";
         }
 
         //Search
-        $result = ldap_search($this->ldapCon,$ldaptree, $filter) or die ("Error in search query: ".ldap_error($this->ldapCon));
+        $result = ldap_search($this->ldapCon, $ldaptree, $filter) or die ("Error in search query: " . ldap_error($this->ldapCon));
         $data = ldap_get_entries($this->ldapCon, $result);
 
-        $groups = Array();
+        $groups = array();
 
-        if($data["count"] != 0)
-        {
-            for($i = 0; $i < $data["count"]; $i++)
-            {
-                if(isset($data[$i]["description"]) && strpos($data[$i]["description"][0],"stammGroup") !== false)
-                {
+        if($data["count"] != 0){
+            for($i = 0; $i < $data["count"]; $i++){
+                if(isset($data[$i]["description"]) && strpos($data[$i]["description"][0], "stammGroup") !== false){
                     $group = new Group($this);
                     $group->name = $data[$i]["cn"][0];
                     $group->dn = $data[$i]["dn"];
@@ -131,15 +123,13 @@ class LDAPService
                     //If the group has member
                     if(isset($data[$i]["memberuid"])){
                         $member = $data[$i]["memberuid"];
-                        for ($j = 0;$j < $member["count"];$j++)
-                        {
+                        for ($j = 0;$j < $member["count"];$j++){
                             $group->addMemberToClassArray($member[$j]);
                         }
                     }
                     array_push($groups,$group);
                 }
-                elseif (isset($data[$i]["description"]) && strpos($data[$i]["description"][0],"teamGroup") !== false)
-                {
+                elseif (isset($data[$i]["description"]) && strpos($data[$i]["description"][0],"teamGroup") !== false){
                     $team = new Team($this);
                     $team->name = $data[$i]["cn"][0];
                     $team->dn = $data[$i]["dn"];
@@ -147,14 +137,12 @@ class LDAPService
 
                     $team->gidNumber =$data[$i]["gidnumber"][0];
                     $member = $data[$i]["memberuid"];
-                    for ($j = 0;$j < $member["count"];$j++)
-                    {
+                    for ($j = 0; $j < $member["count"]; $j++){
                         $team->addMemberToClassArray($member[$j]);
                     }
-                    array_push($groups,$team);
+                    array_push($groups, $team);
                 }
-                else
-                {
+                else{
                     $group = new Group($this);
                     $group->name = $data[$i]["cn"][0];
                     $group->dn = $data[$i]["dn"];
@@ -162,16 +150,14 @@ class LDAPService
 
                     $group->gidNumber =$data[$i]["gidnumber"][0];
                     $member = $data[$i]["memberuid"];
-                    for ($j = 0;$j < $member["count"];$j++)
-                    {
+                    for ($j = 0; $j < $member["count"]; $j++){
                         $group->addMemberToClassArray($member[$j]);
                     }
-                    array_push($groups,$group);
+                    array_push($groups, $group);
                 }
             }
         }
-        else
-        {
+        else{
             throw new GroupNotFoundException("The group with the name $groupFilterName does not exist!");
         }
 
@@ -191,31 +177,25 @@ class LDAPService
         $ldaptree = "ou=Group,dc=pbnl,dc=de";
 
         //Search filters
-        if($teamFilterName != "" && is_numeric($teamFilterName))
-        {
+        if($teamFilterName != "" && is_numeric($teamFilterName)){
             $filter="(&(objectClass=posixGroup)(gidNumber=$teamFilterName))";
         }
-        elseif ($teamFilterName != "")
-        {
+        elseif ($teamFilterName != ""){
             $filter="(&(objectClass=posixGroup)(cn=$teamFilterName))";
         }
-        else
-        {
+        else{
             $filter="(&(objectClass=posixGroup))";
         }
 
         //Search
-        $result = ldap_search($this->ldapCon,$ldaptree, $filter) or die ("Error in search query: ".ldap_error($this->ldapCon));
+        $result = ldap_search($this->ldapCon, $ldaptree, $filter) or die ("Error in search query: " . ldap_error($this->ldapCon));
         $data = ldap_get_entries($this->ldapCon, $result);
 
-        $teams = Array();
+        $teams = array();
 
-        if($data["count"] != 0)
-        {
-            for($i = 0; $i < $data["count"]; $i++)
-            {
-                if(isset($data[$i]["description"]) && strpos($data[$i]["description"][0],"teamGroup") !== false)
-                {
+        if($data["count"] != 0){
+            for($i = 0; $i < $data["count"]; $i++){
+                if(isset($data[$i]["description"]) && strpos($data[$i]["description"][0], "teamGroup") !== false){
                     $team = new Team($this);
                     $team->name = $data[$i]["cn"][0];
                     $team->dn = $data[$i]["dn"];
@@ -223,19 +203,19 @@ class LDAPService
 
                     $team->gidNumber =$data[$i]["gidnumber"][0];
                     $member = $data[$i]["memberuid"];
-                    for ($j = 0;$j < $member["count"];$j++)
-                    {
+                    for ($j = 0;$j < $member["count"];$j++){
                         $team->addMemberToClassArray($member[$j]);
                     }
                     array_push($teams,$team);
                 }
             }
         }
-        else
-        {
+        else{
             throw new GroupNotFoundException("The group with the name $teamFilterName does not exist!");
         }
-        if(count($teams) == 0) throw new GroupNotFoundException("The team with the name $teamFilterName does not exist! (But maybe a group?)");
+        if(count($teams) == 0){
+            throw new GroupNotFoundException("The team with the name $teamFilterName does not exist! (But maybe a group?)");
+        }
 
         return $teams;
     }
@@ -247,7 +227,7 @@ class LDAPService
      */
     public function addAUser(User $user)
     {
-        $userForLDAP = Array();
+        $userForLDAP = array();
         $userForLDAP["objectclass"][0] = "inetOrgPerson";
         $userForLDAP["objectclass"][1] = "posixAccount";
         $userForLDAP["objectclass"][2] = "pbnlAccount";
@@ -276,8 +256,7 @@ class LDAPService
 
 
         //TODO: Add error handling
-        return new User($this,$userForLDAP);
-
+        return new User($this, $userForLDAP);
     }
 
     public function getUserByGivenname($name)
@@ -287,14 +266,21 @@ class LDAPService
         $filter="(|(givenname=$name))";
 
         //Search
-        $result = ldap_search($this->ldapCon,$ldaptree, $filter) or die ("Error in search query: ".ldap_error($this->ldapCon));
+        $result = ldap_search($this->ldapCon, $ldaptree, $filter) or die ("Error in search query: ".ldap_error($this->ldapCon));
         $data = ldap_get_entries($this->ldapCon, $result);
 
         //There can be only one user with the name we are looking for
-        if ($data["count"] > 1) $this->logger->error("There are more than one people with the name: $name");
-        if ($data["count"] > 1) throw new UserNotUnique("There are more than one people with the name: $name");
-        if ($data["count"] == 0) throw new UserNotUnique("No user found");
-        return new User($this,$data[0]);
+        if ($data["count"] > 1){
+            $this->logger->error("There are more than one people with the name: $name");
+        }
+        if ($data["count"] > 1){
+            throw new UserNotUnique("There are more than one people with the name: $name");
+        }
+        if ($data["count"] == 0){
+            throw new UserNotUnique("No user found");
+        }
+
+        return new User($this, $data[0]);
     }
 
     public function getUserByUidNumber($uidNumber)
@@ -304,13 +290,18 @@ class LDAPService
         $filter="(|(uidnumber=$uidNumber))";
 
         //Search
-        $result = ldap_search($this->ldapCon,$ldaptree, $filter) or die ("Error in search query: ".ldap_error($this->ldapCon));
+        $result = ldap_search($this->ldapCon, $ldaptree, $filter) or die ("Error in search query: ".ldap_error($this->ldapCon));
         $data = ldap_get_entries($this->ldapCon, $result);
 
         //There can be only one user with the name we are looking for
-        if ($data["count"] != 1) $this->logger->error("There are more than one people with the uidNumber: $uidNumber");
-        if ($data["count"] != 1) throw new UserNotUnique("There are more than one people with the uidNumber: $uidNumber");
-        return new User($this,$data[0]);
+        if ($data["count"] != 1){
+            $this->logger->error("There are more than one people with the uidNumber: $uidNumber");
+        }
+        if ($data["count"] != 1){
+            throw new UserNotUnique("There are more than one people with the uidNumber: $uidNumber");
+        }
+
+        return new User($this, $data[0]);
     }
 
     public function getUserByDN($dn)
@@ -321,18 +312,21 @@ class LDAPService
 
         $result = "";
         //Search
-        try
-        {
+        try{
             $result = ldap_search($this->ldapCon, $ldaptree, $filter) or die ("Error in search query: " . ldap_error($this->ldapCon));
             $data = ldap_get_entries($this->ldapCon, $result);
         }
-        catch (ContextErrorException $e)
-        {
+        catch (ContextErrorException $e){
             throw new UserNotUnique("There is no person with the dn: $dn");
         }
             //There can be only one user with the dn we are looking for
-            if ($data["count"] != 1) $this->logger->error("There are more than one people with the dn: $dn");
-            if ($data["count"] != 1) throw new UserNotUnique("There are more than one people with the dn: $dn");
+            if ($data["count"] != 1){
+                $this->logger->error("There are more than one people with the dn: $dn");
+            }
+            if ($data["count"] != 1){
+                throw new UserNotUnique("There are more than one people with the dn: $dn");
+            }
+
             return new User($this, $data[0]);
     }
 
@@ -340,9 +334,10 @@ class LDAPService
     {
         $users = $this->getAllUsers();
         $highestUidNumber = 0;
-        foreach ($users as $oneUser)
-        {
-            if($oneUser->uidNumber >= $highestUidNumber) $highestUidNumber = $oneUser->uidNumber;
+        foreach ($users as $oneUser){
+            if($oneUser->uidNumber >= $highestUidNumber){
+                $highestUidNumber = $oneUser->uidNumber;
+            }
         }
         return $highestUidNumber;
     }
@@ -360,16 +355,14 @@ class LDAPService
         $filter="(&(objectClass=organizationalUnit) (!(ou=people)))";
 
         //Search
-        $result = ldap_search($this->ldapCon,$ldaptree, $filter) or die ("Error in search query: ".ldap_error($this->ldapCon));
+        $result = ldap_search($this->ldapCon, $ldaptree, $filter) or die ("Error in search query: ".ldap_error($this->ldapCon));
         $data = ldap_get_entries($this->ldapCon, $result);
 
-        $ou= Array();
+        $ou= array();
 
-        if($data["count"] != 0)
-        {
-            for($i = 0; $i < $data["count"]; $i++)
-            {
-                array_push($ou,$data[$i]["ou"][0]);
+        if($data["count"] != 0){
+            for($i = 0; $i < $data["count"]; $i++){
+                array_push($ou, $data[$i]["ou"][0]);
             }
         }
         return $ou;
@@ -380,19 +373,17 @@ class LDAPService
      * @param $userDN
      * @param $group
      */
-    public function addUserDNToGroup($userDN ,$group)
+    public function addUserDNToGroup($userDN, $group)
     {
         //Add options
         $ldaptree = "ou=Group,dc=pbnl,dc=de";
-        $group_info['memberuid'] = str_replace(", ",",",$userDN);
+        $group_info['memberuid'] = str_replace(", ", ",", $userDN);
 
         //Add
-        try
-        {
+        try{
             ldap_mod_add($this->ldapCon, "cn=$group,$ldaptree", $group_info);
         }
-        catch (ContextErrorException $e)
-        {
+        catch (ContextErrorException $e){
             //TODO: Maybe create group
             throw new AllreadyInGroupException("User already in group $group");
         }
@@ -403,40 +394,35 @@ class LDAPService
      * @param $mail
      * @param $forward
      */
-    public function addMailToForward($mail,$forward)
+    public function addMailToForward($mail, $forward)
     {
         //Add options
         $ldaptree = "ou=Forward,dc=pbnl,dc=de";
         $forward_info['forward'] = $mail;
 
         //Add
-        try
-        {
-            if (!ldap_mod_add($this->ldapCon,"mail=$forward,$ldaptree",$forward_info))
-            {
+        try{
+            if (!ldap_mod_add($this->ldapCon, "mail=$forward,$ldaptree", $forward_info)){
                 //Check if the forward exist
                 $forwardGroup = $this->getForwardForMail($forward);
-                if($forwardGroup == [])
-                {
+                if($forwardGroup == []){
                     $this->logger->addAlert("Forward $forward does not exist");
-                    $this->session->getFlashBag()->add("notice","We added the group $forward, because it did not exist.");
+                    $this->session->getFlashBag()->add("notice", "We added the group $forward, because it did not exist.");
                     //Create forward and add the first mail
-                    $this->createForward($forward,$mail);
+                    $this->createForward($forward, $mail);
                     return;
                 }
                 throw new AllreadyInGroupException("User already in forward $forward");
             }
         }
-        catch (\ErrorException $e)
-        {
+        catch (\ErrorException $e){
             //Check if the forward exist
             $forwardGroup = $this->getForwardForMail($forward);
-            if($forwardGroup == [])
-            {
+            if($forwardGroup == []){
                 $this->logger->addAlert("Forward $forward does not exist");
-                $this->session->getFlashBag()->add("notice","We added the group $forward, because it did not exist.");
+                $this->session->getFlashBag()->add("notice", "We added the group $forward, because it did not exist.");
                 //Create forward and add the first mail
-                $this->createForward($forward,$mail);
+                $this->createForward($forward, $mail);
                 return;
             }
             throw new AllreadyInGroupException("User already in forward $forward");
@@ -448,25 +434,22 @@ class LDAPService
      * @param $userDN
      * @param $group
      */
-    public function removeUserDNFromGroup($userDN,$group)
+    public function removeUserDNFromGroup($userDN, $group)
     {
         //Del options
         $ldaptree = "ou=Group,dc=pbnl,dc=de";
-        $group_info['memberuid'] = str_replace(", ",",",$userDN);
+        $group_info['memberuid'] = str_replace(", ", ",", $userDN);
 
         //Del
-        try
-        {
+        try{
             ldap_mod_del($this->ldapCon, "cn=$group,$ldaptree", $group_info);
         }
-        catch (ContextErrorException $e)
-        {
-            if(count($this->getAllGroups($group)) == 0 )
-            {
+        catch (ContextErrorException $e){
+            if(count($this->getAllGroups($group)) == 0){
             $this->logger->addInfo("The group $group does not exist. Because of this we cant delet the $userDN from the group");
             throw new GroupNotFoundException("The group $group does not exist. Because of this we cant delet the $userDN from the group");
             }
-            else {
+            else{
                 $this->logger->addInfo("Cant del user $userDN from group $group because he does not exist!");
                 throw new UserNotInGroupException("Cant del user $userDN from group $group because he does not exist!");
             }
@@ -486,19 +469,16 @@ class LDAPService
         $forward_info['forward'] = $mail;
 
         //Del
-        try
-        {
+        try{
             ldap_mod_del($this->ldapCon, "mail=$forward,$ldaptree", $forward_info);
         }
-        catch (ContextErrorException $e)
-        {
+        catch (ContextErrorException $e){
             if($this->getForwardForMail($forward) == [])
             {
                 $this->logger->addInfo("The froward $forward does not exist. Because of this we cant delet the $mail from the forward");
                 throw new GroupNotFoundException("The froward $forward does not exist. Because of this we cant delet the $mail from the forward");
             }
-            else
-            {
+            else{
                 $this->logger->addInfo("Cant del mail $mail from forward $forward because it does not exist!");
                 throw new UserNotInGroupException("Cant del mail $mail from forward $forward because it does not exist!");
             }
@@ -513,7 +493,7 @@ class LDAPService
     {
         //Del
         //TODO: Add error handling
-        ldap_delete($this->ldapCon,$userDN);
+        ldap_delete($this->ldapCon, $userDN);
     }
 
     public function makeLoginRequest(LoginDataHolder $loginData)
@@ -523,7 +503,7 @@ class LDAPService
         $filter="(|(givenname=$loginData->name))";
 
         //Search
-        $result = ldap_search($this->ldapCon,$ldaptree, $filter) or die ("Error in search query: ".ldap_error($this->ldapCon));
+        $result = ldap_search($this->ldapCon, $ldaptree, $filter) or die ("Error in search query: " . ldap_error($this->ldapCon));
         $data = ldap_get_entries($this->ldapCon, $result);
 
         return $data;
@@ -533,13 +513,11 @@ class LDAPService
     {
         $groups = $this->getAllGroups();
         $names = array();
-        foreach ($groups as $group)
-        {
-            if($group->type == "stamm")
-            {
-                array_push($names,$group->name);
+        foreach ($groups as $group){
+            if($group->type == "stamm"){
+                array_push($names, $group->name);
             }
-        };
+        }
         return $names;
     }
 
@@ -550,18 +528,18 @@ class LDAPService
         $filter="(|(mail=$mail))";
 
         //Search
-        $result = ldap_search($this->ldapCon,$ldaptree, $filter) or die ("Error in search query: ".ldap_error($this->ldapCon));
+        $result = ldap_search($this->ldapCon, $ldaptree, $filter) or die ("Error in search query: ".ldap_error($this->ldapCon));
         $data = ldap_get_entries($this->ldapCon, $result);
 
-        $forwards = Array();
+        $forwards = array();
 
-        if($data["count"] != 0)
-        {
-            for($i = 0; $i < $data["count"]; $i++) {
-                if ($data[$i]["forward"]["count"] != 0)
-                    for ($j = 0; $j < $data[$i]["forward"]["count"] ; $j++) {
+        if($data["count"] != 0){
+            for($i = 0; $i < $data["count"]; $i++){
+                if ($data[$i]["forward"]["count"] != 0){
+                    for ($j = 0; $j < $data[$i]["forward"]["count"]; $j++){
                         array_push($forwards, $data[$i]["forward"][$j]);
                     }
+                }
             }
         }
         //TODO: Add error handling
