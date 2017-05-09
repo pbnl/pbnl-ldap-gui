@@ -25,7 +25,7 @@ class LoginController extends Controller
     public function defaultLoginPage(Request $request)
     {
         //If your are logged in you get redirected to the startPage
-        if($request->getSession()->get("loggedIn", TRUE)) {
+        if ($request->getSession()->get("loggedIn", true)) {
             return $this->redirectToRoute("Startpage");
         }
 
@@ -43,7 +43,7 @@ class LoginController extends Controller
         if ($loginForm->isSubmitted() && $loginForm->isValid()) {
             $loginDataHolder = $loginForm->getData();
             $loginHandler = $this->get("login");
-            if ($loginHandler->login($loginDataHolder) == FALSE) {
+            if ($loginHandler->login($loginDataHolder) == false) {
                 $this->addFlash("error","Name oder Passwort falsch!");
             } else {
                 return $this->redirectToRoute("Startpage");

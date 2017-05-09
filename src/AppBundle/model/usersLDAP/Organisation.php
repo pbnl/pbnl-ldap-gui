@@ -32,7 +32,7 @@ class Organisation
 
     public function getTeamManager()
     {
-        if($this->teamManager == null) {
+        if ($this->teamManager == null) {
             $this->teamManager = new TeamManager($this->ldapFrontend,$this);
             return $this->teamManager;
         }
@@ -41,7 +41,7 @@ class Organisation
 
     public function getUserManager()
     {
-        if($this->userManager == null) {
+        if ($this->userManager == null) {
             $this->userManager = new UserManager($this->ldapFrontend,$this);
             return $this->userManager;
         } else {
@@ -51,7 +51,7 @@ class Organisation
 
     public function getGroupManager()
     {
-        if($this->groupManager == null) {
+        if ($this->groupManager == null) {
             $this->groupManager = new GroupManager($this->ldapFrontend,$this);
             return $this->groupManager;
         } else {

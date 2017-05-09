@@ -143,8 +143,8 @@ class StammController extends Controller
             ->add('dn', ChoiceType::class, array(
                 'choices'  => $stammesMember,
             ))
-            ->add('stamm',HiddenType::class, array())
-            ->add("send",SubmitType::class,array("label"=>"Hinzufügen", "attr"=>["class"=>"btn btn-lg btn-primary btn-block"]))
+            ->add('stamm', HiddenType::class, array())
+            ->add("send", SubmitType::class, array("label"=>"Hinzufügen", "attr"=>["class"=>"btn btn-lg btn-primary btn-block"]))
             ->setMethod("get")
             ->setAction($this->generateUrl("Stavo Mitglied hinzufügen"))
             ->getForm();

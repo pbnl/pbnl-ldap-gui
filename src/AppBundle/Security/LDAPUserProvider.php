@@ -61,21 +61,21 @@ class LDAPUserProvider implements UserProviderInterface
             $roles = array();
             array_push($roles,"ROLE_NORMAL");
             if ($user->getStamm() != "") {
-                array_push($roles,"ROLE_STAMM_".$user->getStamm());
+                array_push($roles, "ROLE_STAMM_".$user->getStamm());
             }
             if ($this->ldapFrontend->getAllGroups("stavo")[0]->isDNMember($user->getDN())) {
-                array_push($roles,"ROLE_STAVO") ;
+                array_push($roles, "ROLE_STAVO") ;
             }
             if ($this->ldapFrontend->getAllGroups("buvo")[0]->isDNMember($user->getDN())) {
-                array_push($roles,"ROLE_BUVO");
+                array_push($roles, "ROLE_BUVO");
             }
 
 
             $teamManager = $this->organisation->getTeamManager();
             $teams = $teamManager->getAllTeams("");
             foreach ($teams as $team) {
-                if($team->isDNMember($user->getDn())) {
-                    array_push($roles,"ROLE_TEAM_".$team->name);
+                if ($team->isDNMember($user->getDn())) {
+                    array_push($roles, "ROLE_TEAM_".$team->name);
                 }
             }
 

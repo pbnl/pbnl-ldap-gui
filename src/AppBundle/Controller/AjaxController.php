@@ -46,7 +46,7 @@ class AjaxController extends Controller
         $team = $teamManager->getAllTeams($gid)[0];
         foreach ($users as $user) {
             if (!$team->isDNMember($user->dn)) {
-                array_push($usersNotInGroup,$user->givenName);
+                array_push($usersNotInGroup, $user->givenName);
             }
         }
 
@@ -136,11 +136,11 @@ class AjaxController extends Controller
 
         $offerIds = $materialPiece->getOffersIds();
         if (strpos($offerIds, ' ; '.$id) !== false) {
-            $offerIds=str_replace(" ; ".$id,"",$offerIds);
-        } else if (strpos($offerIds, $id.' ; ') !== false) {
-            $offerIds=str_replace($id." ; ","",$offerIds);
-        } else if (strpos($offerIds, $id) !== false) {
-            $offerIds=str_replace($id,"",$offerIds);
+            $offerIds=str_replace(" ; ".$id, "", $offerIds);
+        } elseif (strpos($offerIds, $id.' ; ') !== false) {
+            $offerIds=str_replace($id." ; ", "", $offerIds);
+        } elseif (strpos($offerIds, $id) !== false) {
+            $offerIds=str_replace($id, "", $offerIds);
         }
         $materialPiece->setOffersIds($offerIds);
         $em->flush();
