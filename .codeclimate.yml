@@ -5,6 +5,9 @@ engines:
     enabled: true
   phpcodesniffer:
     enabled: true
+    checks:
+      Squiz ControlStructures ControlSignature SpaceAfterCloseParenthesis:
+        enabled: false
   duplication:
     enabled: true
     config:
