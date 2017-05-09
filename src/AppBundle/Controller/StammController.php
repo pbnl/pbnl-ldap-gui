@@ -8,7 +8,6 @@
 
 namespace AppBundle\Controller;
 
-
 use AppBundle\model\ArrayMethods;
 use AppBundle\model\usersLDAP\People;
 use AppBundle\model\usersLDAP\Stavo;
@@ -40,9 +39,9 @@ class StammController extends Controller
         $userManager= $org->getUserManager();
 
         //Search users
-        $peopleList = $userManager->getAllUsers($request->get("stamm",$session->get("stamm")),"");
+        $peopleList = $userManager->getAllUsers($request->get("stamm", $session->get("stamm")),"");
 
-        return$this->render(":default:showUsersInOneTabel.html.twig",array(
+        return$this->render(":default:showUsersInOneTabel.html.twig", array(
             "users"=>$peopleList,
         ));
     }
@@ -60,10 +59,10 @@ class StammController extends Controller
 
         //Security stuff
         $authUser = $this->get('security.token_storage')->getToken()->getUser();
-        $this->denyAccessUnlessGranted('ROLE_STAMM_'.$request->get("stamm",$authUser->getStamm()), null, 'Unable to access this page!');
+        $this->denyAccessUnlessGranted('ROLE_STAMM_'.$request->get("stamm", $authUser->getStamm()), null, 'Unable to access this page!');
         $this->denyAccessUnlessGranted('ROLE_STAVO', null, 'Unable to access this page!');
 
-        $group = $groupManager->getStavo($request->get("stamm",$stamm))->getMembersUser();
+        $group = $groupManager->getStavo($request->get("stamm", $stamm))->getMembersUser();
 
         $stammesMember = $groupManager->getAllGroups($request->get("stamm",$stamm))[0]->getListWithDNAndName();
 
@@ -73,15 +72,14 @@ class StammController extends Controller
             ->add('dn', ChoiceType::class, array(
                 'choices'  => $stammesMember,
             ))
-            ->add('stamm',HiddenType::class, array(
-            ))
-            ->add("send",SubmitType::class,array("label"=>"Hinzufügen","attr"=>["class"=>"btn btn-lg btn-primary btn-block"]))
+            ->add('stamm', HiddenType::class, array())
+            ->add("send", SubmitType::class,array("label"=>"Hinzufügen", "attr"=>["class"=>"btn btn-lg btn-primary btn-block"]))
             ->setMethod("get")
             ->setAction($this->generateUrl("Stavo Mitglied hinzufügen"))
             ->getForm();
 
 
-        return$this->render(":default:showStavo.html.twig",array(
+        return$this->render(":default:showStavo.html.twig", array(
             "addStavoMemberForm"=> $addstavoMemberForm->createView(),
             "users" => $group
         ));
@@ -111,14 +109,11 @@ class StammController extends Controller
         //The uid of the user who should get deleted
         $uidNumber = $request->get("uidNumber");
 
-        try
-        {
+        try {
             $stamm->removeMember($userManager->getUserByUid($uidNumber)->dn);
             $this->addFlash("success","User wurde aus dem Stavo gelöscht");
-        }
-        catch (Exception $e)
-        {
-            $this->addFlash("error",$e->getMessage());
+        } catch (Exception $e)  {
+            $this->addFlash("error", $e->getMessage());
         }
 
         return$this->redirectToRoute("Zeige Stavo");
@@ -144,31 +139,26 @@ class StammController extends Controller
 
         //Create add stavo member form
         $user = $people->getEmptyUser();
-        $addstavoMemberForm = $this->createFormBuilder($user,['attr' => ['class' => 'form-addStavoMemberForm']])
+        $addstavoMemberForm = $this->createFormBuilder($user, ['attr' => ['class' => 'form-addStavoMemberForm']])
             ->add('dn', ChoiceType::class, array(
                 'choices'  => $stammesMember,
             ))
-            ->add('stamm',HiddenType::class, array(
-            ))
-            ->add("send",SubmitType::class,array("label"=>"Hinzufügen","attr"=>["class"=>"btn btn-lg btn-primary btn-block"]))
+            ->add('stamm',HiddenType::class, array())
+            ->add("send",SubmitType::class,array("label"=>"Hinzufügen", "attr"=>["class"=>"btn btn-lg btn-primary btn-block"]))
             ->setMethod("get")
             ->setAction($this->generateUrl("Stavo Mitglied hinzufügen"))
             ->getForm();
 
         //Handel the form input
         $addstavoMemberForm->handleRequest($request);
-        if($addstavoMemberForm->isSubmitted() && $addstavoMemberForm->isValid())
-        {
+        if ($addstavoMemberForm->isSubmitted() && $addstavoMemberForm->isValid()) {
             //Create the new user
             $stavo = $groupManager->getStavo($request->get("form[stamm]"));
-            try
-            {
+            try {
                 $stavo->addMember($user->dn);
-                $this->addFlash("success","Benutzer zum Stavo hinzugefügt");
-            }
-            catch (Exception $e)
-            {
-                $this->addFlash("error",$e->getMessage());
+                $this->addFlash("success", "Benutzer zum Stavo hinzugefügt");
+            } catch (Exception $e) {
+                $this->addFlash("error", $e->getMessage());
             }
         }
         return$this->redirectToRoute("Zeige Stavo");

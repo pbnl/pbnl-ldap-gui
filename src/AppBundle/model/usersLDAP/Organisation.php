@@ -8,7 +8,6 @@
 
 namespace AppBundle\model\usersLDAP;
 
-
 use AppBundle\model\ldapCon\LDAPService;
 use Monolog\Logger;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -33,8 +32,7 @@ class Organisation
 
     public function getTeamManager()
     {
-        if($this->teamManager == null)
-        {
+        if($this->teamManager == null) {
             $this->teamManager = new TeamManager($this->ldapFrontend,$this);
             return $this->teamManager;
         }
@@ -43,22 +41,22 @@ class Organisation
 
     public function getUserManager()
     {
-        if($this->userManager == null)
-        {
+        if($this->userManager == null) {
             $this->userManager = new UserManager($this->ldapFrontend,$this);
             return $this->userManager;
+        } else {
+            return $this->userManager;
         }
-        else return $this->userManager;
     }
 
     public function getGroupManager()
     {
-        if($this->groupManager == null)
-        {
+        if($this->groupManager == null) {
             $this->groupManager = new GroupManager($this->ldapFrontend,$this);
             return $this->groupManager;
+        } else {
+            return $this->groupManager;
         }
-        else return $this->groupManager;
     }
 
     public function getOUGroupsNames()
@@ -70,13 +68,11 @@ class Organisation
     {
         $groups = $this->ldapFrontend->getAllGroups();
         $names = array();
-        foreach ($groups as $group)
-        {
-            if($group->type == "stamm")
-            {
+        foreach ($groups as $group) {
+            if ($group->type == "stamm") {
                 array_push($names,$group->name);
             }
-        };
+        }
         return $names;
     }
 

@@ -8,7 +8,6 @@
 
 namespace AppBundle\Controller;
 
-
 use AppBundle\Entity\material\MaterialOffer;
 use AppBundle\model\usersLDAP\Organisation;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -24,7 +23,8 @@ class AjaxController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function getUsersNotInGroup(Request $request){
+    public function getUsersNotInGroup(Request $request)
+    {
 
 
         $gid = $request->query->get('gid');
@@ -34,19 +34,20 @@ class AjaxController extends Controller
 
         //Security stuff
         $teamManager = $org->getTeamManager();
-        $team = $teamManager->getAllTeams($request->get("gid",""))[0];
+        $team = $teamManager->getAllTeams($request->get("gid", ""))[0];
 
 
         $authUser = $this->get('security.token_storage')->getToken()->getUser();
-        if(!$team->isDNMember($authUser->getDN())) throw $this->createAccessDeniedException();
+        if (!$team->isDNMember($authUser->getDN())) throw $this->createAccessDeniedException();
 
         $userManager = $org->getUserManager();
-        $users = $userManager->getAllUsers("",$searchedUserName);
+        $users = $userManager->getAllUsers("", $searchedUserName);
         $usersNotInGroup = array();
         $team = $teamManager->getAllTeams($gid)[0];
-        foreach ($users as $user)
-        {
-            if(!$team->isDNMember($user->dn)) array_push($usersNotInGroup,$user->givenName);
+        foreach ($users as $user) {
+            if (!$team->isDNMember($user->dn)) {
+                array_push($usersNotInGroup,$user->givenName);
+            }
         }
 
         $response = array("code" => 100, "success" => true, "users"=>$usersNotInGroup);
@@ -82,8 +83,12 @@ class AjaxController extends Controller
 
         $materialPiece = $em->getRepository('AppBundle:material\MaterialPiece')
             ->find($pieceId);
-        if($materialPiece->getOffersIds() == "") $materialPiece->setOffersIds($offer->getId());
-        else $materialPiece->setOffersIds($materialPiece->getOffersIds() . " ; " . $offer->getId());
+        if ($materialPiece->getOffersIds() == "") {
+            $materialPiece->setOffersIds($offer->getId());
+        } else {
+            $materialPiece->setOffersIds($materialPiece->getOffersIds() . " ; " . $offer->getId());
+        }
+
         $em->flush();
 
 
@@ -109,8 +114,7 @@ class AjaxController extends Controller
         try {
             $id = $request->get("id");
             $pieceId = $request->get("pieceId");
-        }catch (Exception $e)
-        {
+        } catch (Exception $e) {
             $response = array("code" => 404);
             return new Response(json_encode($response));
         }
@@ -131,9 +135,13 @@ class AjaxController extends Controller
         $em->flush();
 
         $offerIds = $materialPiece->getOffersIds();
-        if(strpos($offerIds, ' ; '.$id) !== false) $offerIds=str_replace(" ; ".$id,"",$offerIds);
-        else if(strpos($offerIds, $id.' ; ') !== false) $offerIds=str_replace($id." ; ","",$offerIds);
-        else if(strpos($offerIds, $id) !== false) $offerIds=str_replace($id,"",$offerIds);
+        if (strpos($offerIds, ' ; '.$id) !== false) {
+            $offerIds=str_replace(" ; ".$id,"",$offerIds);
+        } else if (strpos($offerIds, $id.' ; ') !== false) {
+            $offerIds=str_replace($id." ; ","",$offerIds);
+        } else if (strpos($offerIds, $id) !== false) {
+            $offerIds=str_replace($id,"",$offerIds);
+        }
         $materialPiece->setOffersIds($offerIds);
         $em->flush();
 

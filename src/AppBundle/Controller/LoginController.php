@@ -25,32 +25,27 @@ class LoginController extends Controller
     public function defaultLoginPage(Request $request)
     {
         //If your are logged in you get redirected to the startPage
-        if($request->getSession()->get("loggedIn",TRUE))
-        {
+        if($request->getSession()->get("loggedIn", TRUE)) {
             return $this->redirectToRoute("Startpage");
         }
 
         //Creats a loginform
         $loginDataHolder= new LoginDataHolder();
-        $loginForm = $this->createFormBuilder($loginDataHolder,['attr' => ['class' => 'form-signin']])
-            ->add("name",TextType::class,array("attr"=>["placeholder"=>"Name"],'label' => false))
-            ->add("password",PasswordType::class,array("attr"=>["placeholder"=>"Passwort"],'label' => false))
-            ->add("rememberme",CheckboxType::class,array("label"=>"Erinnere dich","required"=>false))
-            ->add("send",SubmitType::class,array("label"=>"Login","attr"=>["class"=>"btn btn-lg btn-primary btn-block"]))
+        $loginForm = $this->createFormBuilder($loginDataHolder, ['attr' => ['class' => 'form-signin']])
+            ->add("name",TextType::class, array("attr"=>["placeholder"=>"Name"], 'label' => false))
+            ->add("password",PasswordType::class, array("attr"=>["placeholder"=>"Passwort"], 'label' => false))
+            ->add("rememberme",CheckboxType::class, array("label"=>"Erinnere dich", "required"=>false))
+            ->add("send",SubmitType::class, array("label"=>"Login", "attr"=>["class"=>"btn btn-lg btn-primary btn-block"]))
             ->getForm();
 
         $loginForm->handleRequest($request);
         //If someone send login data
-        if ($loginForm->isSubmitted() && $loginForm->isValid())
-        {
+        if ($loginForm->isSubmitted() && $loginForm->isValid()) {
             $loginDataHolder = $loginForm->getData();
             $loginHandler = $this->get("login");
-            if ($loginHandler->login($loginDataHolder) == FALSE)
-            {
+            if ($loginHandler->login($loginDataHolder) == FALSE) {
                 $this->addFlash("error","Name oder Passwort falsch!");
-            }
-            else
-            {
+            } else {
                 return $this->redirectToRoute("Startpage");
             }
 
